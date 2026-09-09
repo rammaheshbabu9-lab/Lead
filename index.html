@@ -2,1648 +2,4041 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a66c2">
+<title>WorkLynk — People • Skills • Opportunities</title>
 
-<title>PixelOne - Digital Business Wall</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
-box-sizing:border-box;
+:root{
+ --blue:#0a66c2;
+ --blue2:#004182;
+ --bg:#f3f6f8;
+ --card:#fff;
+ --text:#172033;
+ --muted:#667085;
+ --line:#e4e7ec;
+ --green:#16a34a;
+ --danger:#dc2626;
+ --gold:#b7791f;
+ --shadow:0 3px 16px rgba(16,24,40,.08);
+ --radius:16px;
 }
-
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
 body{
-margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:#f5f7fb;
-color:#111827;
+ font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+ background:var(--bg);color:var(--text)
 }
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none}
+.hidden{display:none!important}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.bold{font-weight:800}
 
-.hero{
-background:linear-gradient(135deg,#0f172a,#1e3a8a);
-color:#fff;
-text-align:center;
-padding:42px 18px;
+.btn{
+ border:0;background:var(--blue);color:#fff;
+ padding:10px 15px;border-radius:10px;font-weight:800
 }
+.btn:hover{background:var(--blue2)}
+.btn.gray{background:#eef2f6;color:#344054}
+.btn.outline{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+.btn.danger{background:var(--danger)}
+.btn.green{background:var(--green)}
 
-.hero h1{
-margin:10px 0;
-font-size:clamp(30px,5vw,52px);
+.iconbtn{
+ border:0;background:transparent;border-radius:10px;
+ padding:9px;font-size:19px
 }
+.iconbtn:hover{background:#eef2f6}
 
-.hero p{
-max-width:700px;
-margin:0 auto;
-color:#cbd5e1;
-line-height:1.6;
+.top{
+ position:sticky;top:0;z-index:50;
+ height:64px;background:#fff;
+ border-bottom:1px solid var(--line)
 }
-
-.badge{
-display:inline-block;
-padding:7px 14px;
-border-radius:30px;
-background:rgba(255,255,255,.1);
-border:1px solid rgba(255,255,255,.2);
-font-size:12px;
+.topin{
+ width:min(1250px,calc(100% - 24px));
+ height:100%;margin:auto;
+ display:flex;align-items:center;gap:12px
 }
-
-.container{
-width:94%;
-max-width:1200px;
-margin:25px auto 50px;
+.logo{
+ font-size:24px;font-weight:950;color:var(--blue);
+ white-space:nowrap
 }
-
-/* STATS */
-
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-margin-bottom:18px;
-}
-
-.stat{
-background:#fff;
-padding:17px;
-border-radius:15px;
-border:1px solid #e5e7eb;
-}
-
-.stat span{
-color:#64748b;
-font-size:12px;
-}
-
-.stat strong{
-display:block;
-font-size:23px;
-margin-top:7px;
-}
-
-/* TOOLBAR */
-
-.toolbar{
-background:#fff;
-border:1px solid #e5e7eb;
-padding:13px;
-border-radius:15px;
-display:flex;
-gap:10px;
-margin-bottom:15px;
-}
+.logo span{color:#111}
 
 .search{
-flex:1;
+ width:100%;max-width:450px;
+ background:#eef2f6;border:0;border-radius:11px;
+ padding:11px 14px;outline:none
+}
+.search:focus{box-shadow:0 0 0 2px #b9d8f5}
+
+.topactions{
+ margin-left:auto;display:flex;align-items:center;gap:4px
+}
+.avatar{
+ width:39px;height:39px;border-radius:50%;
+ display:grid;place-items:center;
+ background:#dbeafe;color:var(--blue);
+ font-weight:900;overflow:hidden;
+ border:1px solid #d0d5dd;
+ flex:none
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
+
+.layout{
+ width:min(1250px,calc(100% - 24px));
+ margin:18px auto 80px;
+ display:grid;
+ grid-template-columns:220px minmax(0,1fr) 280px;
+ gap:18px
+}
+.side,.right,.card{
+ background:var(--card);
+ border:1px solid var(--line);
+ border-radius:var(--radius);
+ box-shadow:var(--shadow)
+}
+.side{
+ padding:10px;height:max-content;
+ position:sticky;top:82px
+}
+.right{
+ padding:16px;height:max-content;
+ position:sticky;top:82px
+}
+.nav{
+ width:100%;border:0;background:transparent;
+ text-align:left;padding:12px;
+ border-radius:10px;
+ color:#344054;font-weight:800;
+ display:flex;gap:10px;align-items:center
+}
+.nav:hover,.nav.active{
+ background:#e8f1fb;color:var(--blue)
 }
 
-.search input,
-select{
-width:100%;
-padding:12px;
-border:1px solid #dbe1ea;
-border-radius:9px;
-outline:none;
+.card{
+ padding:16px;margin-bottom:14px
+}
+.hero{
+ border:0;color:#fff;
+ background:linear-gradient(135deg,#0a66c2,#004182 65%,#172554)
+}
+.hero h1{font-size:31px;margin-bottom:8px}
+.hero p{line-height:1.55;opacity:.92}
+.heroActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+
+.composer{
+ display:flex;align-items:center;gap:10px
+}
+.composerInput{
+ flex:1;border:1px solid var(--line);
+ border-radius:30px;padding:12px 16px;
+ cursor:pointer;outline:none
 }
 
-select{
-width:180px;
-background:#fff;
+.sectiontitle{
+ display:flex;align-items:center;
+ justify-content:space-between;gap:10px;
+ margin-bottom:12px
 }
+.sectiontitle h2{font-size:22px}
 
-/* LEGEND */
-
-.legend{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-margin-bottom:15px;
+.posthead{
+ display:flex;align-items:center;gap:10px
 }
-
-.legend span{
-background:#fff;
-border:1px solid #e5e7eb;
-padding:7px 11px;
-border-radius:20px;
-font-size:11px;
+.grow{flex:1}
+.postcaption{
+ margin:12px 0;line-height:1.55;
+ white-space:pre-wrap
 }
-
-.dot{
-display:inline-block;
-width:9px;
-height:9px;
-border-radius:50%;
-margin-right:5px;
+.postmedia{
+ width:100%;max-height:550px;
+ object-fit:cover;border-radius:13px
 }
-
-.available{
-background:#dbe3ec;
+.postactions{
+ display:grid;grid-template-columns:repeat(4,1fr);
+ gap:3px;border-top:1px solid var(--line);
+ margin-top:12px;padding-top:6px
 }
-
-.sold{
-background:#22c55e;
+.postactions button{
+ border:0;background:#fff;
+ padding:10px 5px;border-radius:9px;
+ color:#475467;font-weight:800
 }
+.postactions button:hover{background:#f2f4f7}
+.postactions button.active{color:var(--blue)}
 
-.premium{
-background:#f59e0b;
+.commentBox{
+ display:flex;gap:7px;margin-top:10px
 }
-
-.corner{
-background:#8b5cf6;
+.commentBox input{
+ flex:1;border:1px solid var(--line);
+ border-radius:20px;padding:9px 12px;outline:none
 }
-
-/* WALL */
-
-.wall{
-background:#fff;
-border:1px solid #e5e7eb;
-border-radius:18px;
-padding:18px;
+.comment{
+ padding:8px 0;
+ border-bottom:1px solid #f0f2f5
 }
-
-.wall-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:17px;
-}
-
-.wall-header h2{
-margin:0;
-font-size:21px;
-}
-
-.wall-header small{
-color:#64748b;
-}
-
-.row{
-margin-bottom:13px;
-}
-
-.row-head{
-display:flex;
-justify-content:space-between;
-margin-bottom:5px;
-}
-
-.row-head strong{
-font-size:11px;
-}
-
-.row-head span{
-font-size:10px;
-color:#94a3b8;
-}
-
-/* SMALL SQUARES */
-
-.grid{
-display:grid;
-grid-template-columns:repeat(20,1fr);
-gap:3px;
-}
-
-.pixel{
-height:39px;
-border:1px solid #dbe2ea;
-border-radius:6px;
-background:#fff;
-cursor:pointer;
-position:relative;
-display:flex;
-align-items:center;
-justify-content:center;
-transition:.15s;
-}
-
-.pixel:hover{
-transform:translateY(-2px);
-box-shadow:0 4px 10px rgba(0,0,0,.12);
-}
-
-.pixel.premium{
-background:#fffaf0;
-border-color:#f6c866;
-}
-
-.pixel.edge{
-background:#f8faff;
-}
-
-.pixel.corner{
-background:#faf7ff;
-border-color:#b99af7;
-}
-
-.pixel.is-sold{
-background:#dcfce7;
-border-color:#4ade80;
-}
-
-.pixel.highlight{
-outline:3px solid #2563eb;
-}
-
-.logo{
-width:25px;
-height:25px;
-object-fit:contain;
-background:#fff;
-border-radius:5px;
-padding:2px;
-}
-
-.company-name{
-position:absolute;
-left:2px;
-right:2px;
-bottom:2px;
-background:rgba(15,23,42,.82);
-color:#fff;
-font-size:6px;
-text-align:center;
-padding:2px;
-border-radius:3px;
-overflow:hidden;
-white-space:nowrap;
-text-overflow:ellipsis;
-}
-
-/* SELECTED */
-
-.selection{
-display:none;
-margin-top:15px;
-background:#0f172a;
-color:#fff;
-border-radius:15px;
-padding:18px;
-}
-
-.selection.show{
-display:block;
-}
-
-.selection-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:8px;
-}
-
-.selection-item{
-background:#1e293b;
-padding:10px;
-border-radius:8px;
-}
-
-.selection-item small{
-color:#94a3b8;
-display:block;
-font-size:10px;
-}
-
-.selection-item strong{
-font-size:13px;
-}
-
-.continue{
-width:100%;
-margin-top:12px;
-padding:12px;
-border:0;
-border-radius:9px;
-background:#2563eb;
-color:#fff;
-font-weight:bold;
-cursor:pointer;
-}
-
-/* PRICING */
-
-.pricing{
-margin-top:25px;
-}
-
-.pricing h2{
-margin-bottom:5px;
-}
-
-.subtitle{
-color:#64748b;
-font-size:13px;
-}
-
-.price-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-margin-top:15px;
-}
-
-.price-card{
-background:#fff;
-border:1px solid #e5e7eb;
-border-radius:15px;
-padding:18px;
-}
-
-.price-card.corner-card{
-border:2px solid #8b5cf6;
-}
-
-.price-card h3{
-margin:0;
-}
-
-.price{
-font-size:27px;
-font-weight:900;
-margin:10px 0;
-}
-
-.price-card p{
-color:#64748b;
-font-size:12px;
-line-height:1.5;
-}
-
-/* FORM */
-
-.form{
-background:#fff;
-margin-top:25px;
-border:1px solid #e5e7eb;
-border-radius:18px;
-padding:22px;
-}
-
-.form h2{
-margin-top:0;
-}
-
-.form-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:13px;
-}
-
-.form-group label{
-display:block;
-font-size:12px;
-font-weight:bold;
-margin-bottom:5px;
-}
-
-.form-group input,
-.form-group textarea{
-width:100%;
-padding:11px;
-border:1px solid #dbe1ea;
-border-radius:8px;
-outline:none;
-}
-
-.form-group textarea{
-min-height:90px;
-}
-
-.full{
-grid-column:1/-1;
-}
-
-.summary{
-margin-top:15px;
-padding:13px;
-background:#f8fafc;
-border-radius:9px;
-font-size:13px;
-line-height:1.8;
-}
-
-.reserve{
-width:100%;
-margin-top:12px;
-padding:13px;
-background:#111827;
-color:#fff;
-border:0;
-border-radius:9px;
-font-weight:bold;
-cursor:pointer;
-}
-
-/* PROFILE POPUP */
-
-.overlay{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.7);
-align-items:center;
-justify-content:center;
-z-index:1000;
-padding:20px;
-}
-
-.overlay.show{
-display:flex;
-}
-
-.profile-box{
-width:100%;
-max-width:370px;
-background:#fff;
-border-radius:20px;
-padding:25px;
-text-align:center;
-}
-
-.profile-logo{
-width:85px;
-height:85px;
-object-fit:contain;
-border:1px solid #e5e7eb;
-border-radius:15px;
-padding:5px;
-}
-
-.profile-box h2{
-margin:12px 0 5px;
-}
-
-.profile-box p{
-color:#64748b;
-line-height:1.6;
-font-size:13px;
-}
-
-.profile-btn{
-display:block;
-width:100%;
-padding:12px;
-border:0;
-border-radius:9px;
-margin-top:10px;
-cursor:pointer;
-font-weight:bold;
-}
-
-.view{
-background:#2563eb;
-color:#fff;
-}
-
-.close{
-background:#e2e8f0;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:900px){
 
 .stats{
-grid-template-columns:repeat(2,1fr);
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:10px
+}
+.stat{
+ background:#f8fafc;border:1px solid var(--line);
+ border-radius:12px;padding:14px;text-align:center
+}
+.stat b{font-size:22px;display:block}
+
+.grid2{
+ display:grid;grid-template-columns:repeat(2,1fr);gap:14px
 }
 
-.price-grid{
-grid-template-columns:repeat(2,1fr);
+.listitem{
+ border:1px solid var(--line);
+ border-radius:12px;padding:14px;margin-bottom:10px
+}
+.listitem:last-child{margin-bottom:0}
+
+.chips{
+ display:flex;flex-wrap:wrap;gap:6px;margin-top:8px
+}
+.chip{
+ padding:5px 9px;border-radius:999px;
+ background:#eef4fb;color:#245b91;
+ font-size:12px;font-weight:800
 }
 
-.grid{
-grid-template-columns:repeat(10,1fr);
+.progress{
+ height:8px;background:#e5e7eb;
+ border-radius:99px;overflow:hidden
+}
+.progress i{
+ display:block;height:100%;
+ background:var(--blue)
 }
 
+.profileCover{
+ height:145px;
+ border-radius:14px 14px 0 0;
+ background:linear-gradient(120deg,#0a66c2,#4f46e5,#7c3aed)
+}
+.profileMain{
+ margin-top:-48px;padding:0 20px 20px
+}
+.bigAvatar{
+ width:96px;height:96px;border-radius:50%;
+ border:4px solid #fff;
+ background:#dbeafe;
+ object-fit:cover
 }
 
-@media(max-width:600px){
-
-.toolbar{
-flex-direction:column;
+.tabs{
+ display:flex;gap:5px;overflow:auto;
+ border-bottom:1px solid var(--line);
+ margin-bottom:14px
+}
+.tab{
+ border:0;background:#fff;
+ padding:10px 14px;font-weight:800;
+ white-space:nowrap
+}
+.tab.active{
+ color:var(--blue);
+ border-bottom:3px solid var(--blue)
 }
 
-select{
-width:100%;
+.modalback{
+ position:fixed;inset:0;
+ background:rgba(15,23,42,.62);
+ z-index:100;
+ display:grid;place-items:center;
+ padding:15px
+}
+.modal{
+ width:min(650px,100%);
+ max-height:91vh;overflow:auto;
+ background:#fff;border-radius:18px;
+ box-shadow:0 25px 80px rgba(0,0,0,.28)
+}
+.modalHead{
+ padding:16px 18px;border-bottom:1px solid var(--line);
+ display:flex;align-items:center;justify-content:space-between
+}
+.modalBody{padding:18px}
+.modalFoot{
+ padding:14px 18px;border-top:1px solid var(--line);
+ display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap
+}
+.field{margin-bottom:13px}
+.field label{
+ display:block;font-size:13px;
+ font-weight:800;margin-bottom:6px
+}
+.field input,.field textarea,.field select{
+ width:100%;padding:11px 12px;
+ border:1px solid #d0d5dd;border-radius:10px;
+ outline:none;background:#fff
+}
+.field textarea{min-height:110px;resize:vertical}
+
+.toast{
+ position:fixed;right:18px;bottom:18px;z-index:200;
+ background:#101828;color:#fff;
+ padding:12px 16px;border-radius:11px;
+ box-shadow:var(--shadow);max-width:370px
 }
 
-.grid{
-grid-template-columns:repeat(5,1fr);
-gap:3px;
+.aiHero{
+ background:linear-gradient(135deg,#111827,#1e3a8a);
+ color:#fff
+}
+.aiChat{
+ height:440px;overflow:auto;
+ background:#f8fafc;border-radius:13px;
+ padding:14px
+}
+.aiMsg{
+ max-width:82%;
+ padding:11px 13px;
+ border-radius:14px;
+ margin-bottom:10px;
+ line-height:1.5
+}
+.aiMsg.me{
+ margin-left:auto;
+ background:#dbeafe
+}
+.aiMsg.bot{
+ background:#fff;
+ border:1px solid var(--line)
+}
+.aiForm{
+ display:flex;gap:8px;margin-top:10px
+}
+.aiForm input{
+ flex:1;padding:12px;
+ border:1px solid var(--line);
+ border-radius:12px;outline:none
 }
 
-.pixel{
-height:45px;
+.chatBox{
+ height:540px;
+ display:grid;
+ grid-template-columns:230px 1fr;
+ border:1px solid var(--line);
+ border-radius:14px;
+ overflow:hidden
+}
+.chatUsers{
+ border-right:1px solid var(--line);
+ overflow:auto
+}
+.chatUser{
+ width:100%;border:0;
+ border-bottom:1px solid #f0f2f5;
+ background:#fff;text-align:left;
+ padding:12px
+}
+.chatUser:hover,.chatUser.active{background:#eef4fb}
+.chatMain{display:flex;flex-direction:column}
+.messages{
+ flex:1;overflow:auto;
+ padding:14px;background:#f8fafc
+}
+.bubble{
+ max-width:76%;
+ padding:10px 12px;
+ background:#fff;border:1px solid var(--line);
+ border-radius:14px;margin-bottom:8px
+}
+.bubble.me{
+ margin-left:auto;background:#dbeafe
+}
+.sendRow{
+ display:flex;gap:8px;
+ padding:10px;border-top:1px solid var(--line)
+}
+.sendRow input{
+ flex:1;padding:11px;
+ border:1px solid var(--line);
+ border-radius:10px
 }
 
-.selection-grid{
-grid-template-columns:1fr 1fr;
+.bottom{
+ display:none
 }
 
-.form-grid{
-grid-template-columns:1fr;
+.empty{
+ text-align:center;padding:30px 15px;
+ color:var(--muted)
 }
 
-.full{
-grid-column:auto;
+@media(max-width:1000px){
+ .layout{grid-template-columns:190px minmax(0,1fr)}
+ .right{display:none}
 }
-
-.price-grid{
-grid-template-columns:1fr;
-}
-
+@media(max-width:700px){
+ .top{height:58px}
+ .topin{width:calc(100% - 12px)}
+ .logo{font-size:20px}
+ .search{max-width:none}
+ .hideMobile{display:none!important}
+ .layout{
+  display:block;width:100%;
+  margin:9px 0 72px
+ }
+ .side{display:none}
+ .main{padding:0 7px}
+ .card{padding:13px;border-radius:14px}
+ .hero h1{font-size:25px}
+ .grid2{grid-template-columns:1fr}
+ .stats{gap:5px}
+ .postactions{grid-template-columns:repeat(4,1fr)}
+ .postactions button{font-size:12px}
+ .chatBox{grid-template-columns:1fr;height:570px}
+ .chatUsers{display:none}
+ .bottom{
+  position:fixed;left:0;right:0;bottom:0;
+  height:63px;background:#fff;
+  border-top:1px solid var(--line);
+  z-index:60;
+  display:flex;justify-content:space-around
+ }
+ .bottom button{
+  border:0;background:#fff;
+  color:#475467;font-size:10px;font-weight:800
+ }
+ .bottom b{display:block;font-size:20px}
 }
 </style>
 </head>
 
 <body>
 
-<header class="hero">
+<header class="top">
+ <div class="topin">
 
-<div class="badge">
-✦ 1,00,000 Pixel Business Wall
-</div>
+  <div class="logo">Work<span>Lynk</span></div>
 
-<h1>
-Your Brand. Your Pixel.
-</h1>
+  <input
+   id="globalSearch"
+   class="search"
+   placeholder="Search people, jobs, businesses, projects..."
+   onkeydown="if(event.key==='Enter')searchAll(this.value)"
+  >
 
-<p>
-Give your business a permanent digital space
-where customers can discover your brand,
-view your profile and visit your website.
-</p>
+  <div class="topactions">
+   <button class="iconbtn" onclick="showPage('ai')" title="Lynk AI">🤖</button>
+   <button class="iconbtn hideMobile" onclick="showPage('chat')" title="Messages">💬</button>
+   <button class="iconbtn hideMobile" onclick="showPage('notifications')" title="Notifications">🔔</button>
+   <button id="topAvatar" class="avatar" onclick="showPage('profile')">W</button>
+  </div>
 
+ </div>
 </header>
 
 
-<div class="container">
+<div class="layout">
 
-<!-- STATS -->
+<aside class="side">
 
-<div class="stats">
+ <button class="nav active" data-page="home" onclick="showPage('home')">🏠 Home</button>
+ <button class="nav" data-page="network" onclick="showPage('network')">🤝 My Network</button>
+ <button class="nav" data-page="jobs" onclick="showPage('jobs')">💼 Jobs</button>
+ <button class="nav" data-page="projects" onclick="showPage('projects')">🚀 Projects</button>
+ <button class="nav" data-page="business" onclick="showPage('business')">🏢 Business</button>
+ <button class="nav" data-page="profile" onclick="showPage('profile')">👤 Profile</button>
+ <button class="nav" data-page="chat" onclick="showPage('chat')">💬 Messaging</button>
+ <button class="nav" data-page="notifications" onclick="showPage('notifications')">🔔 Notifications</button>
+ <button class="nav" data-page="ai" onclick="showPage('ai')">🤖 Lynk AI</button>
 
-<div class="stat">
-<span>Total Pixels</span>
-<strong>1,00,000</strong>
-</div>
+ <hr style="border:0;border-top:1px solid var(--line);margin:10px 0">
 
-<div class="stat">
-<span>Sold Pixels</span>
-<strong id="soldPixels">0</strong>
-</div>
+ <button class="nav" onclick="openModal('createPost')">✍️ Create Post</button>
+ <button class="nav" onclick="openModal('createJob')">➕ Post a Job</button>
+ <button class="nav" onclick="openModal('createProject')">🛠️ Start Project</button>
 
-<div class="stat">
-<span>Available</span>
-<strong id="availablePixels">1,00,000</strong>
-</div>
-
-<div class="stat">
-<span>Business Blocks</span>
-<strong id="soldBlocks">0</strong>
-</div>
-
-</div>
+</aside>
 
 
-<!-- SEARCH -->
-
-<div class="toolbar">
-
-<div class="search">
-
-<input
-id="search"
-type="text"
-placeholder="Search company / brand...">
-
-</div>
-
-<select id="filter">
-
-<option value="all">
-All Spaces
-</option>
-
-<option value="center">
-Center ₹49
-</option>
-
-<option value="premium">
-Premium ₹69
-</option>
-
-<option value="edge">
-Edge ₹79
-</option>
-
-<option value="corner">
-Corner ₹99
-</option>
-
-</select>
-
-</div>
+<main id="app" class="main"></main>
 
 
-<!-- LEGEND -->
+<aside class="right">
 
-<div class="legend">
+ <div class="sectiontitle">
+  <b>WorkLynk</b>
+  <span class="small muted">Professional Hub</span>
+ </div>
 
-<span>
-<i class="dot available"></i>
-Available
-</span>
+ <p class="muted small">
+  Where People, Skills & Opportunities Work Together.
+ </p>
 
-<span>
-<i class="dot sold"></i>
-Sold
-</span>
+ <div style="height:12px"></div>
 
-<span>
-<i class="dot premium"></i>
-Premium
-</span>
+ <div class="listitem">
+  <b>Profile Strength</b>
+  <div class="progress" style="margin:9px 0">
+   <i id="profileProgress" style="width:20%"></i>
+  </div>
+  <span id="profileProgressText" class="small muted">20% complete</span>
+ </div>
 
-<span>
-<i class="dot corner"></i>
-Corner
-</span>
+ <div class="listitem">
+  <b>Quick Actions</b>
+  <div class="chips">
+   <button class="btn" onclick="openModal('createPost')">Post</button>
+   <button class="btn gray" onclick="showPage('jobs')">Jobs</button>
+   <button class="btn gray" onclick="showPage('ai')">AI</button>
+  </div>
+ </div>
+
+ <div class="listitem">
+  <b>Build your network</b>
+  <p class="small muted" style="margin-top:6px">
+   Connect with professionals and discover opportunities.
+  </p>
+ </div>
+
+</aside>
 
 </div>
 
 
-<!-- WALL -->
-
-<section class="wall">
-
-<div class="wall-header">
-
-<div>
-
-<h2>
-Live Business Wall
-</h2>
-
-<small>
-1 block = 100 pixels
-</small>
-
-</div>
-
-<small>
-1,000 Blocks
-</small>
-
-</div>
-
-
-<div id="board"></div>
-
-</section>
-
-
-<!-- SELECTION -->
-
-<div
-id="selection"
-class="selection">
-
-<h3>
-Selected Space
-</h3>
-
-<div class="selection-grid">
-
-<div class="selection-item">
-
-<small>Row</small>
-
-<strong id="selRow">
--
-</strong>
-
-</div>
-
-<div class="selection-item">
-
-<small>Pixels</small>
-
-<strong id="selPixels">
--
-</strong>
-
-</div>
-
-<div class="selection-item">
-
-<small>Zone</small>
-
-<strong id="selZone">
--
-</strong>
-
-</div>
-
-<div class="selection-item">
-
-<small>Price</small>
-
-<strong>
-₹<span id="selPrice">0</span>
-</strong>
-
-</div>
-
-</div>
-
-<button
-class="continue"
-onclick="goRegistration()">
-
-Continue →
-
-</button>
-
-</div>
-
-
-<!-- PRICING -->
-
-<section class="pricing">
-
-<h2>
-Simple Pricing
-</h2>
-
-<div class="subtitle">
-Choose your preferred location.
-</div>
-
-
-<div class="price-grid">
-
-<div class="price-card">
-
-<h3>Center</h3>
-
-<div class="price">
-₹49
-</div>
-
-<p>
-Standard business visibility.
-</p>
-
-</div>
-
-
-<div class="price-card">
-
-<h3>Premium</h3>
-
-<div class="price">
-₹69
-</div>
-
-<p>
-Better visibility placement.
-</p>
-
-</div>
-
-
-<div class="price-card">
-
-<h3>Edge</h3>
-
-<div class="price">
-₹79
-</div>
-
-<p>
-High visibility position.
-</p>
-
-</div>
-
-
-<div class="price-card corner-card">
-
-<h3>
-Corner ⭐
-</h3>
-
-<div class="price">
-₹99
-</div>
-
-<p>
-Premium corner visibility.
-Minimum 20 Corner blocks available.
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- REGISTRATION -->
-
-<section
-id="registration"
-class="form">
-
-<h2>
-Register Your Business
-</h2>
-
-<p class="subtitle">
-Select a space and enter your business details.
-</p>
-
-
-<div class="form-grid">
-
-<div class="form-group">
-
-<label>
-Company / Brand Name *
-</label>
-
-<input
-id="company"
-type="text"
-placeholder="Example: Ram Solutions">
-
-</div>
-
-
-<div class="form-group">
-
-<label>
-Website
-</label>
-
-<input
-id="website"
-type="url"
-placeholder="https://example.com">
-
-</div>
-
-
-<div class="form-group">
-
-<label>
-Company Logo *
-</label>
-
-<input
-id="logoInput"
-type="file"
-accept="image/*">
-
-</div>
-
-
-<div class="form-group">
-
-<label>
-Business Category
-</label>
-
-<input
-id="category"
-type="text"
-placeholder="Technology">
-
-</div>
-
-
-<div class="form-group full">
-
-<label>
-Business Description
-</label>
-
-<textarea
-id="description"
-placeholder="Tell customers about your business..."></textarea>
-
-</div>
-
-</div>
-
-
-<div class="summary">
-
-<strong>Selected:</strong>
-<span id="summary">
-No space selected
-</span>
-
-</div>
-
-
-<button
-class="reserve"
-onclick="reserve()">
-
-Continue to Payment
-
-</button>
-
-</section>
-
-</div>
-
-
-<footer style="text-align:center;padding:20px;color:#64748b;font-size:12px">
-
-© 2026 PixelOne • Digital Business Visibility Platform
-
-</footer>
-
-
-<!-- VIEW PROFILE -->
-
-<div
-id="profileOverlay"
-class="overlay">
-
-<div class="profile-box">
-
-<img
-id="profileLogo"
-class="profile-logo"
-src=""
-alt="Company Logo">
-
-<h2 id="profileCompany">
-Company
-</h2>
-
-<p id="profileInfo">
-Business Profile
-</p>
-
-<button
-class="profile-btn view"
-onclick="openProfile()">
-
-View Profile
-
-</button>
-
-<button
-class="profile-btn close"
-onclick="closeProfile()">
-
-Close
-
-</button>
-
-</div>
-
-</div>
+<nav class="bottom">
+ <button onclick="showPage('home')"><b>⌂</b>Home</button>
+ <button onclick="showPage('network')"><b>♙</b>Network</button>
+ <button onclick="showPage('jobs')"><b>▣</b>Jobs</button>
+ <button onclick="showPage('chat')"><b>◌</b>Chat</button>
+ <button onclick="showPage('profile')"><b>◯</b>Me</button>
+</nav>
+
+
+<div id="modalRoot"></div>
+<div id="toastRoot"></div>
 
 
 <script>
+
 /* =========================================================
-   ONE MILLION PIXELS INDIA — GLOBAL BOOKING VERSION
-   IMPORTANT:
-   Set API_BASE_URL to the URL of your deployed backend.
-   The backend must:
-     GET  /api/pixels/booked
-     POST /api/payments/create
-   and must verify payment before marking a pixel SUCCESS.
+   WORKLYNK CONFIG
 ========================================================= */
 
-const API_BASE_URL = "YOUR_BACKEND_URL";
+const SUPABASE_URL =
+ "https://eaowxilhfzyukzetgqxo.supabase.co";
 
-const ROWS = 10;
-const BLOCKS = 100;
-const PIXELS_PER_BLOCK = 100;
-const TOTAL_PIXELS = 100000;
+const SUPABASE_KEY =
+ "sb_publishable_Z3xsADypaOjX8GEQEOLUdg_vbxynHRx";
 
-const prices = {
-    center: 49,
-    premium: 69,
-    edge: 79,
-    corner: 99
-};
+const supabaseClient =
+ supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let businesses = {};
-let selected = null;
-let selectedBusiness = null;
-let uploadedLogo = null;
-let loadingBookings = false;
-
-/* ---------- DEFAULT LOGO ---------- */
-function defaultLogo(){
-    return "data:image/svg+xml," + encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
-          <rect width="100" height="100" rx="15" fill="#f1f5f9"/>
-          <text x="50" y="63" text-anchor="middle" font-size="35">🏢</text>
-        </svg>
-    `);
-}
-
-/* ---------- ZONE ---------- */
-function zone(row, block){
-    if ((row === 0 || row === 9) && (block < 10 || block >= 90)) return "corner";
-    if (row === 0 || row === 9 || block < 10 || block >= 90) return "edge";
-    if (row === 1 || row === 8 || block < 30 || block >= 70) return "premium";
-    return "center";
-}
-
-/* ---------- LOAD SHARED BOOKINGS ---------- */
-async function loadBookings(){
-    if (loadingBookings) return;
-    loadingBookings = true;
-
-    try {
-        const response = await fetch(
-            API_BASE_URL + "/api/pixels/booked",
-            { cache: "no-store" }
-        );
-
-        if (!response.ok) throw new Error("Booking API failed");
-
-        const rows = await response.json();
-
-        businesses = {};
-
-        /*
-          Expected public response:
-          [
-            {
-              id: 123,
-              pixelId: 123,
-              company: "ABC",
-              website: "https://abc.com",
-              category: "Business",
-              description: "...",
-              logo: "https://...",
-              status: "SUCCESS"
-            }
-          ]
-
-          Only SUCCESS bookings are shown publicly.
-          Private phone/email/payment fields should NOT
-          be returned by this endpoint.
-        */
-        rows.forEach(b => {
-            const id = Number(
-                b.pixelId !== undefined ? b.pixelId : b.id
-            );
-
-            if (
-                Number.isInteger(id) &&
-                id >= 0 &&
-                id < TOTAL_PIXELS &&
-                String(b.status || "").toUpperCase() === "SUCCESS"
-            ) {
-                businesses[id] = {
-                    company: b.company || b.companyName || "Business",
-                    website: b.website || "",
-                    category: b.category || "Verified Business",
-                    description: b.description || "",
-                    logo: b.logo || b.logoUrl || defaultLogo()
-                };
-            }
-        });
-
-    } catch (e) {
-        console.error("Could not load shared bookings:", e);
-        /*
-          IMPORTANT:
-          Do NOT invent a booking locally if the server fails.
-          This prevents one browser from showing a false state.
-        */
-        businesses = {};
-    } finally {
-        loadingBookings = false;
-        buildWall();
-    }
-}
-
-/* ---------- BUILD WALL ---------- */
-function buildWall(){
-    const board = document.getElementById("board");
-    if (!board) return;
-
-    board.innerHTML = "";
-
-    for (let row = 0; row < ROWS; row++) {
-
-        const rowDiv = document.createElement("div");
-        rowDiv.className = "row";
-
-        const rowStart = row * 10000 + 1;
-        const rowEnd = (row + 1) * 10000;
-
-        rowDiv.innerHTML = `
-            <div class="row-head">
-                <strong>ROW ${String(row + 1).padStart(2,"0")}</strong>
-                <span>${rowStart.toLocaleString("en-IN")} - ${rowEnd.toLocaleString("en-IN")}</span>
-            </div>
-        `;
-
-        const grid = document.createElement("div");
-        grid.className = "grid";
-
-        for (let block = 0; block < BLOCKS; block++) {
-
-            const id = row * BLOCKS + block;
-            const start = rowStart + block * PIXELS_PER_BLOCK;
-            const end = start + PIXELS_PER_BLOCK - 1;
-            const currentZone = zone(row, block);
-
-            const pixel = document.createElement("div");
-            pixel.className = "pixel " + currentZone;
-            pixel.dataset.id = id;
-            pixel.dataset.zone = currentZone;
-
-            const business = businesses[id];
-
-            if (business) {
-                pixel.classList.add("is-sold");
-
-                pixel.innerHTML = `
-                    <img
-                        class="logo"
-                        src="${escapeAttr(business.logo || defaultLogo())}"
-                        alt="Company logo">
-                    <div class="company-name">
-                        ${escapeHtml(business.company)}
-                    </div>
-                    <div style="
-                        position:absolute;
-                        top:2px;
-                        left:2px;
-                        right:2px;
-                        color:#b91c1c;
-                        background:#fee2e2;
-                        font-size:6px;
-                        font-weight:800;
-                        border-radius:3px;
-                        padding:2px;
-                    ">
-                        UNAVAILABLE
-                    </div>
-                    <div style="
-                        position:absolute;
-                        bottom:14px;
-                        left:2px;
-                        right:2px;
-                        color:#1d4ed8;
-                        font-size:6px;
-                        font-weight:800;
-                    ">
-                        VIEW DETAILS
-                    </div>
-                `;
-
-                pixel.onclick = () => showProfile(business);
-
-            } else {
-
-                pixel.innerHTML = `
-                    <span style="
-                        font-size:7px;
-                        color:#94a3b8">
-                        ${block + 1}
-                    </span>
-                `;
-
-                pixel.onclick = () => selectSpace(
-                    id, row, block, start, end, currentZone, pixel
-                );
-            }
-
-            grid.appendChild(pixel);
-        }
-
-        rowDiv.appendChild(grid);
-        board.appendChild(rowDiv);
-    }
-
-    updateStats();
-}
-
-/* ---------- SELECT AVAILABLE SQUARE ---------- */
-function selectSpace(id, row, block, start, end, currentZone, element){
-
-    /*
-      Re-check server before allowing the selection.
-      This reduces stale-browser booking conflicts.
-    */
-    if (businesses[id]) {
-        showProfile(businesses[id]);
-        return;
-    }
-
-    document.querySelectorAll(".pixel.highlight")
-        .forEach(x => x.classList.remove("highlight"));
-
-    element.classList.add("highlight");
-
-    selected = {
-        id,
-        row,
-        block,
-        start,
-        end,
-        zone: currentZone,
-        price: prices[currentZone],
-        element
-    };
-
-    document.getElementById("selRow").innerText =
-        "Row " + (row + 1);
-
-    document.getElementById("selPixels").innerText =
-        start.toLocaleString("en-IN") + " - " +
-        end.toLocaleString("en-IN");
-
-    document.getElementById("selZone").innerText =
-        currentZone.toUpperCase();
-
-    document.getElementById("selPrice").innerText =
-        prices[currentZone];
-
-    document.getElementById("selection")
-        .classList.add("show");
-
-    document.getElementById("summary").innerText =
-        `Row ${row + 1} • ` +
-        `${start.toLocaleString("en-IN")} - ` +
-        `${end.toLocaleString("en-IN")} • ` +
-        `${currentZone.toUpperCase()} • ₹${prices[currentZone]}`;
-}
-
-/* ---------- FORM ---------- */
-function goRegistration(){
-
-    if (!selected) {
-        alert("Please select an available space first.");
-        return;
-    }
-
-    /*
-      Ask server one more time for the exact pixel.
-      If already booked, immediately refresh the wall.
-    */
-    checkExactPixel(selected.id).then(available => {
-
-        if (!available) {
-            alert("This square was just booked by another customer.");
-            selected = null;
-            document.getElementById("selection")
-                .classList.remove("show");
-            loadBookings();
-            return;
-        }
-
-        document.getElementById("registration")
-            .scrollIntoView({behavior:"smooth"});
-    });
-}
-
-/* ---------- EXACT PIXEL CHECK ---------- */
-async function checkExactPixel(id){
-
-    if (!API_BASE_URL || API_BASE_URL === "YOUR_BACKEND_URL") {
-        return !businesses[id];
-    }
-
-    try {
-        const response = await fetch(
-            API_BASE_URL + "/api/pixels/" + encodeURIComponent(id),
-            {cache:"no-store"}
-        );
-
-        if (!response.ok) return !businesses[id];
-
-        const result = await response.json();
-
-        return !(
-            String(result.status || "").toUpperCase() === "SUCCESS"
-        );
-
-    } catch(e) {
-        return !businesses[id];
-    }
-}
-
-/* ---------- LOGO ---------- */
-document.getElementById("logoInput")
-.addEventListener("change", function(e){
-
-    const file = e.target.files[0];
-
-    if (!file) {
-        uploadedLogo = null;
-        return;
-    }
-
-    if (!file.type.startsWith("image/")) {
-        alert("Please select an image.");
-        this.value = "";
-        uploadedLogo = null;
-        return;
-    }
-
-    if (file.size > 2 * 1024 * 1024) {
-        alert("Logo must be less than 2 MB.");
-        this.value = "";
-        uploadedLogo = null;
-        return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = function(event){
-        uploadedLogo = event.target.result;
-    };
-
-    reader.readAsDataURL(file);
-});
-
-/* ---------- RESERVE / PAYMENT ---------- */
-async function reserve(){
-
-    if (!selected) {
-        alert("Please select an available space.");
-        return;
-    }
-
-    const company = document.getElementById("company").value.trim();
-    const website = document.getElementById("website").value.trim();
-    const category = document.getElementById("category").value.trim();
-    const description = document.getElementById("description").value.trim();
-
-    if (!company) {
-        alert("Please enter company name.");
-        return;
-    }
-
-    if (!uploadedLogo) {
-        alert("Please upload company logo.");
-        return;
-    }
-
-    /*
-      NEVER mark the square as SUCCESS here.
-
-      Your backend/payment gateway must:
-        1. Create a payment/order.
-        2. Lock/check the exact pixel.
-        3. Verify the gateway payment.
-        4. Save SUCCESS in the database.
-        5. Return paymentUrl to this page.
-
-      This is what makes the booking global across devices.
-    */
-
-    if (!API_BASE_URL || API_BASE_URL === "YOUR_BACKEND_URL") {
-        alert(
-            "Connect API_BASE_URL to your deployed backend first. " +
-            "A frontend-only booking cannot be shared between different customers."
-        );
-        return;
-    }
-
-    const confirmed = confirm(
-        `Confirm booking
-
-` +
-        `Company: ${company}
-` +
-        `Pixel Block: ${selected.id}
-` +
-        `Zone: ${selected.zone.toUpperCase()}
-` +
-        `Price: ₹${selected.price}
-
-` +
-        `Continue to payment?`
-    );
-
-    if (!confirmed) return;
-
-    try {
-
-        /*
-          Backend receives logo as a data URL in this version.
-          Prefer changing this to a real storage upload endpoint
-          if your backend already has one.
-        */
-        const response = await fetch(
-            API_BASE_URL + "/api/payments/create",
-            {
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify({
-                    pixelId: selected.id,
-                    pixelStart: selected.start,
-                    pixelEnd: selected.end,
-                    zone: selected.zone,
-                    amount: selected.price,
-                    company,
-                    website,
-                    category,
-                    description,
-                    logo: uploadedLogo
-                })
-            }
-        );
-
-        if (!response.ok) {
-            const msg = await response.text();
-            throw new Error(msg || "Unable to create payment");
-        }
-
-        const result = await response.json();
-
-        if (result.paymentUrl) {
-            window.location.href = result.paymentUrl;
-            return;
-        }
-
-        /*
-          Some backends may return an order ID instead.
-          In that case your existing payment UI can use it.
-        */
-        if (result.gatewayOrderId || result.orderId) {
-            alert(
-                "Payment order created. Connect this order to your existing UPI payment screen."
-            );
-            return;
-        }
-
-        throw new Error("Payment URL was not returned.");
-
-    } catch(error) {
-
-        console.error(error);
-
-        alert(
-            "Payment could not be started.
-
-" +
-            (error.message || "Please try again.")
-        );
-    }
-}
-
-/* ---------- PUBLIC PROFILE ---------- */
-function showProfile(business){
-
-    selectedBusiness = business;
-
-    document.getElementById("profileLogo").src =
-        business.logo || defaultLogo();
-
-    document.getElementById("profileCompany").innerText =
-        business.company || "Business";
-
-    document.getElementById("profileInfo").innerText =
-        business.category || "Verified Business";
-
-    document.getElementById("profileOverlay")
-        .classList.add("show");
-}
-
-/* ---------- FULL PROFILE ---------- */
-function openProfile(){
-
-    if (!selectedBusiness) return;
-
-    const business = selectedBusiness;
-
-    const website = business.website;
-
-    let message =
-        `${business.company}
-
-` +
-        `${business.description || "Verified Business"}
-
-` +
-        `Category: ${business.category || "Business"}`;
-
-    if (website) {
-
-        const validWebsite =
-            /^https?:\/\//i.test(website)
-            ? website
-            : "https://" + website;
-
-        if (confirm(message + "
-
-Open company website?")) {
-            window.open(validWebsite, "_blank");
-        }
-
-    } else {
-        alert(message);
-    }
-}
-
-function closeProfile(){
-    document.getElementById("profileOverlay")
-        .classList.remove("show");
-}
-
-/* ---------- SEARCH ---------- */
-document.getElementById("search")
-.addEventListener("input", function(){
-
-    const value = this.value.toLowerCase().trim();
-
-    document.querySelectorAll(".pixel")
-    .forEach(pixel => {
-
-        pixel.classList.remove("highlight");
-
-        const id = Number(pixel.dataset.id);
-
-        if (
-            value &&
-            businesses[id] &&
-            businesses[id].company
-                .toLowerCase()
-                .includes(value)
-        ) {
-            pixel.classList.add("highlight");
-        }
-    });
-});
-
-/* ---------- FILTER ---------- */
-document.getElementById("filter")
-.addEventListener("change", function(){
-
-    const value = this.value;
-
-    document.querySelectorAll(".pixel")
-    .forEach(pixel => {
-
-        if (
-            value === "all" ||
-            pixel.dataset.zone === value
-        ) {
-            pixel.style.display = "flex";
-        } else {
-            pixel.style.display = "none";
-        }
-    });
-});
-
-/* ---------- STATS ---------- */
-function updateStats(){
-
-    const blocks = Object.keys(businesses).length;
-    const sold = blocks * PIXELS_PER_BLOCK;
-
-    document.getElementById("soldBlocks").innerText =
-        blocks.toLocaleString("en-IN");
-
-    document.getElementById("soldPixels").innerText =
-        sold.toLocaleString("en-IN");
-
-    document.getElementById("availablePixels").innerText =
-        (TOTAL_PIXELS - sold).toLocaleString("en-IN");
-}
-
-/* ---------- SAFE HTML ---------- */
-function escapeHtml(value){
-    return String(value || "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-}
-
-function escapeAttr(value){
-    return escapeHtml(value);
-}
-
-/* ---------- START ---------- */
-buildWall();
-loadBookings();
 
 /*
-  Refresh shared booking state periodically.
-  This means customer B will see customer A's
-  successful booking without relying on localStorage.
+  OPTIONAL REAL AI BACKEND
+
+  Example:
+  window.LYNK_AI_ENDPOINT =
+    "https://YOUR-PROJECT.supabase.co/functions/v1/lynk-ai";
+
+  DO NOT PUT SECRET AI API KEYS HERE.
 */
-setInterval(loadBookings, 10000);
+window.LYNK_AI_ENDPOINT = "";
+
+
+let currentUser=null;
+let currentProfile=null;
+let currentPage="home";
+let currentChatUser=null;
+let messageChannel=null;
+
+let cache={
+ posts:[],
+ profiles:[],
+ jobs:[],
+ projects:[],
+ businesses:[],
+ notifications:[]
+};
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function esc(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[c]));
+}
+
+function safeUrl(url){
+ return /^https?:\/\//i.test(String(url||""))
+  ? String(url)
+  : "#";
+}
+
+function initials(name){
+ return (
+  String(name||"User")
+   .trim()
+   .split(/\s+/)
+   .map(x=>x[0])
+   .join("")
+   .slice(0,2)
+  ||"U"
+ ).toUpperCase();
+}
+
+function toast(message){
+ const el=document.createElement("div");
+ el.className="toast";
+ el.textContent=message;
+ document.getElementById("toastRoot").appendChild(el);
+ setTimeout(()=>el.remove(),3000);
+}
+
+function loading(text="Loading..."){
+ return `<div class="card"><div class="empty">${esc(text)}</div></div>`;
+}
+
+async function db(table,fn){
+ try{
+  const result=await fn();
+  if(result.error)throw result.error;
+  return result.data??[];
+ }catch(error){
+  console.warn("WorkLynk:",table,error);
+  return null;
+ }
+}
+
+function avatarHTML(profile,sizeClass="avatar"){
+ const name=profile?.full_name||"User";
+ if(profile?.avatar_url){
+  return `
+   <div class="${sizeClass}">
+    <img
+     src="${safeUrl(profile.avatar_url)}"
+     alt=""
+     onerror="this.parentElement.innerHTML='${esc(initials(name))}'"
+    >
+   </div>`;
+ }
+ return `<div class="${sizeClass}">${esc(initials(name))}</div>`;
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+async function initialize(){
+
+ const {
+  data:{session}
+ }=await supabaseClient.auth.getSession();
+
+ currentUser=session?.user||null;
+
+ if(currentUser){
+  await loadProfile();
+ }
+
+ renderHome();
+
+ supabaseClient.auth.onAuthStateChange(()=>{
+  setTimeout(async()=>{
+   const {
+    data:{session}
+   }=await supabaseClient.auth.getSession();
+
+   currentUser=session?.user||null;
+
+   if(currentUser){
+    await loadProfile();
+   }
+
+   if(currentPage==="home"){
+    renderHome();
+   }
+  },0);
+ });
+}
+
+async function requireAuth(){
+
+ if(currentUser)return true;
+
+ openModal("auth");
+ return false;
+}
+
+async function loadProfile(){
+
+ if(!currentUser)return;
+
+ const profile=await db(
+  "profiles",
+  ()=>supabaseClient
+   .from("profiles")
+   .select("*")
+   .eq("id",currentUser.id)
+   .maybeSingle()
+ );
+
+ currentProfile=profile||{
+  id:currentUser.id,
+  email:currentUser.email,
+  full_name:
+   currentUser.user_metadata?.full_name||
+   currentUser.email?.split("@")[0]||
+   "WorkLynk User"
+ };
+
+ updateTopAvatar();
+ updateProfileStrength();
+}
+
+function updateTopAvatar(){
+
+ const el=document.getElementById("topAvatar");
+ if(!el)return;
+
+ if(currentProfile?.avatar_url){
+  el.innerHTML=
+   `<img src="${safeUrl(currentProfile.avatar_url)}" alt="">`;
+ }else{
+  el.textContent=initials(currentProfile?.full_name);
+ }
+}
+
+function updateProfileStrength(){
+
+ if(!currentProfile)return;
+
+ const fields=[
+  "full_name",
+  "headline",
+  "about",
+  "company_name",
+  "location",
+  "skills",
+  "experience",
+  "education",
+  "linkedin_url",
+  "github_url",
+  "portfolio_url",
+  "avatar_url"
+ ];
+
+ const completed=fields.filter(
+  key=>currentProfile[key] &&
+       String(currentProfile[key]).trim()
+ ).length;
+
+ const percent=Math.round(
+  completed/fields.length*100
+ );
+
+ const bar=document.getElementById("profileProgress");
+ const text=document.getElementById("profileProgressText");
+
+ if(bar)bar.style.width=percent+"%";
+ if(text)text.textContent=percent+"% complete";
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function setActivePage(page){
+
+ document.querySelectorAll(".nav").forEach(btn=>{
+  btn.classList.toggle(
+   "active",
+   btn.dataset.page===page
+  );
+ });
+}
+
+async function showPage(page){
+
+ currentPage=page;
+ setActivePage(page);
+
+ if(
+  !currentUser &&
+  !["home","jobs","ai"].includes(page)
+ ){
+  if(!(await requireAuth()))return;
+ }
+
+ if(page==="home")return renderHome();
+ if(page==="network")return renderNetwork();
+ if(page==="jobs")return renderJobs();
+ if(page==="projects")return renderProjects();
+ if(page==="business")return renderBusiness();
+ if(page==="profile")return renderProfile();
+ if(page==="chat")return renderChat();
+ if(page==="notifications")return renderNotifications();
+ if(page==="ai")return renderAI();
+}
+
+
+/* =========================================================
+   HOME / FEED
+========================================================= */
+
+function renderHome(){
+
+ document.getElementById("app").innerHTML=`
+
+  <section class="card hero">
+   <h1>Build your professional world.</h1>
+
+   <p>
+    Connect with people, showcase skills,
+    discover opportunities and grow with WorkLynk.
+   </p>
+
+   <div class="heroActions">
+    <button class="btn" onclick="showPage('jobs')">
+     Explore Jobs
+    </button>
+
+    <button class="btn outline" onclick="showPage('ai')">
+     🤖 Ask Lynk AI
+    </button>
+
+    <button class="btn gray" onclick="showPage('network')">
+     🤝 Grow Network
+    </button>
+   </div>
+  </section>
+
+
+  <section class="card">
+   <div class="composer">
+
+    ${avatarHTML(currentProfile)}
+
+    <input
+     class="composerInput"
+     placeholder="Start a post, share an idea or opportunity..."
+     onclick="openModal('createPost')"
+     readonly
+    >
+
+   </div>
+  </section>
+
+
+  <div id="feed">
+   ${loading("Loading your professional feed...")}
+  </div>
+ `;
+
+ loadFeed();
+}
+
+async function loadFeed(){
+
+ const posts=await db(
+  "posts",
+  ()=>supabaseClient
+   .from("posts")
+   .select("*,profiles(*)")
+   .order("created_at",{ascending:false})
+   .limit(50)
+ );
+
+ cache.posts=posts||[];
+
+ const feed=document.getElementById("feed");
+
+ if(!feed)return;
+
+ if(!cache.posts.length){
+  feed.innerHTML=`
+   <div class="card empty">
+    <h3>No posts yet</h3>
+    <p>Be the first person to share something valuable.</p>
+   </div>`;
+  return;
+ }
+
+ feed.innerHTML=cache.posts
+  .map(renderPost)
+  .join("");
+}
+
+function renderPost(post){
+
+ const profile=post.profiles||{};
+ const mine=currentUser &&
+            post.user_id===currentUser.id;
+
+ const media=post.media_url
+  ? (
+    String(post.media_type||"")
+     .toLowerCase()
+     .includes("video")
+    ?
+    `<video
+      class="postmedia"
+      controls
+      src="${safeUrl(post.media_url)}"
+     ></video>`
+    :
+    `<img
+      class="postmedia"
+      src="${safeUrl(post.media_url)}"
+      alt="Post media"
+     >`
+   )
+  :"";
+
+ return `
+ <article class="card" id="post-${post.id}">
+
+  <div class="posthead">
+
+   ${avatarHTML(profile)}
+
+   <div class="grow">
+    <b>${esc(profile.full_name||"WorkLynk Member")}</b>
+
+    <div class="small muted">
+     ${esc(
+      profile.headline||
+      profile.company_name||
+      "Professional"
+     )}
+     ·
+     ${new Date(post.created_at).toLocaleString()}
+    </div>
+   </div>
+
+   ${
+    mine
+    ?
+    `<button
+      class="iconbtn"
+      onclick="deletePost(${post.id})"
+      title="Delete"
+     >⋮</button>`
+    :""
+   }
+
+  </div>
+
+  ${
+   post.caption
+   ?
+   `<div class="postcaption">
+     ${esc(post.caption)}
+    </div>`
+   :""
+  }
+
+  ${media}
+
+  <div class="postactions">
+
+   <button
+    onclick="likePost(${post.id},this)"
+   >
+    ❤️ Like
+   </button>
+
+   <button
+    onclick="toggleComments(${post.id})"
+   >
+    💬 Comment
+   </button>
+
+   <button
+    onclick="sharePost(${post.id})"
+   >
+    🔄 Share
+   </button>
+
+   <button
+    onclick="savePost(${post.id},this)"
+   >
+    🔖 Save
+   </button>
+
+  </div>
+
+  <div id="comments-${post.id}" class="hidden">
+
+   <div class="commentBox">
+    <input
+     id="commentInput-${post.id}"
+     placeholder="Write a comment..."
+     onkeydown="
+      if(event.key==='Enter')
+      submitComment(${post.id})
+     "
+    >
+    <button
+     class="btn"
+     onclick="submitComment(${post.id})"
+    >
+     Send
+    </button>
+   </div>
+
+   <div id="commentList-${post.id}"></div>
+
+  </div>
+
+ </article>
+ `;
+}
+
+async function likePost(postId,button){
+
+ if(!(await requireAuth()))return;
+
+ const existing=await db(
+  "post_likes",
+  ()=>supabaseClient
+   .from("post_likes")
+   .select("id")
+   .eq("post_id",postId)
+   .eq("user_id",currentUser.id)
+   .maybeSingle()
+ );
+
+ if(existing?.id){
+
+  await supabaseClient
+   .from("post_likes")
+   .delete()
+   .eq("id",existing.id);
+
+  button?.classList.remove("active");
+  toast("Like removed");
+
+ }else{
+
+  const r=await supabaseClient
+   .from("post_likes")
+   .insert({
+    post_id:postId,
+    user_id:currentUser.id
+   });
+
+  if(r.error){
+   toast(r.error.message);
+   return;
+  }
+
+  button?.classList.add("active");
+  toast("Liked");
+ }
+}
+
+function toggleComments(id){
+
+ const box=document.getElementById("comments-"+id);
+
+ if(!box)return;
+
+ box.classList.toggle("hidden");
+
+ if(!box.classList.contains("hidden")){
+  loadComments(id);
+ }
+}
+
+async function loadComments(postId){
+
+ const comments=await db(
+  "post_comments",
+  ()=>supabaseClient
+   .from("post_comments")
+   .select("*,profiles(full_name,avatar_url)")
+   .eq("post_id",postId)
+   .order("created_at",{ascending:true})
+ );
+
+ const el=document.getElementById(
+  "commentList-"+postId
+ );
+
+ if(!el)return;
+
+ el.innerHTML=(comments||[])
+  .map(comment=>`
+   <div class="comment">
+    <b>${esc(
+     comment.profiles?.full_name||
+     "Member"
+    )}</b>
+
+    <span>${esc(comment.content)}</span>
+
+    <div class="small muted">
+     ${new Date(
+      comment.created_at
+     ).toLocaleString()}
+    </div>
+   </div>
+  `)
+  .join("")||
+  `<div class="small muted" style="padding:10px 0">
+    No comments yet.
+   </div>`;
+}
+
+async function submitComment(postId){
+
+ if(!(await requireAuth()))return;
+
+ const input=document.getElementById(
+  "commentInput-"+postId
+ );
+
+ const content=input?.value.trim();
+
+ if(!content)return;
+
+ const r=await supabaseClient
+  .from("post_comments")
+  .insert({
+   post_id:postId,
+   user_id:currentUser.id,
+   content
+  });
+
+ if(r.error){
+  toast(r.error.message);
+  return;
+ }
+
+ input.value="";
+ toast("Comment added");
+ loadComments(postId);
+}
+
+async function savePost(postId,button){
+
+ if(!(await requireAuth()))return;
+
+ const existing=await db(
+  "post_saves",
+  ()=>supabaseClient
+   .from("post_saves")
+   .select("id")
+   .eq("post_id",postId)
+   .eq("user_id",currentUser.id)
+   .maybeSingle()
+ );
+
+ if(existing?.id){
+
+  await supabaseClient
+   .from("post_saves")
+   .delete()
+   .eq("id",existing.id);
+
+  button?.classList.remove("active");
+  toast("Removed from saved");
+
+ }else{
+
+  const r=await supabaseClient
+   .from("post_saves")
+   .insert({
+    post_id:postId,
+    user_id:currentUser.id
+   });
+
+  if(r.error){
+   toast(r.error.message);
+   return;
+  }
+
+  button?.classList.add("active");
+  toast("Post saved");
+ }
+}
+
+async function sharePost(postId){
+
+ const url=
+  location.href.split("#")[0]+
+  "#post-"+postId;
+
+ try{
+
+  if(navigator.share){
+   await navigator.share({
+    title:"WorkLynk",
+    text:"Check this WorkLynk post",
+    url
+   });
+  }else if(navigator.clipboard){
+   await navigator.clipboard.writeText(url);
+   toast("Post link copied");
+  }
+
+ }catch(e){}
+
+ if(currentUser){
+  await supabaseClient
+   .from("post_shares")
+   .insert({
+    post_id:postId,
+    user_id:currentUser.id
+   });
+ }
+}
+
+async function deletePost(postId){
+
+ if(!currentUser)return;
+
+ if(!confirm("Delete this post?"))return;
+
+ const r=await supabaseClient
+  .from("posts")
+  .delete()
+  .eq("id",postId)
+  .eq("user_id",currentUser.id);
+
+ if(r.error){
+  toast(r.error.message);
+  return;
+ }
+
+ toast("Post deleted");
+ loadFeed();
+}
+
+
+/* =========================================================
+   NETWORK
+========================================================= */
+
+async function renderNetwork(){
+
+ document.getElementById("app").innerHTML=`
+
+ <section class="card">
+
+  <div class="sectiontitle">
+   <div>
+    <h2>My Network</h2>
+    <p class="muted">
+     Discover people and build professional relationships.
+    </p>
+   </div>
+
+   <button
+    class="btn"
+    onclick="showPage('chat')"
+   >
+    Messages
+   </button>
+  </div>
+
+  <input
+   id="networkSearch"
+   class="search"
+   style="width:100%;max-width:none;margin-bottom:13px"
+   placeholder="Search professionals..."
+   oninput="filterNetwork(this.value)"
+  >
+
+  <div id="networkList">
+   ${loading("Finding professionals...")}
+  </div>
+
+ </section>
+ `;
+
+ const profiles=await db(
+  "profiles",
+  ()=>supabaseClient
+   .from("profiles")
+   .select("*")
+   .neq("id",currentUser.id)
+   .limit(100)
+ );
+
+ cache.profiles=profiles||[];
+
+ await drawNetwork(cache.profiles);
+}
+
+async function drawNetwork(list){
+
+ const connections=await db(
+  "connections",
+  ()=>supabaseClient
+   .from("connections")
+   .select("*")
+   .or(
+    `requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
+   )
+ );
+
+ const map=new Map();
+
+ (connections||[]).forEach(c=>{
+  const other=
+   c.requester_id===currentUser.id
+   ?c.receiver_id
+   :c.requester_id;
+
+  map.set(other,c);
+ });
+
+ const el=document.getElementById("networkList");
+
+ if(!el)return;
+
+ el.innerHTML=list.map(profile=>{
+
+  const c=map.get(profile.id);
+
+  let button="Connect";
+  let cls="btn";
+
+  if(c?.status==="accepted"){
+   button="✓ Connected";
+   cls="btn gray";
+  }else if(
+   c?.status==="pending" &&
+   c.requester_id===currentUser.id
+  ){
+   button="Pending";
+   cls="btn gray";
+  }else if(
+   c?.status==="pending" &&
+   c.receiver_id===currentUser.id
+  ){
+   button="Accept";
+   cls="btn green";
+  }
+
+  return `
+   <div class="listitem"
+    style="display:flex;gap:12px;align-items:center">
+
+    ${avatarHTML(profile)}
+
+    <div class="grow">
+     <b>${esc(profile.full_name)}</b>
+
+     <div class="small muted">
+      ${esc(
+       profile.headline||
+       profile.company_name||
+       "Professional"
+      )}
+     </div>
+
+     <div class="small muted">
+      ${esc(profile.location||"")}
+     </div>
+
+     <div class="chips">
+      ${String(profile.skills||"")
+       .split(",")
+       .filter(Boolean)
+       .slice(0,5)
+       .map(s=>
+        `<span class="chip">
+         ${esc(s.trim())}
+        </span>`
+       ).join("")
+      }
+     </div>
+    </div>
+
+    <button
+     class="${cls}"
+     onclick="connectionAction(
+      '${profile.id}',
+      ${c?JSON.stringify(c):"null"}
+     )"
+    >
+     ${button}
+    </button>
+
+   </div>
+  `;
+
+ }).join("")||
+ `<div class="empty">No professionals found.</div>`;
+}
+
+function filterNetwork(q){
+
+ q=q.toLowerCase();
+
+ drawNetwork(
+  cache.profiles.filter(p=>
+   JSON.stringify(p)
+    .toLowerCase()
+    .includes(q)
+  )
+ );
+}
+
+async function connectionAction(id,connection){
+
+ if(!currentUser)return;
+
+ if(!connection){
+
+  const r=await supabaseClient
+   .from("connections")
+   .insert({
+    requester_id:currentUser.id,
+    receiver_id:id,
+    status:"pending"
+   });
+
+  if(r.error){
+   toast(r.error.message);
+   return;
+  }
+
+  toast("Connection request sent");
+
+ }else if(
+  connection.status==="pending" &&
+  connection.receiver_id===currentUser.id
+ ){
+
+  const r=await supabaseClient
+   .from("connections")
+   .update({
+    status:"accepted",
+    updated_at:new Date().toISOString()
+   })
+   .eq("id",connection.id);
+
+  if(r.error){
+   toast(r.error.message);
+   return;
+  }
+
+  toast("Connection accepted");
+
+ }else if(connection.status==="accepted"){
+
+  toast("Already connected");
+
+ }else{
+
+  toast("Request pending");
+ }
+
+ renderNetwork();
+}
+
+
+/* =========================================================
+   JOBS
+========================================================= */
+
+async function renderJobs(){
+
+ document.getElementById("app").innerHTML=`
+
+ <section class="card">
+
+  <div class="sectiontitle">
+   <div>
+    <h2>💼 Jobs</h2>
+    <p class="muted">
+     Find your next opportunity.
+    </p>
+   </div>
+
+   <button
+    class="btn"
+    onclick="openModal('createJob')"
+   >
+    Post Job
+   </button>
+  </div>
+
+  <input
+   id="jobFilter"
+   class="search"
+   style="width:100%;max-width:none"
+   placeholder="Search jobs, skills, company, location..."
+   oninput="filterJobs(this.value)"
+  >
+
+ </section>
+
+ <div id="jobsList">
+  ${loading("Loading jobs...")}
+ </div>
+ `;
+
+ const jobs=await db(
+  "jobs",
+  ()=>supabaseClient
+   .from("jobs")
+   .select("*,profiles(full_name,avatar_url,headline)")
+   .order("created_at",{ascending:false})
+   .limit(100)
+ );
+
+ cache.jobs=jobs||[];
+
+ drawJobs(cache.jobs);
+}
+
+function drawJobs(list){
+
+ const el=document.getElementById("jobsList");
+
+ if(!el)return;
+
+ if(!list.length){
+  el.innerHTML=
+   `<div class="card empty">
+     <h3>No jobs found</h3>
+     <p>Try another search.</p>
+    </div>`;
+  return;
+ }
+
+ el.innerHTML=list.map(job=>{
+
+  const skills=Array.isArray(job.skills)
+   ?job.skills
+   :String(job.skills||"")
+     .split(",")
+     .filter(Boolean);
+
+  return `
+  <section class="card">
+
+   <div class="sectiontitle">
+
+    <div>
+     <h3>${esc(job.title)}</h3>
+
+     <div class="muted">
+      ${esc(job.company_name||"Company")}
+      ·
+      ${esc(job.location||"Remote")}
+     </div>
+    </div>
+
+    <span class="chip">
+     ${esc(job.work_mode||"Flexible")}
+    </span>
+
+   </div>
+
+   <p style="line-height:1.55">
+    ${esc(job.description||"")}
+   </p>
+
+   <div class="chips">
+    ${skills.map(s=>
+     `<span class="chip">
+      ${esc(String(s).trim())}
+     </span>`
+    ).join("")}
+   </div>
+
+   <div style="margin-top:13px;display:flex;gap:8px;flex-wrap:wrap">
+
+    <button
+     class="btn"
+     onclick="applyJob('${job.id}')"
+    >
+     Apply Now
+    </button>
+
+    ${
+     job.user_id===currentUser?.id
+     ?
+     `<button
+       class="btn danger"
+       onclick="deleteJob('${job.id}')"
+      >
+       Delete
+      </button>`
+     :""
+    }
+
+   </div>
+
+  </section>
+  `;
+ }).join("");
+}
+
+function filterJobs(query){
+
+ query=query.toLowerCase();
+
+ drawJobs(
+  cache.jobs.filter(job=>
+   JSON.stringify(job)
+    .toLowerCase()
+    .includes(query)
+  )
+ );
+}
+
+async function deleteJob(id){
+
+ if(!confirm("Delete this job?"))return;
+
+ const r=await supabaseClient
+  .from("jobs")
+  .delete()
+  .eq("id",id)
+  .eq("user_id",currentUser.id);
+
+ if(r.error){
+  toast(r.error.message);
+  return;
+ }
+
+ toast("Job deleted");
+ renderJobs();
+}
+
+function applyJob(id){
+ openModal("applyJob",id);
+}
+
+
+/* =========================================================
+   PROJECTS
+========================================================= */
+
+async function renderProjects(){
+
+ document.getElementById("app").innerHTML=`
+
+ <section class="card">
+
+  <div class="sectiontitle">
+   <div>
+    <h2>🚀 Projects</h2>
+    <p class="muted">
+     Build teams, collaborate and launch ideas.
+    </p>
+   </div>
+
+   <button
+    class="btn"
+    onclick="openModal('createProject')"
+   >
+    Start Project
+   </button>
+  </div>
+
+ </section>
+
+ <div id="projectsList">
+  ${loading("Loading projects...")}
+ </div>
+ `;
+
+ const projects=await db(
+  "projects",
+  ()=>supabaseClient
+   .from("projects")
+   .select("*,profiles(full_name)")
+   .order("created_at",{ascending:false})
+   .limit(100)
+ );
+
+ cache.projects=projects||[];
+
+ document.getElementById("projectsList").innerHTML=
+ cache.projects.map(project=>{
+
+  const skills=Array.isArray(project.required_skills)
+   ?project.required_skills
+   :String(project.required_skills||"")
+    .split(",")
+    .filter(Boolean);
+
+  return `
+   <section class="card">
+
+    <div class="sectiontitle">
+
+     <div>
+      <h3>${esc(project.title)}</h3>
+
+      <div class="small muted">
+       By ${esc(
+        project.profiles?.full_name||
+        "WorkLynk Member"
+       )}
+       ·
+       ${esc(project.work_mode||"Flexible")}
+      </div>
+     </div>
+
+     <span class="chip">
+      ${esc(project.status||"Open")}
+     </span>
+
+    </div>
+
+    <p style="line-height:1.55">
+     ${esc(project.description||"")}
+    </p>
+
+    <div class="chips">
+     ${skills.map(s=>
+      `<span class="chip">
+       ${esc(String(s).trim())}
+      </span>`
+     ).join("")}
+    </div>
+
+    ${
+     project.owner_id!==currentUser?.id
+     ?
+     `<button
+       class="btn"
+       style="margin-top:12px"
+       onclick="openModal(
+        'proposal',
+        '${project.id}'
+       )"
+      >
+       Send Proposal
+      </button>`
+     :""
+    }
+
+   </section>
+  `;
+ }).join("")||
+ `<div class="card empty">No projects yet.</div>`;
+}
+
+
+/* =========================================================
+   BUSINESS
+========================================================= */
+
+async function renderBusiness(){
+
+ document.getElementById("app").innerHTML=`
+
+ <section class="card">
+
+  <div class="sectiontitle">
+
+   <div>
+    <h2>🏢 Business</h2>
+    <p class="muted">
+     Discover companies, brands and professional businesses.
+    </p>
+   </div>
+
+   <button
+    class="btn"
+    onclick="openModal('createBusiness')"
+   >
+    Create Business
+   </button>
+
+  </div>
+
+ </section>
+
+ <div id="businessList">
+  ${loading("Loading businesses...")}
+ </div>
+ `;
+
+ const businesses=await db(
+  "businesses",
+  ()=>supabaseClient
+   .from("businesses")
+   .select("*,profiles(full_name)")
+   .order("created_at",{ascending:false})
+   .limit(100)
+ );
+
+ cache.businesses=businesses||[];
+
+ document.getElementById("businessList").innerHTML=
+ cache.businesses.map(business=>`
+
+  <section class="card">
+
+   <h3>🏢 ${esc(business.name)}</h3>
+
+   <div class="muted" style="margin-top:4px">
+    ${esc(business.industry||"Business")}
+    ·
+    ${esc(business.location||"")}
+   </div>
+
+   <p style="margin-top:10px;line-height:1.55">
+    ${esc(business.about||"")}
+   </p>
+
+   <div style="margin-top:12px">
+
+    ${
+     business.website
+     ?
+     `<a
+       class="btn outline"
+       href="${safeUrl(business.website)}"
+       target="_blank"
+       rel="noopener"
+      >
+       Website
+      </a>`
+     :""
+    }
+
+    ${
+     currentUser
+     ?
+     `<button
+       class="btn"
+       style="margin-left:6px"
+       onclick="followBusiness('${business.id}')"
+      >
+       Follow
+      </button>`
+     :""
+    }
+
+   </div>
+
+  </section>
+
+ `).join("")||
+ `<div class="card empty">
+  No businesses yet.
+ </div>`;
+}
+
+async function followBusiness(id){
+
+ if(!(await requireAuth()))return;
+
+ const existing=await db(
+  "business_followers",
+  ()=>supabaseClient
+   .from("business_followers")
+   .select("id")
+   .eq("business_id",id)
+   .eq("user_id",currentUser.id)
+   .maybeSingle()
+ );
+
+ if(existing?.id){
+
+  await supabaseClient
+   .from("business_followers")
+   .delete()
+   .eq("id",existing.id);
+
+  toast("Unfollowed");
+
+ }else{
+
+  const r=await supabaseClient
+   .from("business_followers")
+   .insert({
+    business_id:id,
+    user_id:currentUser.id
+   });
+
+  if(r.error){
+   toast(r.error.message);
+   return;
+  }
+
+  toast("Following");
+ }
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+async function renderProfile(){
+
+ const p=currentProfile||{};
+
+ document.getElementById("app").innerHTML=`
+
+ <section class="card" style="padding:0;overflow:hidden">
+
+  <div class="profileCover"></div>
+
+  <div class="profileMain">
+
+   ${
+    p.avatar_url
+    ?
+    `<img
+      class="bigAvatar"
+      src="${safeUrl(p.avatar_url)}"
+      alt=""
+     >`
+    :
+    `<div class="bigAvatar"
+      style="display:grid;place-items:center;font-size:28px;font-weight:900;color:var(--blue)">
+      ${esc(initials(p.full_name))}
+     </div>`
+   }
+
+   <div class="sectiontitle" style="margin-top:8px">
+
+    <div>
+     <h2>${esc(p.full_name||"WorkLynk User")}</h2>
+
+     <div>
+      ${esc(
+       p.headline||
+       "Add your professional headline"
+      )}
+     </div>
+
+     <div class="small muted">
+      ${esc(p.location||"Add location")}
+      ${p.company_name?" · "+esc(p.company_name):""}
+     </div>
+    </div>
+
+    <button
+     class="btn"
+     onclick="openModal('profileEdit')"
+    >
+     Edit Profile
+    </button>
+
+   </div>
+
+   <p style="margin-top:13px;line-height:1.55">
+    ${esc(
+     p.about||
+     "Tell the professional world what you do, what you build and what opportunities you seek."
+    )}
+   </p>
+
+   <div class="chips">
+    ${String(p.skills||"")
+     .split(",")
+     .filter(Boolean)
+     .map(s=>
+      `<span class="chip">${esc(s.trim())}</span>`
+     ).join("")
+    }
+   </div>
+
+  </div>
+
+ </section>
+
+
+ <section class="card">
+
+  <div class="sectiontitle">
+   <h3>Professional Dashboard</h3>
+
+   <button
+    class="btn gray"
+    onclick="openModal('achievement')"
+   >
+    🏆 Add Achievement
+   </button>
+  </div>
+
+  <div class="stats">
+
+   <div class="stat">
+    <b id="postStat">0</b>
+    <span class="small muted">Posts</span>
+   </div>
+
+   <div class="stat">
+    <b id="connStat">0</b>
+    <span class="small muted">Connections</span>
+   </div>
+
+   <div class="stat">
+    <b id="appStat">0</b>
+    <span class="small muted">Applications</span>
+   </div>
+
+  </div>
+
+ </section>
+
+
+ <section class="card">
+
+  <h3>Experience & Education</h3>
+
+  <div class="grid2" style="margin-top:12px">
+
+   <div class="listitem">
+    <b>💼 Experience</b>
+    <p class="small muted" style="margin-top:7px">
+     ${esc(
+      p.experience||
+      "Add your experience from Edit Profile."
+     )}
+    </p>
+   </div>
+
+   <div class="listitem">
+    <b>🎓 Education</b>
+    <p class="small muted" style="margin-top:7px">
+     ${esc(
+      p.education||
+      "Add your education from Edit Profile."
+     )}
+    </p>
+   </div>
+
+  </div>
+
+ </section>
+
+
+ <section class="card">
+
+  <h3>🔗 Professional Links</h3>
+
+  <div class="chips">
+
+   ${
+    p.linkedin_url
+    ?
+    `<a class="chip"
+       href="${safeUrl(p.linkedin_url)}"
+       target="_blank"
+       rel="noopener">
+       LinkedIn
+     </a>`
+    :""
+   }
+
+   ${
+    p.github_url
+    ?
+    `<a class="chip"
+       href="${safeUrl(p.github_url)}"
+       target="_blank"
+       rel="noopener">
+       GitHub
+     </a>`
+    :""
+   }
+
+   ${
+    p.portfolio_url
+    ?
+    `<a class="chip"
+       href="${safeUrl(p.portfolio_url)}"
+       target="_blank"
+       rel="noopener">
+       Portfolio
+     </a>`
+    :""
+   }
+
+  </div>
+
+ </section>
+ `;
+
+ const posts=await db(
+  "posts",
+  ()=>supabaseClient
+   .from("posts")
+   .select("id")
+   .eq("user_id",currentUser.id)
+ );
+
+ document.getElementById("postStat").textContent=
+  posts?.length||0;
+
+ const connections=await db(
+  "connections",
+  ()=>supabaseClient
+   .from("connections")
+   .select("id")
+   .eq("status","accepted")
+   .or(
+    `requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
+   )
+ );
+
+ document.getElementById("connStat").textContent=
+  connections?.length||0;
+
+ const applications=await db(
+  "job_applications",
+  ()=>supabaseClient
+   .from("job_applications")
+   .select("id")
+   .eq("applicant_id",currentUser.id)
+ );
+
+ document.getElementById("appStat").textContent=
+  applications?.length||0;
+}
+
+async function saveProfile(){
+
+ const form=document.getElementById("profileForm");
+
+ if(!form)return;
+
+ const data=Object.fromEntries(
+  new FormData(form).entries()
+ );
+
+ data.skills=data.skills||"";
+ data.updated_at=new Date().toISOString();
+
+ const r=await supabaseClient
+  .from("profiles")
+  .upsert({
+   id:currentUser.id,
+   email:currentUser.email,
+   ...data
+  });
+
+ if(r.error){
+  toast(r.error.message);
+  return;
+ }
+
+ toast("Profile updated");
+ closeModal();
+
+ await loadProfile();
+ renderProfile();
+}
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+async function renderChat(){
+
+ document.getElementById("app").innerHTML=`
+
+ <section class="card">
+
+  <div class="sectiontitle">
+   <div>
+    <h2>💬 Messaging</h2>
+    <p class="muted">
+     Chat with your professional network.
+    </p>
+   </div>
+  </div>
+
+  <div class="chatBox">
+
+   <div class="chatUsers" id="chatUsers">
+    Loading...
+   </div>
+
+   <div class="chatMain">
+
+    <div class="messages" id="messages">
+     <div class="empty">
+      Select a connection to start chatting.
+     </div>
+    </div>
+
+    <div class="sendRow">
+
+     <input
+      id="chatInput"
+      placeholder="Write a message..."
+      onkeydown="
+       if(event.key==='Enter')
+       sendMessage()
+      "
+     >
+
+     <button
+      class="btn"
+      onclick="sendMessage()"
+     >
+      Send
+     </button>
+
+    </div>
+
+   </div>
+
+  </div>
+
+ </section>
+ `;
+
+ const connections=await db(
+  "connections",
+  ()=>supabaseClient
+   .from("connections")
+   .select("requester_id,receiver_id")
+   .eq("status","accepted")
+   .or(
+    `requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
+   )
+ );
+
+ const ids=(connections||[])
+  .map(c=>
+   c.requester_id===currentUser.id
+   ?c.receiver_id
+   :c.requester_id
+  );
+
+ let profiles=[];
+
+ if(ids.length){
+
+  profiles=await db(
+   "profiles",
+   ()=>supabaseClient
+    .from("profiles")
+    .select("*")
+    .in("id",ids)
+  );
+ }
+
+ const users=document.getElementById("chatUsers");
+
+ users.innerHTML=(profiles||[])
+  .map(profile=>`
+   <button
+    class="chatUser"
+    onclick="openChat('${profile.id}',this)"
+   >
+    <b>${esc(profile.full_name)}</b>
+    <div class="small muted">
+     ${esc(profile.headline||"")}
+    </div>
+   </button>
+  `)
+  .join("")||
+  `<div class="empty">
+    No accepted connections yet.
+   </div>`;
+
+ subscribeMessages();
+}
+
+function openChat(id,button){
+
+ currentChatUser=id;
+
+ document.querySelectorAll(".chatUser")
+  .forEach(x=>x.classList.remove("active"));
+
+ button?.classList.add("active");
+
+ loadMessages();
+}
+
+async function loadMessages(){
+
+ if(!currentChatUser)return;
+
+ const filter=
+  `and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser}),`+
+  `and(sender_id.eq.${currentChatUser},receiver_id.eq.${currentUser.id})`;
+
+ const messages=await db(
+  "messages",
+  ()=>supabaseClient
+   .from("messages")
+   .select("*")
+   .or(filter)
+   .order("created_at",{ascending:true})
+ );
+
+ const el=document.getElementById("messages");
+
+ if(!el)return;
+
+ el.innerHTML=(messages||[])
+  .map(message=>`
+   <div class="bubble ${
+    message.sender_id===currentUser.id
+    ?"me":""
+   }">
+
+    ${esc(message.content)}
+
+    <div class="small muted" style="margin-top:4px">
+     ${new Date(
+      message.created_at
+     ).toLocaleTimeString()}
+    </div>
+
+   </div>
+  `)
+  .join("")||
+  `<div class="empty">No messages yet.</div>`;
+
+ el.scrollTop=el.scrollHeight;
+}
+
+async function sendMessage(){
+
+ if(!currentChatUser){
+  toast("Select a connection first");
+  return;
+ }
+
+ const input=document.getElementById("chatInput");
+ const content=input?.value.trim();
+
+ if(!content)return;
+
+ input.value="";
+
+ const r=await supabaseClient
+  .from("messages")
+  .insert({
+   sender_id:currentUser.id,
+   receiver_id:currentChatUser,
+   content
+  });
+
+ if(r.error){
+  toast(r.error.message);
+  return;
+ }
+
+ loadMessages();
+}
+
+function subscribeMessages(){
+
+ if(messageChannel){
+  supabaseClient.removeChannel(messageChannel);
+ }
+
+ messageChannel=
+  supabaseClient
+   .channel("worklynk-messages")
+   .on(
+    "postgres_changes",
+    {
+     event:"INSERT",
+     schema:"public",
+     table:"messages"
+    },
+    payload=>{
+     if(
+      currentPage==="chat" &&
+      currentChatUser &&
+      (
+       payload.new.sender_id===currentChatUser||
+       payload.new.receiver_id===currentChatUser
+      )
+     ){
+      loadMessages();
+     }
+    }
+   )
+   .subscribe();
+}
+
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+async function renderNotifications(){
+
+ document.getElementById("app").innerHTML=`
+
+ <section class="card">
+
+  <div class="sectiontitle">
+
+   <div>
+    <h2>🔔 Notifications</h2>
+    <p class="muted">
+     Stay updated with your WorkLynk activity.
+    </p>
+   </div>
+
+   <button
+    class="btn gray"
+    onclick="markNotifications()"
+   >
+    Mark all read
+   </button>
+
+  </div>
+
+  <div id="notifs">
+   ${loading("Loading notifications...")}
+  </div>
+
+ </section>
+ `;
+
+ const notifications=await db(
+  "notifications",
+  ()=>supabaseClient
+   .from("notifications")
+   .select("*")
+   .eq("user_id",currentUser.id)
+   .order("created_at",{ascending:false})
+   .limit(100)
+ );
+
+ cache.notifications=notifications||[];
+
+ document.getElementById("notifs").innerHTML=
+ cache.notifications.map(n=>`
+
+  <div
+   class="listitem"
+   style="${
+    n.is_read
+    ?""
+    :"border-left:4px solid var(--blue)"
+   }"
+  >
+
+   <b>${esc(n.type||"Update")}</b>
+
+   <p style="margin-top:5px">
+    ${esc(
+     n.message||
+     "You have a new WorkLynk notification."
+    )}
+   </p>
+
+   <div class="small muted" style="margin-top:5px">
+    ${new Date(
+     n.created_at
+    ).toLocaleString()}
+   </div>
+
+  </div>
+
+ `).join("")||
+ `<div class="empty">
+  No notifications yet.
+ </div>`;
+}
+
+async function markNotifications(){
+
+ const r=await supabaseClient
+  .from("notifications")
+  .update({is_read:true})
+  .eq("user_id",currentUser.id);
+
+ if(r.error){
+  toast(r.error.message);
+  return;
+ }
+
+ toast("Notifications marked read");
+ renderNotifications();
+}
+
+
+/* =========================================================
+   LYNK AI
+========================================================= */
+
+function renderAI(){
+
+ document.getElementById("app").innerHTML=`
+
+ <section class="card aiHero">
+
+  <div class="sectiontitle">
+
+   <div>
+    <h2>🤖 Lynk AI</h2>
+
+    <p style="opacity:.85">
+     Your professional growth assistant.
+    </p>
+   </div>
+
+   <span
+    class="chip"
+    style="background:rgba(255,255,255,.15);color:#fff"
+   >
+    AI
+   </span>
+
+  </div>
+
+  <div class="chips">
+
+   <button
+    class="btn gray"
+    onclick="aiQuick('Improve my professional profile')"
+   >
+    Improve Profile
+   </button>
+
+   <button
+    class="btn gray"
+    onclick="aiQuick('Write a professional LinkedIn-style post')"
+   >
+    Write Post
+   </button>
+
+   <button
+    class="btn gray"
+    onclick="aiQuick('Create my professional resume summary')"
+   >
+    Resume Summary
+   </button>
+
+   <button
+    class="btn gray"
+    onclick="aiQuick('Prepare me for a technical interview')"
+   >
+    Interview Prep
+   </button>
+
+   <button
+    class="btn gray"
+    onclick="aiQuick('Write a job application message')"
+   >
+    Job Application
+   </button>
+
+   <button
+    class="btn gray"
+    onclick="aiQuick('Suggest jobs based on my skills')"
+   >
+    Career Ideas
+   </button>
+
+  </div>
+
+ </section>
+
+
+ <section class="card">
+
+  <div id="aiChat" class="aiChat">
+
+   <div class="aiMsg bot">
+    <b>🤖 Lynk AI</b><br><br>
+    Hi! I can help you improve your professional profile,
+    create posts, prepare for interviews, write applications
+    and plan your career.
+   </div>
+
+  </div>
+
+  <div class="aiForm">
+
+   <input
+    id="aiInput"
+    placeholder="Ask Lynk AI anything..."
+    onkeydown="
+     if(event.key==='Enter')
+     askAI()
+    "
+   >
+
+   <button
+    class="btn"
+    onclick="askAI()"
+   >
+    Ask
+   </button>
+
+  </div>
+
+  <p class="small muted" style="margin-top:8px">
+   Production AI should use a secure Supabase Edge Function.
+   Never expose an AI secret key in this HTML file.
+  </p>
+
+ </section>
+ `;
+
+}
+
+function aiQuick(text){
+
+ const input=document.getElementById("aiInput");
+
+ if(!input)return;
+
+ input.value=text;
+
+ askAI();
+}
+
+async function askAI(){
+
+ const input=document.getElementById("aiInput");
+ const chat=document.getElementById("aiChat");
+
+ if(!input||!chat)return;
+
+ const question=input.value.trim();
+
+ if(!question)return;
+
+ input.value="";
+
+ chat.innerHTML+=`
+  <div class="aiMsg me">
+   ${esc(question)}
+  </div>
+ `;
+
+ const endpoint=
+  window.LYNK_AI_ENDPOINT||"";
+
+ /*
+   REAL AI
+ */
+ if(endpoint){
+
+  try{
+
+   const response=await fetch(
+    endpoint,
+    {
+     method:"POST",
+     headers:{
+      "Content-Type":"application/json"
+     },
+     body:JSON.stringify({
+      message:question,
+      user_id:currentUser?.id||null,
+      profile:currentProfile||null
+     })
+    }
+   );
+
+   const data=await response.json();
+
+   const answer=
+    data.answer||
+    data.message||
+    "No AI response.";
+
+   chat.innerHTML+=`
+    <div class="aiMsg bot">
+     <b>🤖 Lynk AI</b><br><br>
+     ${esc(answer)}
+    </div>
+   `;
+
+   chat.scrollTop=chat.scrollHeight;
+
+   return;
+
+  }catch(error){
+   console.warn(error);
+  }
+ }
+
+ /*
+   FALLBACK AI
+   Keeps the UI functional even before
+   a real AI Edge Function is connected.
+ */
+
+ const answer=localAI(question);
+
+ chat.innerHTML+=`
+  <div class="aiMsg bot">
+   <b>🤖 Lynk AI</b><br><br>
+   ${esc(answer)}
+  </div>
+ `;
+
+ chat.scrollTop=chat.scrollHeight;
+}
+
+function localAI(question){
+
+ const q=question.toLowerCase();
+
+ if(q.includes("profile")){
+
+  return `
+Your WorkLynk profile should have:
+
+1. Strong professional headline
+2. Clear About section
+3. 5–10 relevant skills
+4. Measurable achievements
+5. Experience and education
+6. Portfolio/GitHub/LinkedIn links
+
+Suggested headline:
+"${currentProfile?.headline||
+"Java Developer | Spring Boot | Azure | Building scalable solutions"}"
+ `;
+ }
+
+ if(q.includes("post")){
+
+  return `
+Professional post structure:
+
+HOOK:
+Start with a strong one-line idea.
+
+VALUE:
+Share the lesson, technology, experience or result.
+
+EXAMPLE:
+Give one practical example.
+
+CONCLUSION:
+Tell people what you learned.
+
+QUESTION:
+End with a question that encourages discussion.
+ `;
+ }
+
+ if(q.includes("resume")){
+
+  return `
+Resume summary:
+
+${currentProfile?.full_name||"Professional"} is a results-driven
+professional specializing in ${
+  currentProfile?.skills||
+  "technology, business and professional solutions"
+}.
+Experienced in collaborating with teams, solving business problems
+and delivering scalable solutions. Open to high-impact opportunities.
+ `;
+ }
+
+ if(q.includes("interview")){
+
+  return `
+Interview preparation plan:
+
+• 60-second self introduction
+• Current project architecture
+• Your exact responsibilities
+• Technologies used
+• Difficult production issue
+• Database/SQL questions
+• API questions
+• Cloud questions
+• Testing
+• Performance optimization
+• Behavioral questions
+
+Always explain answers using real project examples.
+ `;
+ }
+
+ if(q.includes("application")||q.includes("job")){
+
+  return `
+Job application template:
+
+Hello,
+
+I am interested in this opportunity because my experience in
+${
+ currentProfile?.skills||
+ "relevant technologies"
+}
+matches the requirements of the role.
+
+I can contribute through practical project experience,
+problem solving and collaboration.
+
+I would appreciate the opportunity to discuss how I can
+contribute to the team.
+
+Regards,
+${currentProfile?.full_name||"Your Name"}
+ `;
+ }
+
+ return `
+I can help with:
+
+• Professional profile
+• Resume
+• Job applications
+• Interview preparation
+• Professional posts
+• Career planning
+• Skills development
+
+For full generative AI responses, connect the secure
+LYNK_AI_ENDPOINT to your Supabase Edge Function.
+ `;
+}
+
+
+/* =========================================================
+   GLOBAL SEARCH
+========================================================= */
+
+async function searchAll(query){
+
+ query=query.trim();
+
+ if(!query)return;
+
+ document.getElementById("app").innerHTML=`
+
+ <section class="card">
+  <h2>🔎 Search</h2>
+  <p class="muted">
+   Results for “${esc(query)}”
+  </p>
+ </section>
+
+ <div id="searchResults">
+  ${loading("Searching WorkLynk...")}
+ </div>
+ `;
+
+ const [
+  people,
+  jobs,
+  businesses,
+  projects
+ ]=await Promise.all([
+
+  db(
+   "profiles",
+   ()=>supabaseClient
+    .from("profiles")
+    .select("*")
+    .or(
+     `full_name.ilike.%${query}%,headline.ilike.%${query}%,company_name.ilike.%${query}%`
+    )
+    .limit(20)
+  ),
+
+  db(
+   "jobs",
+   ()=>supabaseClient
+    .from("jobs")
+    .select("*")
+    .or(
+     `title.ilike.%${query}%,company_name.ilike.%${query}%,location.ilike.%${query}%`
+    )
+    .limit(20)
+  ),
+
+  db(
+   "businesses",
+   ()=>supabaseClient
+    .from("businesses")
+    .select("*")
+    .ilike("name",`%${query}%`)
+    .limit(20)
+  ),
+
+  db(
+   "projects",
+   ()=>supabaseClient
+    .from("projects")
+    .select("*")
+    .ilike("title",`%${query}%`)
+    .limit(20)
+  )
+
+ ]);
+
+ const result=document.getElementById(
+  "searchResults"
+ );
+
+ result.innerHTML=`
+
+ <section class="card">
+
+  <h3>👥 People</h3>
+
+  ${
+   (people||[]).map(p=>`
+    <div class="listitem">
+     <b>${esc(p.full_name)}</b>
+     <div class="muted">
+      ${esc(p.headline||p.company_name||"")}
+     </div>
+     <div class="small muted">
+      ${esc(p.location||"")}
+     </div>
+    </div>
+   `).join("")||
+   `<p class="muted" style="margin-top:10px">
+    No people found.
+   </p>`
+  }
+
+ </section>
+
+
+ <section class="card">
+
+  <h3>💼 Jobs</h3>
+
+  ${
+   (jobs||[]).map(j=>`
+    <div class="listitem">
+
+     <b>${esc(j.title)}</b>
+
+     <div class="muted">
+      ${esc(j.company_name||"")}
+      ·
+      ${esc(j.location||"")}
+     </div>
+
+     <button
+      class="btn"
+      style="margin-top:9px"
+      onclick="applyJob('${j.id}')"
+     >
+      Apply
+     </button>
+
+    </div>
+   `).join("")||
+   `<p class="muted" style="margin-top:10px">
+    No jobs found.
+   </p>`
+  }
+
+ </section>
+
+
+ <section class="card">
+
+  <h3>🏢 Businesses</h3>
+
+  ${
+   (businesses||[]).map(b=>`
+    <div class="listitem">
+     <b>${esc(b.name)}</b>
+     <div class="muted">
+      ${esc(b.industry||"")}
+     </div>
+    </div>
+   `).join("")||
+   `<p class="muted" style="margin-top:10px">
+    No businesses found.
+   </p>`
+  }
+
+ </section>
+
+
+ <section class="card">
+
+  <h3>🚀 Projects</h3>
+
+  ${
+   (projects||[]).map(p=>`
+    <div class="listitem">
+
+     <b>${esc(p.title)}</b>
+
+     <p class="muted" style="margin-top:5px">
+      ${esc(
+       String(p.description||"")
+       .slice(0,180)
+      )}
+     </p>
+
+     <button
+      class="btn"
+      style="margin-top:9px"
+      onclick="openModal(
+       'proposal',
+       '${p.id}'
+      )"
+     >
+      Send Proposal
+     </button>
+
+    </div>
+   `).join("")||
+   `<p class="muted" style="margin-top:10px">
+    No projects found.
+   </p>`
+  }
+
+ </section>
+ `;
+}
+
+
+/* =========================================================
+   CREATE / EDIT MODALS
+========================================================= */
+
+function openModal(type,arg=null){
+
+ const root=document.getElementById("modalRoot");
+
+ let title="";
+ let body="";
+ let footer="";
+
+
+ /* AUTH */
+
+ if(type==="auth"){
+
+  title="Welcome to WorkLynk";
+
+  body=`
+
+   <div class="field">
+    <label>Email</label>
+    <input
+     id="authEmail"
+     type="email"
+     placeholder="you@example.com"
+    >
+   </div>
+
+   <div class="field">
+    <label>Password</label>
+    <input
+     id="authPass"
+     type="password"
+     placeholder="Minimum 6 characters"
+    >
+   </div>
+
+   <div class="field">
+    <label>Full Name — for new account</label>
+    <input
+     id="authName"
+     placeholder="Your professional name"
+    >
+   </div>
+
+  `;
+
+  footer=`
+   <button class="btn gray" onclick="closeModal()">
+    Cancel
+   </button>
+
+   <button class="btn outline" onclick="signIn()">
+    Sign In
+   </button>
+
+   <button class="btn" onclick="signUp()">
+    Create Account
+   </button>
+  `;
+ }
+
+
+ /* CREATE POST */
+
+ if(type==="createPost"){
+
+  title="Create Professional Post";
+
+  body=`
+
+   <div class="field">
+    <label>Post</label>
+
+    <textarea
+     id="postCaption"
+     placeholder="Share an insight, achievement, project, opportunity..."
+    ></textarea>
+   </div>
+
+   <div class="field">
+    <label>Media URL — optional</label>
+
+    <input
+     id="postMedia"
+     placeholder="https://..."
+    >
+   </div>
+
+   <div class="field">
+    <label>Media Type</label>
+
+    <select id="postMediaType">
+     <option value="image">Image</option>
+     <option value="video">Video</option>
+    </select>
+   </div>
+
+  `;
+
+  footer=`
+   <button class="btn gray" onclick="closeModal()">
+    Cancel
+   </button>
+
+   <button class="btn" onclick="createPost()">
+    Publish
+   </button>
+  `;
+ }
+
+
+ /* PROFILE */
+
+ if(type==="profileEdit"){
+
+  const p=currentProfile||{};
+
+  title="Edit Professional Profile";
+
+  body=`
+
+   <form id="profileForm">
+
+    <div class="field">
+     <label>Full Name</label>
+     <input
+      name="full_name"
+      value="${esc(p.full_name)}"
+     >
+    </div>
+
+    <div class="field">
+     <label>Professional Headline</label>
+     <input
+      name="headline"
+      value="${esc(p.headline)}"
+      placeholder="Java Developer | Spring Boot | Azure"
+     >
+    </div>
+
+    <div class="field">
+     <label>About</label>
+     <textarea name="about">${esc(p.about)}</textarea>
+    </div>
+
+    <div class="grid2">
+
+     <div class="field">
+      <label>Company</label>
+      <input
+       name="company_name"
+       value="${esc(p.company_name)}"
+      >
+     </div>
+
+     <div class="field">
+      <label>Location</label>
+      <input
+       name="location"
+       value="${esc(p.location)}"
+      >
+     </div>
+
+    </div>
+
+    <div class="field">
+     <label>Skills — comma separated</label>
+     <input
+      name="skills"
+      value="${esc(p.skills)}"
+      placeholder="Java, Spring Boot, SQL, Azure"
+     >
+    </div>
+
+    <div class="field">
+     <label>Experience</label>
+     <textarea
+      name="experience"
+      placeholder="Describe your experience..."
+     >${esc(p.experience)}</textarea>
+    </div>
+
+    <div class="field">
+     <label>Education</label>
+     <textarea
+      name="education"
+     >${esc(p.education)}</textarea>
+    </div>
+
+    <div class="field">
+     <label>LinkedIn URL</label>
+     <input
+      name="linkedin_url"
+      value="${esc(p.linkedin_url)}"
+     >
+    </div>
+
+    <div class="field">
+     <label>GitHub URL</label>
+     <input
+      name="github_url"
+      value="${esc(p.github_url)}"
+     >
+    </div>
+
+    <div class="field">
+     <label>Portfolio URL</label>
+     <input
+      name="portfolio_url"
+      value="${esc(p.portfolio_url)}"
+     >
+    </div>
+
+    <div class="field">
+     <label>Avatar URL</label>
+     <input
+      name="avatar_url"
+      value="${esc(p.avatar_url)}"
+      placeholder="https://..."
+     >
+    </div>
+
+    <div class="field">
+     <label>Resume URL</label>
+     <input
+      name="resume_url"
+      value="${esc(p.resume_url)}"
+      placeholder="https://..."
+     >
+    </div>
+
+   </form>
+  `;
+
+  footer=`
+
+   <button
+    class="btn gray"
+    onclick="closeModal()"
+   >
+    Cancel
+   </button>
+
+   <button
+    class="btn"
+    onclick="saveProfile()"
+   >
+    Save Profile
+   </button>
+
+   <button
+    class="btn danger"
+    onclick="signOut()"
+   >
+    Logout
+   </button>
+  `;
+ }
+
+
+ /* JOB */
+
+ if(type==="createJob"){
+
+  title="Post a Job";
+
+  body=`
+
+   <div class="field">
+    <label>Job Title</label>
+    <input id="jobTitle" placeholder="Senior Java Developer">
+   </div>
+
+   <div class="grid2">
+
+    <div class="field">
+     <label>Company</label>
+     <input
+      id="jobCompany"
+      value="${esc(currentProfile?.company_name)}"
+     >
+    </div>
+
+    <div class="field">
+     <label>Location</label>
+     <input
+      id="jobLocation"
+      placeholder="Hyderabad / Remote"
+     >
+    </div>
+
+   </div>
+
+   <div class="grid2">
+
+    <div class="field">
+     <label>Job Type</label>
+
+     <select id="jobType">
+      <option>Full-time</option>
+      <option>Part-time</option>
+      <option>Contract</option>
+      <option>Internship</option>
+     </select>
+    </div>
+
+    <div class="field">
+     <label>Work Mode</label>
+
+     <select id="jobMode">
+      <option>Remote</option>
+      <option>Hybrid</option>
+      <option>On-site</option>
+     </select>
+    </div>
+
+   </div>
+
+   <div class="field">
+    <label>Skills</label>
+    <input
+     id="jobSkills"
+     placeholder="Java, Spring Boot, SQL, Azure"
+    >
+   </div>
+
+   <div class="field">
+    <label>Description</label>
+    <textarea
+     id="jobDesc"
+     placeholder="Describe the role, responsibilities and requirements..."
+    ></textarea>
+   </div>
+  `;
+
+  footer=`
+   <button class="btn gray" onclick="closeModal()">Cancel</button>
+   <button class="btn" onclick="createJob()">Publish Job</button>
+  `;
+ }
+
+
+ /* APPLY */
+
+ if(type==="applyJob"){
+
+  title="Apply for Job";
+
+  body=`
+
+   <div class="field">
+    <label>Resume URL</label>
+    <input
+     id="resumeUrl"
+     value="${esc(currentProfile?.resume_url)}"
+     placeholder="https://..."
+    >
+   </div>
+
+   <div class="field">
+    <label>Cover Message</label>
+    <textarea
+     id="coverMsg"
+     placeholder="Explain why you are a good fit..."
+    ></textarea>
+   </div>
+
+  `;
+
+  footer=`
+   <button class="btn gray" onclick="closeModal()">Cancel</button>
+   <button class="btn" onclick="submitApplication('${arg}')">
+    Submit Application
+   </button>
+  `;
+ }
+
+
+ /* PROJECT */
+
+ if(type==="createProject"){
+
+  title="Start a Project";
+
+  body=`
+
+   <div class="field">
+    <label>Project Title</label>
+    <input
+     id="projectTitle"
+     placeholder="Build an AI-powered platform"
+    >
+   </div>
+
+   <div class="field">
+    <label>Description</label>
+    <textarea
+     id="projectDesc"
+     placeholder="Explain your idea and what you want to build..."
+    ></textarea>
+   </div>
+
+   <div class="grid2">
+
+    <div class="field">
+     <label>Required Skills</label>
+     <input
+      id="projectSkills"
+      placeholder="React, Java, AI, Design"
+     >
+    </div>
+
+    <div class="field">
+     <label>Work Mode</label>
+     <select id="projectMode">
+      <option>Remote</option>
+      <option>Hybrid</option>
+      <option>On-site</option>
+     </select>
+    </div>
+
+   </div>
+
+  `;
+
+  footer=`
+   <button class="btn gray" onclick="closeModal()">Cancel</button>
+   <button class="btn" onclick="createProject()">Create Project</button>
+  `;
+ }
+
+
+ /* PROPOSAL */
+
+ if(type==="proposal"){
+
+  title="Send Project Proposal";
+
+  body=`
+
+   <div class="field">
+    <label>Your Proposal</label>
+    <textarea
+     id="proposalMsg"
+     placeholder="Explain how you can help this project..."
+    ></textarea>
+   </div>
+
+   <div class="field">
+    <label>Bid Amount</label>
+    <input
+     id="bidAmount"
+     type="number"
+     min="0"
+     placeholder="0"
+    >
+   </div>
+
+  `;
+
+  footer=`
+   <button class="btn gray" onclick="closeModal()">Cancel</button>
+   <button
+    class="btn"
+    onclick="submitProposal('${arg}')"
+   >
+    Send Proposal
+   </button>
+  `;
+ }
+
+
+ /* ACHIEVEMENT */
+
+ if(type==="achievement"){
+
+  title="Add Achievement";
+
+  body=`
+
+   <div class="field">
+    <label>Achievement Title</label>
+    <input id="achTitle" placeholder="Certification / Award / Achievement">
+   </div>
+
+   <div class="field">
+    <label>Issuer</label>
+    <input id="achIssuer" placeholder="Company / Organization">
+   </div>
+
+   <div class="field">
+    <label>Description</label>
+    <textarea id="achDesc"></textarea>
+   </div>
+
+  `;
+
+  footer=`
+   <button class="btn gray" onclick="closeModal()">Cancel</button>
+   <button class="btn" onclick="createAchievement()">Add Achievement</button>
+  `;
+ }
+
+
+ /* BUSINESS */
+
+ if(type==="createBusiness"){
+
+  title="Create Business Page";
+
+  body=`
+
+   <div class="field">
+    <label>Business Name</label>
+    <input id="bizName">
+   </div>
+
+   <div class="grid2">
+
+    <div class="field">
+     <label>Industry</label>
+     <input id="bizIndustry">
+    </div>
+
+    <div class="field">
+     <label>Location</label>
+     <input id="bizLocation">
+    </div>
+
+   </div>
+
+   <div class="field">
+    <label>About</label>
+    <textarea id="bizAbout"></textarea>
+   </div>
+
+   <div class="field">
+    <label>Website</label>
+    <input id="bizWebsite" placeholder="https://...">
+   </div>
+
+  `;
+
+  footer=`
+   <button class="btn gray" onclick="closeModal()">Cancel</button>
+   <button class="btn" onclick="createBusiness()">Create Business</button>
+  `;
+ }
+
+
+ root.innerHTML=`
+
+ <div
+  class="modalback"
+  onclick="
+   if(event.target===this)
+   closeModal()
+  "
+ >
+
+  <div class="modal">
+
+   <div class="modalHead">
+
+    <h3>${title}</h3>
+
+    <button
+     class="iconbtn"
+     onclick="closeModal()"
+    >
+     ✕
+    </button>
+
+   </div>
+
+   <div class="modalBody">
+    ${body}
+   </div>
+
+   <div class="modalFoot">
+    ${footer}
+   </div>
+
+  </div>
+
+ </div>
+ `;
+}
+
+function closeModal(){
+ document.getElementById("modalRoot").innerHTML="";
+}
+
+
+/* =========================================================
+   AUTH ACTIONS
+========================================================= */
+
+async function signUp(){
+
+ const email=
+  document.getElementById("authEmail")
+   ?.value.trim();
+
+ const password=
+  document.getElementById("authPass")
+   ?.value;
+
+ const name=
+  document.getElementById("authName")
+   ?.value.trim();
+
+ if(!email||!password){
+  toast("Email and password required");
+  return;
+ }
+
+ if(password.length<6){
+  toast("Password must contain at least 6 characters");
+  return;
+ }
+
+ const result=
+  await supabaseClient.auth.signUp({
+   email,
+   password,
+   options:{
+    data:{
+     full_name:name
+    }
+   }
+  });
+
+ if(result.error){
+  toast(result.error.message);
+  return;
+ }
+
+ if(result.data.user){
+
+  await supabaseClient
+   .from("profiles")
+   .upsert({
+    id:result.data.user.id,
+    email,
+    full_name:name||
+     email.split("@")[0]
+   });
+ }
+
+ toast(
+  "Account created. Check email if confirmation is enabled."
+ );
+
+ closeModal();
+
+ await ensureSession();
+}
+
+async function signIn(){
+
+ const email=
+  document.getElementById("authEmail")
+   ?.value.trim();
+
+ const password=
+  document.getElementById("authPass")
+   ?.value;
+
+ const result=
+  await supabaseClient.auth
+   .signInWithPassword({
+    email,
+    password
+   });
+
+ if(result.error){
+  toast(result.error.message);
+  return;
+ }
+
+ closeModal();
+
+ await ensureSession();
+
+ toast("Welcome back to WorkLynk");
+
+ showPage(currentPage);
+}
+
+async function ensureSession(){
+
+ const {
+  data:{session}
+ }=await supabaseClient.auth.getSession();
+
+ currentUser=session?.user||null;
+
+ if(currentUser){
+  await loadProfile();
+ }
+}
+
+async function signOut(){
+
+ await supabaseClient.auth.signOut();
+
+ currentUser=null;
+ currentProfile=null;
+
+ closeModal();
+
+ toast("Signed out");
+
+ renderHome();
+}
+
+
+/* =========================================================
+   CREATE ACTIONS
+========================================================= */
+
+async function createPost(){
+
+ if(!(await requireAuth()))return;
+
+ const caption=
+  document.getElementById("postCaption")
+   ?.value.trim();
+
+ const media=
+  document.getElementById("postMedia")
+   ?.value.trim();
+
+ const mediaType=
+  document.getElementById("postMediaType")
+   ?.value;
+
+ if(!caption&&!media){
+  toast("Write something before publishing");
+  return;
+ }
+
+ const result=
+  await supabaseClient
+   .from("posts")
+   .insert({
+    user_id:currentUser.id,
+    caption:caption||"",
+    media_url:media||null,
+    media_type:media?mediaType:null
+   });
+
+ if(result.error){
+  toast(result.error.message);
+  return;
+ }
+
+ toast("Post published");
+
+ closeModal();
+
+ showPage("home");
+}
+
+
+async function createJob(){
+
+ const title=
+  document.getElementById("jobTitle")
+   ?.value.trim();
+
+ if(!title){
+  toast("Job title is required");
+  return;
+ }
+
+ const skills=
+  document.getElementById("jobSkills")
+   ?.value
+   .split(",")
+   .map(x=>x.trim())
+   .filter(Boolean);
+
+ const result=
+  await supabaseClient
+   .from("jobs")
+   .insert({
+    user_id:currentUser.id,
+    title,
+    company_name:
+     document.getElementById("jobCompany").value.trim(),
+    location:
+     document.getElementById("jobLocation").value.trim(),
+    job_type:
+     document.getElementById("jobType").value,
+    work_mode:
+     document.getElementById("jobMode").value,
+    skills,
+    description:
+     document.getElementById("jobDesc").value.trim()
+   });
+
+ if(result.error){
+  toast(result.error.message);
+  return;
+ }
+
+ toast("Job published");
+
+ closeModal();
+
+ renderJobs();
+}
+
+
+async function submitApplication(jobId){
+
+ const result=
+  await supabaseClient
+   .from("job_applications")
+   .insert({
+    job_id:jobId,
+    applicant_id:currentUser.id,
+    resume_url:
+     document.getElementById("resumeUrl").value.trim(),
+    cover_message:
+     document.getElementById("coverMsg").value.trim(),
+    status:"submitted"
+   });
+
+ if(result.error){
+  toast(result.error.message);
+  return;
+ }
+
+ toast("Application submitted");
+
+ closeModal();
+}
+
+
+async function createProject(){
+
+ const title=
+  document.getElementById("projectTitle")
+   ?.value.trim();
+
+ if(!title){
+  toast("Project title is required");
+  return;
+ }
+
+ const result=
+  await supabaseClient
+   .from("projects")
+   .insert({
+    owner_id:currentUser.id,
+    title,
+    description:
+     document.getElementById("projectDesc").value.trim(),
+    required_skills:
+     document.getElementById("projectSkills")
+      .value
+      .split(",")
+      .map(x=>x.trim())
+      .filter(Boolean),
+    work_mode:
+     document.getElementById("projectMode").value,
+    status:"open"
+   });
+
+ if(result.error){
+  toast(result.error.message);
+  return;
+ }
+
+ toast("Project created");
+
+ closeModal();
+
+ renderProjects();
+}
+
+
+async function submitProposal(projectId){
+
+ const message=
+  document.getElementById("proposalMsg")
+   ?.value.trim();
+
+ if(!message){
+  toast("Proposal message required");
+  return;
+ }
+
+ const result=
+  await supabaseClient
+   .from("project_proposals")
+   .insert({
+    project_id:projectId,
+    proposer_id:currentUser.id,
+    message,
+    bid_amount:
+     Number(
+      document.getElementById("bidAmount").value
+     )||0,
+    status:"submitted"
+   });
+
+ if(result.error){
+  toast(result.error.message);
+  return;
+ }
+
+ toast("Proposal sent");
+
+ closeModal();
+}
+
+
+async function createAchievement(){
+
+ const title=
+  document.getElementById("achTitle")
+   ?.value.trim();
+
+ if(!title){
+  toast("Achievement title required");
+  return;
+ }
+
+ const result=
+  await supabaseClient
+   .from("achievements")
+   .insert({
+    user_id:currentUser.id,
+    title,
+    issuer:
+     document.getElementById("achIssuer").value.trim(),
+    description:
+     document.getElementById("achDesc").value.trim()
+   });
+
+ if(result.error){
+  toast(result.error.message);
+  return;
+ }
+
+ toast("Achievement added");
+
+ closeModal();
+}
+
+
+async function createBusiness(){
+
+ const name=
+  document.getElementById("bizName")
+   ?.value.trim();
+
+ if(!name){
+  toast("Business name required");
+  return;
+ }
+
+ const result=
+  await supabaseClient
+   .from("businesses")
+   .insert({
+    owner_id:currentUser.id,
+    name,
+    industry:
+     document.getElementById("bizIndustry").value.trim(),
+    location:
+     document.getElementById("bizLocation").value.trim(),
+    about:
+     document.getElementById("bizAbout").value.trim(),
+    website:
+     document.getElementById("bizWebsite").value.trim()
+   });
+
+ if(result.error){
+  toast(result.error.message);
+  return;
+ }
+
+ toast("Business created");
+
+ closeModal();
+
+ renderBusiness();
+}
+
+
+/* =========================================================
+   ESCAPE MODAL
+========================================================= */
+
+document.addEventListener("keydown",event=>{
+ if(event.key==="Escape"){
+  closeModal();
+ }
+});
+
+
+/* =========================================================
+   START
+========================================================= */
+
+initialize();
+
 </script>
 
 </body>
