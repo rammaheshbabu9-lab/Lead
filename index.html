@@ -1,4041 +1,2555 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0a66c2">
-<title>WorkLynk — People • Skills • Opportunities</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>ONE MINUTE NEWS — Admin</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
 :root{
- --blue:#0a66c2;
- --blue2:#004182;
- --bg:#f3f6f8;
- --card:#fff;
- --text:#172033;
- --muted:#667085;
- --line:#e4e7ec;
- --green:#16a34a;
- --danger:#dc2626;
- --gold:#b7791f;
- --shadow:0 3px 16px rgba(16,24,40,.08);
- --radius:16px;
+  --red:#e51b23;
+  --dark:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --bg:#f5f7fa;
+  --card:#fff;
+  --green:#16a34a;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+
 body{
- font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
- background:var(--bg);color:var(--text)
+  font-family:Arial,"Noto Sans Telugu",sans-serif;
+  background:var(--bg);
+  color:var(--dark);
 }
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-a{text-decoration:none}
-.hidden{display:none!important}
-.muted{color:var(--muted)}
-.small{font-size:12px}
-.bold{font-weight:800}
 
-.btn{
- border:0;background:var(--blue);color:#fff;
- padding:10px 15px;border-radius:10px;font-weight:800
+button,input,textarea,select{
+  font:inherit;
 }
-.btn:hover{background:var(--blue2)}
-.btn.gray{background:#eef2f6;color:#344054}
-.btn.outline{background:#fff;color:var(--blue);border:1px solid var(--blue)}
-.btn.danger{background:var(--danger)}
-.btn.green{background:var(--green)}
 
-.iconbtn{
- border:0;background:transparent;border-radius:10px;
- padding:9px;font-size:19px
+button{
+  cursor:pointer;
 }
-.iconbtn:hover{background:#eef2f6}
 
-.top{
- position:sticky;top:0;z-index:50;
- height:64px;background:#fff;
- border-bottom:1px solid var(--line)
+.hidden{
+  display:none!important;
 }
-.topin{
- width:min(1250px,calc(100% - 24px));
- height:100%;margin:auto;
- display:flex;align-items:center;gap:12px
+
+/* ================= LOGIN ================= */
+
+#loginScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at top,#fff 0,#f5f7fa 50%,#eceff3 100%);
 }
+
+.login-card{
+  width:100%;
+  max-width:420px;
+  background:white;
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:32px 25px;
+  box-shadow:0 20px 60px rgba(0,0,0,.08);
+}
+
 .logo{
- font-size:24px;font-weight:950;color:var(--blue);
- white-space:nowrap
+  width:62px;
+  height:62px;
+  border-radius:18px;
+  background:var(--red);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:25px;
+  margin:auto auto 16px;
 }
-.logo span{color:#111}
 
-.search{
- width:100%;max-width:450px;
- background:#eef2f6;border:0;border-radius:11px;
- padding:11px 14px;outline:none
+.login-card h1{
+  text-align:center;
+  font-size:25px;
+  margin-bottom:7px;
 }
-.search:focus{box-shadow:0 0 0 2px #b9d8f5}
 
-.topactions{
- margin-left:auto;display:flex;align-items:center;gap:4px
+.login-card p{
+  text-align:center;
+  color:var(--muted);
+  margin-bottom:25px;
 }
-.avatar{
- width:39px;height:39px;border-radius:50%;
- display:grid;place-items:center;
- background:#dbeafe;color:var(--blue);
- font-weight:900;overflow:hidden;
- border:1px solid #d0d5dd;
- flex:none
+
+.form-group{
+  margin-bottom:17px;
 }
-.avatar img{width:100%;height:100%;object-fit:cover}
+
+.form-group label{
+  display:block;
+  font-size:14px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.form-control{
+  width:100%;
+  padding:14px 15px;
+  border:1px solid #d9dde4;
+  border-radius:12px;
+  outline:none;
+  background:#fff;
+}
+
+.form-control:focus{
+  border-color:var(--red);
+  box-shadow:0 0 0 3px rgba(229,27,35,.08);
+}
+
+.primary-btn{
+  width:100%;
+  border:0;
+  background:var(--red);
+  color:white;
+  padding:14px;
+  border-radius:12px;
+  font-weight:800;
+  font-size:15px;
+}
+
+.primary-btn:hover{
+  filter:brightness(.95);
+}
+
+.demo-note{
+  margin-top:15px;
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+  padding:11px;
+  border-radius:10px;
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* ================= APP ================= */
+
+#app{
+  min-height:100vh;
+}
+
+.topbar{
+  height:70px;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 24px;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.brand-logo{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  background:var(--red);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+}
+
+.brand-title{
+  font-size:18px;
+  font-weight:900;
+}
+
+.brand-title span{
+  color:var(--red);
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.small-btn{
+  border:1px solid var(--border);
+  background:white;
+  padding:9px 13px;
+  border-radius:10px;
+  font-weight:700;
+}
+
+.logout{
+  color:var(--red);
+}
 
 .layout{
- width:min(1250px,calc(100% - 24px));
- margin:18px auto 80px;
- display:grid;
- grid-template-columns:220px minmax(0,1fr) 280px;
- gap:18px
-}
-.side,.right,.card{
- background:var(--card);
- border:1px solid var(--line);
- border-radius:var(--radius);
- box-shadow:var(--shadow)
-}
-.side{
- padding:10px;height:max-content;
- position:sticky;top:82px
-}
-.right{
- padding:16px;height:max-content;
- position:sticky;top:82px
-}
-.nav{
- width:100%;border:0;background:transparent;
- text-align:left;padding:12px;
- border-radius:10px;
- color:#344054;font-weight:800;
- display:flex;gap:10px;align-items:center
-}
-.nav:hover,.nav.active{
- background:#e8f1fb;color:var(--blue)
+  max-width:1200px;
+  margin:auto;
+  padding:25px;
 }
 
-.card{
- padding:16px;margin-bottom:14px
-}
-.hero{
- border:0;color:#fff;
- background:linear-gradient(135deg,#0a66c2,#004182 65%,#172554)
-}
-.hero h1{font-size:31px;margin-bottom:8px}
-.hero p{line-height:1.55;opacity:.92}
-.heroActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+/* ================= HEADER ================= */
 
-.composer{
- display:flex;align-items:center;gap:10px
-}
-.composerInput{
- flex:1;border:1px solid var(--line);
- border-radius:30px;padding:12px 16px;
- cursor:pointer;outline:none
+.page-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:20px;
 }
 
-.sectiontitle{
- display:flex;align-items:center;
- justify-content:space-between;gap:10px;
- margin-bottom:12px
-}
-.sectiontitle h2{font-size:22px}
-
-.posthead{
- display:flex;align-items:center;gap:10px
-}
-.grow{flex:1}
-.postcaption{
- margin:12px 0;line-height:1.55;
- white-space:pre-wrap
-}
-.postmedia{
- width:100%;max-height:550px;
- object-fit:cover;border-radius:13px
-}
-.postactions{
- display:grid;grid-template-columns:repeat(4,1fr);
- gap:3px;border-top:1px solid var(--line);
- margin-top:12px;padding-top:6px
-}
-.postactions button{
- border:0;background:#fff;
- padding:10px 5px;border-radius:9px;
- color:#475467;font-weight:800
-}
-.postactions button:hover{background:#f2f4f7}
-.postactions button.active{color:var(--blue)}
-
-.commentBox{
- display:flex;gap:7px;margin-top:10px
-}
-.commentBox input{
- flex:1;border:1px solid var(--line);
- border-radius:20px;padding:9px 12px;outline:none
-}
-.comment{
- padding:8px 0;
- border-bottom:1px solid #f0f2f5
+.page-header h2{
+  font-size:27px;
 }
 
-.stats{
- display:grid;grid-template-columns:repeat(3,1fr);
- gap:10px
+.page-header p{
+  color:var(--muted);
+  margin-top:5px;
+  font-size:14px;
 }
-.stat{
- background:#f8fafc;border:1px solid var(--line);
- border-radius:12px;padding:14px;text-align:center
+
+/* ================= NEWS FORM ================= */
+
+.editor-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:24px;
+  box-shadow:0 8px 30px rgba(0,0,0,.04);
 }
-.stat b{font-size:22px;display:block}
+
+.step{
+  border:1px solid var(--border);
+  border-radius:17px;
+  margin-bottom:16px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.step-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:15px 17px;
+  background:#fafafa;
+  border-bottom:1px solid var(--border);
+}
+
+.step-number{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  background:var(--red);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  flex:none;
+}
+
+.step-head strong{
+  font-size:15px;
+}
+
+.step-head small{
+  display:block;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.step-body{
+  padding:18px;
+}
+
+/* upload */
+
+.upload-box{
+  border:2px dashed #d6d9df;
+  border-radius:15px;
+  padding:22px;
+  text-align:center;
+  transition:.2s;
+}
+
+.upload-box:hover{
+  border-color:var(--red);
+  background:#fffafa;
+}
+
+.upload-icon{
+  font-size:35px;
+  margin-bottom:7px;
+}
+
+.upload-box strong{
+  display:block;
+  margin-bottom:5px;
+}
+
+.upload-box span{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.file-btn{
+  display:inline-block;
+  margin-top:12px;
+  background:#111827;
+  color:white;
+  padding:10px 15px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.file-btn input{
+  display:none;
+}
+
+/* previews */
+
+.preview-wrap{
+  margin-top:15px;
+  position:relative;
+}
+
+.image-preview{
+  width:100%;
+  max-height:330px;
+  object-fit:cover;
+  border-radius:14px;
+  display:none;
+}
+
+.video-preview{
+  width:100%;
+  max-height:360px;
+  border-radius:14px;
+  background:#000;
+  display:none;
+}
+
+.file-name{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* headline */
+
+.headline-input{
+  font-size:20px;
+  font-weight:700;
+  padding:17px;
+}
+
+.tagline-input{
+  font-size:15px;
+}
+
+.matter{
+  min-height:180px;
+  resize:vertical;
+  line-height:1.7;
+}
+
+/* options */
 
 .grid2{
- display:grid;grid-template-columns:repeat(2,1fr);gap:14px
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
 }
 
-.listitem{
- border:1px solid var(--line);
- border-radius:12px;padding:14px;margin-bottom:10px
-}
-.listitem:last-child{margin-bottom:0}
-
-.chips{
- display:flex;flex-wrap:wrap;gap:6px;margin-top:8px
-}
-.chip{
- padding:5px 9px;border-radius:999px;
- background:#eef4fb;color:#245b91;
- font-size:12px;font-weight:800
+.check-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
 }
 
-.progress{
- height:8px;background:#e5e7eb;
- border-radius:99px;overflow:hidden
-}
-.progress i{
- display:block;height:100%;
- background:var(--blue)
-}
-
-.profileCover{
- height:145px;
- border-radius:14px 14px 0 0;
- background:linear-gradient(120deg,#0a66c2,#4f46e5,#7c3aed)
-}
-.profileMain{
- margin-top:-48px;padding:0 20px 20px
-}
-.bigAvatar{
- width:96px;height:96px;border-radius:50%;
- border:4px solid #fff;
- background:#dbeafe;
- object-fit:cover
+.check-card{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  font-weight:700;
 }
 
-.tabs{
- display:flex;gap:5px;overflow:auto;
- border-bottom:1px solid var(--line);
- margin-bottom:14px
-}
-.tab{
- border:0;background:#fff;
- padding:10px 14px;font-weight:800;
- white-space:nowrap
-}
-.tab.active{
- color:var(--blue);
- border-bottom:3px solid var(--blue)
+.check-card input{
+  accent-color:var(--red);
 }
 
-.modalback{
- position:fixed;inset:0;
- background:rgba(15,23,42,.62);
- z-index:100;
- display:grid;place-items:center;
- padding:15px
-}
-.modal{
- width:min(650px,100%);
- max-height:91vh;overflow:auto;
- background:#fff;border-radius:18px;
- box-shadow:0 25px 80px rgba(0,0,0,.28)
-}
-.modalHead{
- padding:16px 18px;border-bottom:1px solid var(--line);
- display:flex;align-items:center;justify-content:space-between
-}
-.modalBody{padding:18px}
-.modalFoot{
- padding:14px 18px;border-top:1px solid var(--line);
- display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap
-}
-.field{margin-bottom:13px}
-.field label{
- display:block;font-size:13px;
- font-weight:800;margin-bottom:6px
-}
-.field input,.field textarea,.field select{
- width:100%;padding:11px 12px;
- border:1px solid #d0d5dd;border-radius:10px;
- outline:none;background:#fff
-}
-.field textarea{min-height:110px;resize:vertical}
+/* promotion */
 
-.toast{
- position:fixed;right:18px;bottom:18px;z-index:200;
- background:#101828;color:#fff;
- padding:12px 16px;border-radius:11px;
- box-shadow:var(--shadow);max-width:370px
+.promo-box{
+  background:#fff8f8;
+  border:1px solid #ffd4d7;
+  border-radius:14px;
+  padding:15px;
 }
 
-.aiHero{
- background:linear-gradient(135deg,#111827,#1e3a8a);
- color:#fff
-}
-.aiChat{
- height:440px;overflow:auto;
- background:#f8fafc;border-radius:13px;
- padding:14px
-}
-.aiMsg{
- max-width:82%;
- padding:11px 13px;
- border-radius:14px;
- margin-bottom:10px;
- line-height:1.5
-}
-.aiMsg.me{
- margin-left:auto;
- background:#dbeafe
-}
-.aiMsg.bot{
- background:#fff;
- border:1px solid var(--line)
-}
-.aiForm{
- display:flex;gap:8px;margin-top:10px
-}
-.aiForm input{
- flex:1;padding:12px;
- border:1px solid var(--line);
- border-radius:12px;outline:none
+.promo-title{
+  color:var(--red);
+  font-weight:900;
+  margin-bottom:12px;
 }
 
-.chatBox{
- height:540px;
- display:grid;
- grid-template-columns:230px 1fr;
- border:1px solid var(--line);
- border-radius:14px;
- overflow:hidden
-}
-.chatUsers{
- border-right:1px solid var(--line);
- overflow:auto
-}
-.chatUser{
- width:100%;border:0;
- border-bottom:1px solid #f0f2f5;
- background:#fff;text-align:left;
- padding:12px
-}
-.chatUser:hover,.chatUser.active{background:#eef4fb}
-.chatMain{display:flex;flex-direction:column}
-.messages{
- flex:1;overflow:auto;
- padding:14px;background:#f8fafc
-}
-.bubble{
- max-width:76%;
- padding:10px 12px;
- background:#fff;border:1px solid var(--line);
- border-radius:14px;margin-bottom:8px
-}
-.bubble.me{
- margin-left:auto;background:#dbeafe
-}
-.sendRow{
- display:flex;gap:8px;
- padding:10px;border-top:1px solid var(--line)
-}
-.sendRow input{
- flex:1;padding:11px;
- border:1px solid var(--line);
- border-radius:10px
+/* bottom */
+
+.publish-area{
+  margin-top:20px;
+  border-top:1px solid var(--border);
+  padding-top:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
 }
 
-.bottom{
- display:none
+.status-info{
+  color:var(--muted);
+  font-size:13px;
 }
 
-.empty{
- text-align:center;padding:30px 15px;
- color:var(--muted)
+.publish-buttons{
+  display:flex;
+  gap:10px;
 }
 
-@media(max-width:1000px){
- .layout{grid-template-columns:190px minmax(0,1fr)}
- .right{display:none}
+.secondary-btn{
+  border:1px solid var(--border);
+  background:#fff;
+  padding:13px 18px;
+  border-radius:11px;
+  font-weight:800;
 }
+
+.publish-btn{
+  border:0;
+  background:var(--red);
+  color:#fff;
+  padding:13px 22px;
+  border-radius:11px;
+  font-weight:900;
+}
+
+/* ================= NEWS LIST ================= */
+
+.list-card{
+  margin-top:25px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:20px;
+}
+
+.list-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+
+.news-item{
+  display:grid;
+  grid-template-columns:110px 1fr auto;
+  gap:15px;
+  align-items:center;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:12px;
+  margin-bottom:10px;
+}
+
+.news-thumb{
+  width:110px;
+  height:75px;
+  object-fit:cover;
+  border-radius:10px;
+  background:#eee;
+}
+
+.news-info h3{
+  font-size:15px;
+  margin-bottom:6px;
+  line-height:1.35;
+}
+
+.news-info p{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.badges{
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+  margin-top:7px;
+}
+
+.badge{
+  padding:4px 7px;
+  border-radius:6px;
+  font-size:10px;
+  font-weight:800;
+  background:#f1f5f9;
+}
+
+.badge.red{
+  background:#fee2e2;
+  color:#b91c1c;
+}
+
+.badge.green{
+  background:#dcfce7;
+  color:#15803d;
+}
+
+.item-actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.icon-btn{
+  border:1px solid var(--border);
+  background:white;
+  padding:8px 10px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.delete-btn{
+  color:#dc2626;
+}
+
+/* ================= TOAST ================= */
+
+#toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translate(-50%,120px);
+  background:#111827;
+  color:white;
+  padding:13px 18px;
+  border-radius:12px;
+  z-index:9999;
+  font-size:13px;
+  font-weight:700;
+  transition:.3s;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+#toast.show{
+  transform:translate(-50%,0);
+}
+
+#toast.success{
+  background:#15803d;
+}
+
+#toast.error{
+  background:#b91c1c;
+}
+
+/* ================= LOADING ================= */
+
+.loading{
+  opacity:.65;
+  pointer-events:none;
+}
+
+/* ================= MOBILE ================= */
+
 @media(max-width:700px){
- .top{height:58px}
- .topin{width:calc(100% - 12px)}
- .logo{font-size:20px}
- .search{max-width:none}
- .hideMobile{display:none!important}
- .layout{
-  display:block;width:100%;
-  margin:9px 0 72px
- }
- .side{display:none}
- .main{padding:0 7px}
- .card{padding:13px;border-radius:14px}
- .hero h1{font-size:25px}
- .grid2{grid-template-columns:1fr}
- .stats{gap:5px}
- .postactions{grid-template-columns:repeat(4,1fr)}
- .postactions button{font-size:12px}
- .chatBox{grid-template-columns:1fr;height:570px}
- .chatUsers{display:none}
- .bottom{
-  position:fixed;left:0;right:0;bottom:0;
-  height:63px;background:#fff;
-  border-top:1px solid var(--line);
-  z-index:60;
-  display:flex;justify-content:space-around
- }
- .bottom button{
-  border:0;background:#fff;
-  color:#475467;font-size:10px;font-weight:800
- }
- .bottom b{display:block;font-size:20px}
+
+  .topbar{
+    height:62px;
+    padding:0 13px;
+  }
+
+  .brand-title{
+    font-size:15px;
+  }
+
+  .brand-logo{
+    width:37px;
+    height:37px;
+  }
+
+  .top-actions .small-btn:first-child{
+    display:none;
+  }
+
+  .layout{
+    padding:14px;
+  }
+
+  .page-header{
+    align-items:flex-start;
+  }
+
+  .page-header h2{
+    font-size:23px;
+  }
+
+  .editor-card{
+    padding:13px;
+    border-radius:16px;
+  }
+
+  .step-body{
+    padding:14px;
+  }
+
+  .grid2{
+    grid-template-columns:1fr;
+  }
+
+  .headline-input{
+    font-size:18px;
+  }
+
+  .publish-area{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .publish-buttons{
+    display:grid;
+    grid-template-columns:1fr 1.4fr;
+  }
+
+  .news-item{
+    grid-template-columns:75px 1fr;
+  }
+
+  .news-thumb{
+    width:75px;
+    height:65px;
+  }
+
+  .item-actions{
+    grid-column:1/-1;
+    justify-content:flex-start;
+  }
+
+  .list-card{
+    padding:13px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<header class="top">
- <div class="topin">
+<!-- ================= LOGIN ================= -->
 
-  <div class="logo">Work<span>Lynk</span></div>
+<section id="loginScreen">
 
-  <input
-   id="globalSearch"
-   class="search"
-   placeholder="Search people, jobs, businesses, projects..."
-   onkeydown="if(event.key==='Enter')searchAll(this.value)"
-  >
+  <div class="login-card">
 
-  <div class="topactions">
-   <button class="iconbtn" onclick="showPage('ai')" title="Lynk AI">🤖</button>
-   <button class="iconbtn hideMobile" onclick="showPage('chat')" title="Messages">💬</button>
-   <button class="iconbtn hideMobile" onclick="showPage('notifications')" title="Notifications">🔔</button>
-   <button id="topAvatar" class="avatar" onclick="showPage('profile')">W</button>
+    <div class="logo">1M</div>
+
+    <h1>ONE MINUTE NEWS</h1>
+    <p>Admin Control Center</p>
+
+    <div id="loginStep">
+
+      <div class="form-group">
+        <label>Admin Email</label>
+        <input
+          id="adminEmail"
+          class="form-control"
+          type="email"
+          placeholder="admin@example.com"
+        >
+      </div>
+
+      <button class="primary-btn" onclick="loginAdmin()">
+        Continue
+      </button>
+
+      <div class="demo-note">
+        Demo login కోసం OTP: <b>123456</b><br>
+        Productionలో Supabase Auth OTP ఉపయోగించండి.
+      </div>
+
+    </div>
+
+    <div id="otpStep" class="hidden">
+
+      <div class="form-group">
+        <label>Enter OTP</label>
+        <input
+          id="adminOtp"
+          class="form-control"
+          maxlength="6"
+          inputmode="numeric"
+          placeholder="123456"
+        >
+      </div>
+
+      <button class="primary-btn" onclick="verifyAdmin()">
+        Verify & Login
+      </button>
+
+    </div>
+
   </div>
 
- </div>
-</header>
+</section>
 
 
-<div class="layout">
+<!-- ================= APP ================= -->
 
-<aside class="side">
+<section id="app" class="hidden">
 
- <button class="nav active" data-page="home" onclick="showPage('home')">🏠 Home</button>
- <button class="nav" data-page="network" onclick="showPage('network')">🤝 My Network</button>
- <button class="nav" data-page="jobs" onclick="showPage('jobs')">💼 Jobs</button>
- <button class="nav" data-page="projects" onclick="showPage('projects')">🚀 Projects</button>
- <button class="nav" data-page="business" onclick="showPage('business')">🏢 Business</button>
- <button class="nav" data-page="profile" onclick="showPage('profile')">👤 Profile</button>
- <button class="nav" data-page="chat" onclick="showPage('chat')">💬 Messaging</button>
- <button class="nav" data-page="notifications" onclick="showPage('notifications')">🔔 Notifications</button>
- <button class="nav" data-page="ai" onclick="showPage('ai')">🤖 Lynk AI</button>
+  <header class="topbar">
 
- <hr style="border:0;border-top:1px solid var(--line);margin:10px 0">
+    <div class="brand">
+      <div class="brand-logo">1M</div>
+      <div class="brand-title">
+        ONE <span>MINUTE</span> NEWS
+      </div>
+    </div>
 
- <button class="nav" onclick="openModal('createPost')">✍️ Create Post</button>
- <button class="nav" onclick="openModal('createJob')">➕ Post a Job</button>
- <button class="nav" onclick="openModal('createProject')">🛠️ Start Project</button>
+    <div class="top-actions">
+      <button class="small-btn" onclick="scrollToNews()">
+        📰 News
+      </button>
 
-</aside>
+      <button class="small-btn logout" onclick="logoutAdmin()">
+        Logout
+      </button>
+    </div>
 
-
-<main id="app" class="main"></main>
-
-
-<aside class="right">
-
- <div class="sectiontitle">
-  <b>WorkLynk</b>
-  <span class="small muted">Professional Hub</span>
- </div>
-
- <p class="muted small">
-  Where People, Skills & Opportunities Work Together.
- </p>
-
- <div style="height:12px"></div>
-
- <div class="listitem">
-  <b>Profile Strength</b>
-  <div class="progress" style="margin:9px 0">
-   <i id="profileProgress" style="width:20%"></i>
-  </div>
-  <span id="profileProgressText" class="small muted">20% complete</span>
- </div>
-
- <div class="listitem">
-  <b>Quick Actions</b>
-  <div class="chips">
-   <button class="btn" onclick="openModal('createPost')">Post</button>
-   <button class="btn gray" onclick="showPage('jobs')">Jobs</button>
-   <button class="btn gray" onclick="showPage('ai')">AI</button>
-  </div>
- </div>
-
- <div class="listitem">
-  <b>Build your network</b>
-  <p class="small muted" style="margin-top:6px">
-   Connect with professionals and discover opportunities.
-  </p>
- </div>
-
-</aside>
-
-</div>
+  </header>
 
 
-<nav class="bottom">
- <button onclick="showPage('home')"><b>⌂</b>Home</button>
- <button onclick="showPage('network')"><b>♙</b>Network</button>
- <button onclick="showPage('jobs')"><b>▣</b>Jobs</button>
- <button onclick="showPage('chat')"><b>◌</b>Chat</button>
- <button onclick="showPage('profile')"><b>◯</b>Me</button>
-</nav>
+  <main class="layout">
+
+    <div class="page-header">
+
+      <div>
+        <h2>📰 Create News</h2>
+        <p>Photo → Headline → Tagline → Matter → Video → Promotion → Publish</p>
+      </div>
+
+    </div>
 
 
-<div id="modalRoot"></div>
-<div id="toastRoot"></div>
+    <!-- ================= EDITOR ================= -->
+
+    <section class="editor-card" id="editor">
+
+      <input type="hidden" id="editId">
+
+
+      <!-- STEP 1 -->
+
+      <div class="step">
+
+        <div class="step-head">
+          <div class="step-number">1</div>
+          <div>
+            <strong>📸 Upload Photo</strong>
+            <small>News main image</small>
+          </div>
+        </div>
+
+        <div class="step-body">
+
+          <div class="upload-box">
+
+            <div class="upload-icon">📸</div>
+
+            <strong>Choose News Photo</strong>
+
+            <span>JPG, PNG, WEBP</span>
+
+            <label class="file-btn">
+              Choose Photo
+              <input
+                id="imageFile"
+                type="file"
+                accept="image/*"
+                onchange="previewImage(this)"
+              >
+            </label>
+
+          </div>
+
+          <div class="preview-wrap">
+            <img id="imagePreview" class="image-preview">
+            <div id="imageName" class="file-name"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- STEP 2 -->
+
+      <div class="step">
+
+        <div class="step-head">
+          <div class="step-number">2</div>
+          <div>
+            <strong>📰 Headline</strong>
+            <small>Main news heading</small>
+          </div>
+        </div>
+
+        <div class="step-body">
+
+          <div class="form-group">
+            <input
+              id="title"
+              class="form-control headline-input"
+              placeholder="ఇక్కడ News Headline టైప్ చేయండి..."
+            >
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- STEP 3 -->
+
+      <div class="step">
+
+        <div class="step-head">
+          <div class="step-number">3</div>
+          <div>
+            <strong>🏷️ Tagline</strong>
+            <small>Short supporting line</small>
+          </div>
+        </div>
+
+        <div class="step-body">
+
+          <input
+            id="tagline"
+            class="form-control tagline-input"
+            placeholder="Short tagline / sub headline..."
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- STEP 4 -->
+
+      <div class="step">
+
+        <div class="step-head">
+          <div class="step-number">4</div>
+          <div>
+            <strong>📝 Matter</strong>
+            <small>Complete news content</small>
+          </div>
+        </div>
+
+        <div class="step-body">
+
+          <textarea
+            id="description"
+            class="form-control matter"
+            placeholder="ఇక్కడ complete news matter రాయండి..."
+          ></textarea>
+
+        </div>
+
+      </div>
+
+
+      <!-- STEP 5 -->
+
+      <div class="step">
+
+        <div class="step-head">
+          <div class="step-number">5</div>
+          <div>
+            <strong>🎬 News Video</strong>
+            <small>Optional — video upload</small>
+          </div>
+        </div>
+
+        <div class="step-body">
+
+          <div class="upload-box">
+
+            <div class="upload-icon">🎬</div>
+
+            <strong>Upload News Video</strong>
+
+            <span>MP4 / WEBM / MOV</span>
+
+            <label class="file-btn">
+              Choose Video
+              <input
+                id="videoFile"
+                type="file"
+                accept="video/*"
+                onchange="previewVideo(this,'videoPreview','videoName')"
+              >
+            </label>
+
+          </div>
+
+          <div class="preview-wrap">
+
+            <video
+              id="videoPreview"
+              class="video-preview"
+              controls
+              playsinline
+            ></video>
+
+            <div id="videoName" class="file-name"></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- STEP 6 -->
+
+      <div class="step">
+
+        <div class="step-head">
+          <div class="step-number">6</div>
+          <div>
+            <strong>📢 Promotion / Ad / Reel</strong>
+            <small>Optional promotional media</small>
+          </div>
+        </div>
+
+        <div class="step-body">
+
+          <div class="promo-box">
+
+            <div class="promo-title">
+              📢 Add Promotion
+            </div>
+
+            <div class="form-group">
+              <label>Promotion Title</label>
+
+              <input
+                id="promotionTitle"
+                class="form-control"
+                placeholder="Example: Mega Offer Today"
+              >
+            </div>
+
+            <div class="form-group">
+              <label>Promotion Message</label>
+
+              <input
+                id="promotionText"
+                class="form-control"
+                placeholder="Short promotion message..."
+              >
+            </div>
+
+            <div class="form-group">
+              <label>Promotion Link</label>
+
+              <input
+                id="promotionLink"
+                class="form-control"
+                placeholder="https://example.com"
+              >
+            </div>
+
+            <div class="upload-box">
+
+              <div class="upload-icon">🎞️</div>
+
+              <strong>Upload Ad / Reel / Promotion Video</strong>
+
+              <span>MP4 / WEBM / MOV</span>
+
+              <label class="file-btn">
+                Upload Promotion Video
+                <input
+                  id="promotionVideoFile"
+                  type="file"
+                  accept="video/*"
+                  onchange="previewVideo(this,'promotionVideoPreview','promotionVideoName')"
+                >
+              </label>
+
+            </div>
+
+            <div class="preview-wrap">
+
+              <video
+                id="promotionVideoPreview"
+                class="video-preview"
+                controls
+                playsinline
+              ></video>
+
+              <div
+                id="promotionVideoName"
+                class="file-name"
+              ></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- STEP 7 -->
+
+      <div class="step">
+
+        <div class="step-head">
+          <div class="step-number">7</div>
+          <div>
+            <strong>🔗 Source</strong>
+            <small>News source information</small>
+          </div>
+        </div>
+
+        <div class="step-body">
+
+          <div class="grid2">
+
+            <div class="form-group">
+
+              <label>Source Name</label>
+
+              <input
+                id="source"
+                class="form-control"
+                placeholder="Example: Local Reporter"
+              >
+
+            </div>
+
+            <div class="form-group">
+
+              <label>Source URL</label>
+
+              <input
+                id="sourceUrl"
+                class="form-control"
+                placeholder="https://..."
+              >
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- STEP 8 -->
+
+      <div class="step">
+
+        <div class="step-head">
+          <div class="step-number">8</div>
+          <div>
+            <strong>🎙️ Voice</strong>
+            <small>Telugu voice reading text</small>
+          </div>
+        </div>
+
+        <div class="step-body">
+
+          <textarea
+            id="voiceText"
+            class="form-control"
+            rows="5"
+            placeholder="Voice reading కోసం Telugu text. ఖాళీగా ఉంటే headline + matter ఉపయోగిస్తాం."
+          ></textarea>
+
+        </div>
+
+      </div>
+
+
+      <!-- STEP 9 -->
+
+      <div class="step">
+
+        <div class="step-head">
+          <div class="step-number">9</div>
+          <div>
+            <strong>⚙️ News Settings</strong>
+            <small>Category & publishing options</small>
+          </div>
+        </div>
+
+        <div class="step-body">
+
+          <div class="grid2">
+
+            <div class="form-group">
+
+              <label>Category</label>
+
+              <select id="categoryId" class="form-control">
+                <option value="">Select Category</option>
+              </select>
+
+            </div>
+
+            <div class="form-group">
+
+              <label>Tag</label>
+
+              <input
+                id="tag"
+                class="form-control"
+                placeholder="Telangana / Politics / Cinema..."
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="check-row">
+
+            <label class="check-card">
+              <input type="checkbox" id="breaking">
+              🔴 Breaking News
+            </label>
+
+            <label class="check-card">
+              <input type="checkbox" id="featured">
+              ⭐ Featured
+            </label>
+
+            <label class="check-card">
+              <input type="checkbox" id="publishNow" checked>
+              🚀 Publish Now
+            </label>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- PUBLISH -->
+
+      <div class="publish-area">
+
+        <div class="status-info" id="formStatus">
+          Ready to publish your news.
+        </div>
+
+        <div class="publish-buttons">
+
+          <button
+            class="secondary-btn"
+            onclick="resetForm()"
+          >
+            Clear
+          </button>
+
+          <button
+            class="publish-btn"
+            id="saveBtn"
+            onclick="saveNews()"
+          >
+            🚀 Publish News
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= NEWS LIST ================= -->
+
+    <section class="list-card" id="newsListSection">
+
+      <div class="list-header">
+
+        <div>
+          <h3>Recent News</h3>
+          <p style="font-size:12px;color:#6b7280;margin-top:4px;">
+            Edit, publish, unpublish or delete
+          </p>
+        </div>
+
+        <button
+          class="small-btn"
+          onclick="loadNews()"
+        >
+          ↻ Refresh
+        </button>
+
+      </div>
+
+      <div id="newsList">
+        Loading...
+      </div>
+
+    </section>
+
+  </main>
+
+</section>
+
+
+<div id="toast"></div>
 
 
 <script>
 
 /* =========================================================
-   WORKLYNK CONFIG
+   SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
- "https://eaowxilhfzyukzetgqxo.supabase.co";
+  "https://eaowxilhfzyukzetgqxo.supabase.co";
 
-const SUPABASE_KEY =
- "sb_publishable_Z3xsADypaOjX8GEQEOLUdg_vbxynHRx";
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_Z3xsADypaOjX8GEQEOLUdg_vbxynHRx";
 
 const supabaseClient =
- supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-
-
-/*
-  OPTIONAL REAL AI BACKEND
-
-  Example:
-  window.LYNK_AI_ENDPOINT =
-    "https://YOUR-PROJECT.supabase.co/functions/v1/lynk-ai";
-
-  DO NOT PUT SECRET AI API KEYS HERE.
-*/
-window.LYNK_AI_ENDPOINT = "";
-
-
-let currentUser=null;
-let currentProfile=null;
-let currentPage="home";
-let currentChatUser=null;
-let messageChannel=null;
-
-let cache={
- posts:[],
- profiles:[],
- jobs:[],
- projects:[],
- businesses:[],
- notifications:[]
-};
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function esc(value){
- return String(value??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#39;"
- }[c]));
-}
-
-function safeUrl(url){
- return /^https?:\/\//i.test(String(url||""))
-  ? String(url)
-  : "#";
-}
-
-function initials(name){
- return (
-  String(name||"User")
-   .trim()
-   .split(/\s+/)
-   .map(x=>x[0])
-   .join("")
-   .slice(0,2)
-  ||"U"
- ).toUpperCase();
-}
-
-function toast(message){
- const el=document.createElement("div");
- el.className="toast";
- el.textContent=message;
- document.getElementById("toastRoot").appendChild(el);
- setTimeout(()=>el.remove(),3000);
-}
-
-function loading(text="Loading..."){
- return `<div class="card"><div class="empty">${esc(text)}</div></div>`;
-}
-
-async function db(table,fn){
- try{
-  const result=await fn();
-  if(result.error)throw result.error;
-  return result.data??[];
- }catch(error){
-  console.warn("WorkLynk:",table,error);
-  return null;
- }
-}
-
-function avatarHTML(profile,sizeClass="avatar"){
- const name=profile?.full_name||"User";
- if(profile?.avatar_url){
-  return `
-   <div class="${sizeClass}">
-    <img
-     src="${safeUrl(profile.avatar_url)}"
-     alt=""
-     onerror="this.parentElement.innerHTML='${esc(initials(name))}'"
-    >
-   </div>`;
- }
- return `<div class="${sizeClass}">${esc(initials(name))}</div>`;
-}
-
-
-/* =========================================================
-   AUTH
-========================================================= */
-
-async function initialize(){
-
- const {
-  data:{session}
- }=await supabaseClient.auth.getSession();
-
- currentUser=session?.user||null;
-
- if(currentUser){
-  await loadProfile();
- }
-
- renderHome();
-
- supabaseClient.auth.onAuthStateChange(()=>{
-  setTimeout(async()=>{
-   const {
-    data:{session}
-   }=await supabaseClient.auth.getSession();
-
-   currentUser=session?.user||null;
-
-   if(currentUser){
-    await loadProfile();
-   }
-
-   if(currentPage==="home"){
-    renderHome();
-   }
-  },0);
- });
-}
-
-async function requireAuth(){
-
- if(currentUser)return true;
-
- openModal("auth");
- return false;
-}
-
-async function loadProfile(){
-
- if(!currentUser)return;
-
- const profile=await db(
-  "profiles",
-  ()=>supabaseClient
-   .from("profiles")
-   .select("*")
-   .eq("id",currentUser.id)
-   .maybeSingle()
- );
-
- currentProfile=profile||{
-  id:currentUser.id,
-  email:currentUser.email,
-  full_name:
-   currentUser.user_metadata?.full_name||
-   currentUser.email?.split("@")[0]||
-   "WorkLynk User"
- };
-
- updateTopAvatar();
- updateProfileStrength();
-}
-
-function updateTopAvatar(){
-
- const el=document.getElementById("topAvatar");
- if(!el)return;
-
- if(currentProfile?.avatar_url){
-  el.innerHTML=
-   `<img src="${safeUrl(currentProfile.avatar_url)}" alt="">`;
- }else{
-  el.textContent=initials(currentProfile?.full_name);
- }
-}
-
-function updateProfileStrength(){
-
- if(!currentProfile)return;
-
- const fields=[
-  "full_name",
-  "headline",
-  "about",
-  "company_name",
-  "location",
-  "skills",
-  "experience",
-  "education",
-  "linkedin_url",
-  "github_url",
-  "portfolio_url",
-  "avatar_url"
- ];
-
- const completed=fields.filter(
-  key=>currentProfile[key] &&
-       String(currentProfile[key]).trim()
- ).length;
-
- const percent=Math.round(
-  completed/fields.length*100
- );
-
- const bar=document.getElementById("profileProgress");
- const text=document.getElementById("profileProgressText");
-
- if(bar)bar.style.width=percent+"%";
- if(text)text.textContent=percent+"% complete";
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function setActivePage(page){
-
- document.querySelectorAll(".nav").forEach(btn=>{
-  btn.classList.toggle(
-   "active",
-   btn.dataset.page===page
-  );
- });
-}
-
-async function showPage(page){
-
- currentPage=page;
- setActivePage(page);
-
- if(
-  !currentUser &&
-  !["home","jobs","ai"].includes(page)
- ){
-  if(!(await requireAuth()))return;
- }
-
- if(page==="home")return renderHome();
- if(page==="network")return renderNetwork();
- if(page==="jobs")return renderJobs();
- if(page==="projects")return renderProjects();
- if(page==="business")return renderBusiness();
- if(page==="profile")return renderProfile();
- if(page==="chat")return renderChat();
- if(page==="notifications")return renderNotifications();
- if(page==="ai")return renderAI();
-}
-
-
-/* =========================================================
-   HOME / FEED
-========================================================= */
-
-function renderHome(){
-
- document.getElementById("app").innerHTML=`
-
-  <section class="card hero">
-   <h1>Build your professional world.</h1>
-
-   <p>
-    Connect with people, showcase skills,
-    discover opportunities and grow with WorkLynk.
-   </p>
-
-   <div class="heroActions">
-    <button class="btn" onclick="showPage('jobs')">
-     Explore Jobs
-    </button>
-
-    <button class="btn outline" onclick="showPage('ai')">
-     🤖 Ask Lynk AI
-    </button>
-
-    <button class="btn gray" onclick="showPage('network')">
-     🤝 Grow Network
-    </button>
-   </div>
-  </section>
-
-
-  <section class="card">
-   <div class="composer">
-
-    ${avatarHTML(currentProfile)}
-
-    <input
-     class="composerInput"
-     placeholder="Start a post, share an idea or opportunity..."
-     onclick="openModal('createPost')"
-     readonly
-    >
-
-   </div>
-  </section>
-
-
-  <div id="feed">
-   ${loading("Loading your professional feed...")}
-  </div>
- `;
-
- loadFeed();
-}
-
-async function loadFeed(){
-
- const posts=await db(
-  "posts",
-  ()=>supabaseClient
-   .from("posts")
-   .select("*,profiles(*)")
-   .order("created_at",{ascending:false})
-   .limit(50)
- );
-
- cache.posts=posts||[];
-
- const feed=document.getElementById("feed");
-
- if(!feed)return;
-
- if(!cache.posts.length){
-  feed.innerHTML=`
-   <div class="card empty">
-    <h3>No posts yet</h3>
-    <p>Be the first person to share something valuable.</p>
-   </div>`;
-  return;
- }
-
- feed.innerHTML=cache.posts
-  .map(renderPost)
-  .join("");
-}
-
-function renderPost(post){
-
- const profile=post.profiles||{};
- const mine=currentUser &&
-            post.user_id===currentUser.id;
-
- const media=post.media_url
-  ? (
-    String(post.media_type||"")
-     .toLowerCase()
-     .includes("video")
-    ?
-    `<video
-      class="postmedia"
-      controls
-      src="${safeUrl(post.media_url)}"
-     ></video>`
-    :
-    `<img
-      class="postmedia"
-      src="${safeUrl(post.media_url)}"
-      alt="Post media"
-     >`
-   )
-  :"";
-
- return `
- <article class="card" id="post-${post.id}">
-
-  <div class="posthead">
-
-   ${avatarHTML(profile)}
-
-   <div class="grow">
-    <b>${esc(profile.full_name||"WorkLynk Member")}</b>
-
-    <div class="small muted">
-     ${esc(
-      profile.headline||
-      profile.company_name||
-      "Professional"
-     )}
-     ·
-     ${new Date(post.created_at).toLocaleString()}
-    </div>
-   </div>
-
-   ${
-    mine
-    ?
-    `<button
-      class="iconbtn"
-      onclick="deletePost(${post.id})"
-      title="Delete"
-     >⋮</button>`
-    :""
-   }
-
-  </div>
-
-  ${
-   post.caption
-   ?
-   `<div class="postcaption">
-     ${esc(post.caption)}
-    </div>`
-   :""
-  }
-
-  ${media}
-
-  <div class="postactions">
-
-   <button
-    onclick="likePost(${post.id},this)"
-   >
-    ❤️ Like
-   </button>
-
-   <button
-    onclick="toggleComments(${post.id})"
-   >
-    💬 Comment
-   </button>
-
-   <button
-    onclick="sharePost(${post.id})"
-   >
-    🔄 Share
-   </button>
-
-   <button
-    onclick="savePost(${post.id},this)"
-   >
-    🔖 Save
-   </button>
-
-  </div>
-
-  <div id="comments-${post.id}" class="hidden">
-
-   <div class="commentBox">
-    <input
-     id="commentInput-${post.id}"
-     placeholder="Write a comment..."
-     onkeydown="
-      if(event.key==='Enter')
-      submitComment(${post.id})
-     "
-    >
-    <button
-     class="btn"
-     onclick="submitComment(${post.id})"
-    >
-     Send
-    </button>
-   </div>
-
-   <div id="commentList-${post.id}"></div>
-
-  </div>
-
- </article>
- `;
-}
-
-async function likePost(postId,button){
-
- if(!(await requireAuth()))return;
-
- const existing=await db(
-  "post_likes",
-  ()=>supabaseClient
-   .from("post_likes")
-   .select("id")
-   .eq("post_id",postId)
-   .eq("user_id",currentUser.id)
-   .maybeSingle()
- );
-
- if(existing?.id){
-
-  await supabaseClient
-   .from("post_likes")
-   .delete()
-   .eq("id",existing.id);
-
-  button?.classList.remove("active");
-  toast("Like removed");
-
- }else{
-
-  const r=await supabaseClient
-   .from("post_likes")
-   .insert({
-    post_id:postId,
-    user_id:currentUser.id
-   });
-
-  if(r.error){
-   toast(r.error.message);
-   return;
-  }
-
-  button?.classList.add("active");
-  toast("Liked");
- }
-}
-
-function toggleComments(id){
-
- const box=document.getElementById("comments-"+id);
-
- if(!box)return;
-
- box.classList.toggle("hidden");
-
- if(!box.classList.contains("hidden")){
-  loadComments(id);
- }
-}
-
-async function loadComments(postId){
-
- const comments=await db(
-  "post_comments",
-  ()=>supabaseClient
-   .from("post_comments")
-   .select("*,profiles(full_name,avatar_url)")
-   .eq("post_id",postId)
-   .order("created_at",{ascending:true})
- );
-
- const el=document.getElementById(
-  "commentList-"+postId
- );
-
- if(!el)return;
-
- el.innerHTML=(comments||[])
-  .map(comment=>`
-   <div class="comment">
-    <b>${esc(
-     comment.profiles?.full_name||
-     "Member"
-    )}</b>
-
-    <span>${esc(comment.content)}</span>
-
-    <div class="small muted">
-     ${new Date(
-      comment.created_at
-     ).toLocaleString()}
-    </div>
-   </div>
-  `)
-  .join("")||
-  `<div class="small muted" style="padding:10px 0">
-    No comments yet.
-   </div>`;
-}
-
-async function submitComment(postId){
-
- if(!(await requireAuth()))return;
-
- const input=document.getElementById(
-  "commentInput-"+postId
- );
-
- const content=input?.value.trim();
-
- if(!content)return;
-
- const r=await supabaseClient
-  .from("post_comments")
-  .insert({
-   post_id:postId,
-   user_id:currentUser.id,
-   content
-  });
-
- if(r.error){
-  toast(r.error.message);
-  return;
- }
-
- input.value="";
- toast("Comment added");
- loadComments(postId);
-}
-
-async function savePost(postId,button){
-
- if(!(await requireAuth()))return;
-
- const existing=await db(
-  "post_saves",
-  ()=>supabaseClient
-   .from("post_saves")
-   .select("id")
-   .eq("post_id",postId)
-   .eq("user_id",currentUser.id)
-   .maybeSingle()
- );
-
- if(existing?.id){
-
-  await supabaseClient
-   .from("post_saves")
-   .delete()
-   .eq("id",existing.id);
-
-  button?.classList.remove("active");
-  toast("Removed from saved");
-
- }else{
-
-  const r=await supabaseClient
-   .from("post_saves")
-   .insert({
-    post_id:postId,
-    user_id:currentUser.id
-   });
-
-  if(r.error){
-   toast(r.error.message);
-   return;
-  }
-
-  button?.classList.add("active");
-  toast("Post saved");
- }
-}
-
-async function sharePost(postId){
-
- const url=
-  location.href.split("#")[0]+
-  "#post-"+postId;
-
- try{
-
-  if(navigator.share){
-   await navigator.share({
-    title:"WorkLynk",
-    text:"Check this WorkLynk post",
-    url
-   });
-  }else if(navigator.clipboard){
-   await navigator.clipboard.writeText(url);
-   toast("Post link copied");
-  }
-
- }catch(e){}
-
- if(currentUser){
-  await supabaseClient
-   .from("post_shares")
-   .insert({
-    post_id:postId,
-    user_id:currentUser.id
-   });
- }
-}
-
-async function deletePost(postId){
-
- if(!currentUser)return;
-
- if(!confirm("Delete this post?"))return;
-
- const r=await supabaseClient
-  .from("posts")
-  .delete()
-  .eq("id",postId)
-  .eq("user_id",currentUser.id);
-
- if(r.error){
-  toast(r.error.message);
-  return;
- }
-
- toast("Post deleted");
- loadFeed();
-}
-
-
-/* =========================================================
-   NETWORK
-========================================================= */
-
-async function renderNetwork(){
-
- document.getElementById("app").innerHTML=`
-
- <section class="card">
-
-  <div class="sectiontitle">
-   <div>
-    <h2>My Network</h2>
-    <p class="muted">
-     Discover people and build professional relationships.
-    </p>
-   </div>
-
-   <button
-    class="btn"
-    onclick="showPage('chat')"
-   >
-    Messages
-   </button>
-  </div>
-
-  <input
-   id="networkSearch"
-   class="search"
-   style="width:100%;max-width:none;margin-bottom:13px"
-   placeholder="Search professionals..."
-   oninput="filterNetwork(this.value)"
-  >
-
-  <div id="networkList">
-   ${loading("Finding professionals...")}
-  </div>
-
- </section>
- `;
-
- const profiles=await db(
-  "profiles",
-  ()=>supabaseClient
-   .from("profiles")
-   .select("*")
-   .neq("id",currentUser.id)
-   .limit(100)
- );
-
- cache.profiles=profiles||[];
-
- await drawNetwork(cache.profiles);
-}
-
-async function drawNetwork(list){
-
- const connections=await db(
-  "connections",
-  ()=>supabaseClient
-   .from("connections")
-   .select("*")
-   .or(
-    `requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
-   )
- );
-
- const map=new Map();
-
- (connections||[]).forEach(c=>{
-  const other=
-   c.requester_id===currentUser.id
-   ?c.receiver_id
-   :c.requester_id;
-
-  map.set(other,c);
- });
-
- const el=document.getElementById("networkList");
-
- if(!el)return;
-
- el.innerHTML=list.map(profile=>{
-
-  const c=map.get(profile.id);
-
-  let button="Connect";
-  let cls="btn";
-
-  if(c?.status==="accepted"){
-   button="✓ Connected";
-   cls="btn gray";
-  }else if(
-   c?.status==="pending" &&
-   c.requester_id===currentUser.id
-  ){
-   button="Pending";
-   cls="btn gray";
-  }else if(
-   c?.status==="pending" &&
-   c.receiver_id===currentUser.id
-  ){
-   button="Accept";
-   cls="btn green";
-  }
-
-  return `
-   <div class="listitem"
-    style="display:flex;gap:12px;align-items:center">
-
-    ${avatarHTML(profile)}
-
-    <div class="grow">
-     <b>${esc(profile.full_name)}</b>
-
-     <div class="small muted">
-      ${esc(
-       profile.headline||
-       profile.company_name||
-       "Professional"
-      )}
-     </div>
-
-     <div class="small muted">
-      ${esc(profile.location||"")}
-     </div>
-
-     <div class="chips">
-      ${String(profile.skills||"")
-       .split(",")
-       .filter(Boolean)
-       .slice(0,5)
-       .map(s=>
-        `<span class="chip">
-         ${esc(s.trim())}
-        </span>`
-       ).join("")
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
       }
-     </div>
-    </div>
-
-    <button
-     class="${cls}"
-     onclick="connectionAction(
-      '${profile.id}',
-      ${c?JSON.stringify(c):"null"}
-     )"
-    >
-     ${button}
-    </button>
-
-   </div>
-  `;
-
- }).join("")||
- `<div class="empty">No professionals found.</div>`;
-}
-
-function filterNetwork(q){
-
- q=q.toLowerCase();
-
- drawNetwork(
-  cache.profiles.filter(p=>
-   JSON.stringify(p)
-    .toLowerCase()
-    .includes(q)
-  )
- );
-}
-
-async function connectionAction(id,connection){
-
- if(!currentUser)return;
-
- if(!connection){
-
-  const r=await supabaseClient
-   .from("connections")
-   .insert({
-    requester_id:currentUser.id,
-    receiver_id:id,
-    status:"pending"
-   });
-
-  if(r.error){
-   toast(r.error.message);
-   return;
-  }
-
-  toast("Connection request sent");
-
- }else if(
-  connection.status==="pending" &&
-  connection.receiver_id===currentUser.id
- ){
-
-  const r=await supabaseClient
-   .from("connections")
-   .update({
-    status:"accepted",
-    updated_at:new Date().toISOString()
-   })
-   .eq("id",connection.id);
-
-  if(r.error){
-   toast(r.error.message);
-   return;
-  }
-
-  toast("Connection accepted");
-
- }else if(connection.status==="accepted"){
-
-  toast("Already connected");
-
- }else{
-
-  toast("Request pending");
- }
-
- renderNetwork();
-}
-
-
-/* =========================================================
-   JOBS
-========================================================= */
-
-async function renderJobs(){
-
- document.getElementById("app").innerHTML=`
-
- <section class="card">
-
-  <div class="sectiontitle">
-   <div>
-    <h2>💼 Jobs</h2>
-    <p class="muted">
-     Find your next opportunity.
-    </p>
-   </div>
-
-   <button
-    class="btn"
-    onclick="openModal('createJob')"
-   >
-    Post Job
-   </button>
-  </div>
-
-  <input
-   id="jobFilter"
-   class="search"
-   style="width:100%;max-width:none"
-   placeholder="Search jobs, skills, company, location..."
-   oninput="filterJobs(this.value)"
-  >
-
- </section>
-
- <div id="jobsList">
-  ${loading("Loading jobs...")}
- </div>
- `;
-
- const jobs=await db(
-  "jobs",
-  ()=>supabaseClient
-   .from("jobs")
-   .select("*,profiles(full_name,avatar_url,headline)")
-   .order("created_at",{ascending:false})
-   .limit(100)
- );
-
- cache.jobs=jobs||[];
-
- drawJobs(cache.jobs);
-}
-
-function drawJobs(list){
-
- const el=document.getElementById("jobsList");
-
- if(!el)return;
-
- if(!list.length){
-  el.innerHTML=
-   `<div class="card empty">
-     <h3>No jobs found</h3>
-     <p>Try another search.</p>
-    </div>`;
-  return;
- }
-
- el.innerHTML=list.map(job=>{
-
-  const skills=Array.isArray(job.skills)
-   ?job.skills
-   :String(job.skills||"")
-     .split(",")
-     .filter(Boolean);
-
-  return `
-  <section class="card">
-
-   <div class="sectiontitle">
-
-    <div>
-     <h3>${esc(job.title)}</h3>
-
-     <div class="muted">
-      ${esc(job.company_name||"Company")}
-      ·
-      ${esc(job.location||"Remote")}
-     </div>
-    </div>
-
-    <span class="chip">
-     ${esc(job.work_mode||"Flexible")}
-    </span>
-
-   </div>
-
-   <p style="line-height:1.55">
-    ${esc(job.description||"")}
-   </p>
-
-   <div class="chips">
-    ${skills.map(s=>
-     `<span class="chip">
-      ${esc(String(s).trim())}
-     </span>`
-    ).join("")}
-   </div>
-
-   <div style="margin-top:13px;display:flex;gap:8px;flex-wrap:wrap">
-
-    <button
-     class="btn"
-     onclick="applyJob('${job.id}')"
-    >
-     Apply Now
-    </button>
-
-    ${
-     job.user_id===currentUser?.id
-     ?
-     `<button
-       class="btn danger"
-       onclick="deleteJob('${job.id}')"
-      >
-       Delete
-      </button>`
-     :""
     }
-
-   </div>
-
-  </section>
-  `;
- }).join("");
-}
-
-function filterJobs(query){
-
- query=query.toLowerCase();
-
- drawJobs(
-  cache.jobs.filter(job=>
-   JSON.stringify(job)
-    .toLowerCase()
-    .includes(query)
-  )
- );
-}
-
-async function deleteJob(id){
-
- if(!confirm("Delete this job?"))return;
-
- const r=await supabaseClient
-  .from("jobs")
-  .delete()
-  .eq("id",id)
-  .eq("user_id",currentUser.id);
-
- if(r.error){
-  toast(r.error.message);
-  return;
- }
-
- toast("Job deleted");
- renderJobs();
-}
-
-function applyJob(id){
- openModal("applyJob",id);
-}
-
-
-/* =========================================================
-   PROJECTS
-========================================================= */
-
-async function renderProjects(){
-
- document.getElementById("app").innerHTML=`
-
- <section class="card">
-
-  <div class="sectiontitle">
-   <div>
-    <h2>🚀 Projects</h2>
-    <p class="muted">
-     Build teams, collaborate and launch ideas.
-    </p>
-   </div>
-
-   <button
-    class="btn"
-    onclick="openModal('createProject')"
-   >
-    Start Project
-   </button>
-  </div>
-
- </section>
-
- <div id="projectsList">
-  ${loading("Loading projects...")}
- </div>
- `;
-
- const projects=await db(
-  "projects",
-  ()=>supabaseClient
-   .from("projects")
-   .select("*,profiles(full_name)")
-   .order("created_at",{ascending:false})
-   .limit(100)
- );
-
- cache.projects=projects||[];
-
- document.getElementById("projectsList").innerHTML=
- cache.projects.map(project=>{
-
-  const skills=Array.isArray(project.required_skills)
-   ?project.required_skills
-   :String(project.required_skills||"")
-    .split(",")
-    .filter(Boolean);
-
-  return `
-   <section class="card">
-
-    <div class="sectiontitle">
-
-     <div>
-      <h3>${esc(project.title)}</h3>
-
-      <div class="small muted">
-       By ${esc(
-        project.profiles?.full_name||
-        "WorkLynk Member"
-       )}
-       ·
-       ${esc(project.work_mode||"Flexible")}
-      </div>
-     </div>
-
-     <span class="chip">
-      ${esc(project.status||"Open")}
-     </span>
-
-    </div>
-
-    <p style="line-height:1.55">
-     ${esc(project.description||"")}
-    </p>
-
-    <div class="chips">
-     ${skills.map(s=>
-      `<span class="chip">
-       ${esc(String(s).trim())}
-      </span>`
-     ).join("")}
-    </div>
-
-    ${
-     project.owner_id!==currentUser?.id
-     ?
-     `<button
-       class="btn"
-       style="margin-top:12px"
-       onclick="openModal(
-        'proposal',
-        '${project.id}'
-       )"
-      >
-       Send Proposal
-      </button>`
-     :""
-    }
-
-   </section>
-  `;
- }).join("")||
- `<div class="card empty">No projects yet.</div>`;
-}
-
-
-/* =========================================================
-   BUSINESS
-========================================================= */
-
-async function renderBusiness(){
-
- document.getElementById("app").innerHTML=`
-
- <section class="card">
-
-  <div class="sectiontitle">
-
-   <div>
-    <h2>🏢 Business</h2>
-    <p class="muted">
-     Discover companies, brands and professional businesses.
-    </p>
-   </div>
-
-   <button
-    class="btn"
-    onclick="openModal('createBusiness')"
-   >
-    Create Business
-   </button>
-
-  </div>
-
- </section>
-
- <div id="businessList">
-  ${loading("Loading businesses...")}
- </div>
- `;
-
- const businesses=await db(
-  "businesses",
-  ()=>supabaseClient
-   .from("businesses")
-   .select("*,profiles(full_name)")
-   .order("created_at",{ascending:false})
-   .limit(100)
- );
-
- cache.businesses=businesses||[];
-
- document.getElementById("businessList").innerHTML=
- cache.businesses.map(business=>`
-
-  <section class="card">
-
-   <h3>🏢 ${esc(business.name)}</h3>
-
-   <div class="muted" style="margin-top:4px">
-    ${esc(business.industry||"Business")}
-    ·
-    ${esc(business.location||"")}
-   </div>
-
-   <p style="margin-top:10px;line-height:1.55">
-    ${esc(business.about||"")}
-   </p>
-
-   <div style="margin-top:12px">
-
-    ${
-     business.website
-     ?
-     `<a
-       class="btn outline"
-       href="${safeUrl(business.website)}"
-       target="_blank"
-       rel="noopener"
-      >
-       Website
-      </a>`
-     :""
-    }
-
-    ${
-     currentUser
-     ?
-     `<button
-       class="btn"
-       style="margin-left:6px"
-       onclick="followBusiness('${business.id}')"
-      >
-       Follow
-      </button>`
-     :""
-    }
-
-   </div>
-
-  </section>
-
- `).join("")||
- `<div class="card empty">
-  No businesses yet.
- </div>`;
-}
-
-async function followBusiness(id){
-
- if(!(await requireAuth()))return;
-
- const existing=await db(
-  "business_followers",
-  ()=>supabaseClient
-   .from("business_followers")
-   .select("id")
-   .eq("business_id",id)
-   .eq("user_id",currentUser.id)
-   .maybeSingle()
- );
-
- if(existing?.id){
-
-  await supabaseClient
-   .from("business_followers")
-   .delete()
-   .eq("id",existing.id);
-
-  toast("Unfollowed");
-
- }else{
-
-  const r=await supabaseClient
-   .from("business_followers")
-   .insert({
-    business_id:id,
-    user_id:currentUser.id
-   });
-
-  if(r.error){
-   toast(r.error.message);
-   return;
-  }
-
-  toast("Following");
- }
-}
-
-
-/* =========================================================
-   PROFILE
-========================================================= */
-
-async function renderProfile(){
-
- const p=currentProfile||{};
-
- document.getElementById("app").innerHTML=`
-
- <section class="card" style="padding:0;overflow:hidden">
-
-  <div class="profileCover"></div>
-
-  <div class="profileMain">
-
-   ${
-    p.avatar_url
-    ?
-    `<img
-      class="bigAvatar"
-      src="${safeUrl(p.avatar_url)}"
-      alt=""
-     >`
-    :
-    `<div class="bigAvatar"
-      style="display:grid;place-items:center;font-size:28px;font-weight:900;color:var(--blue)">
-      ${esc(initials(p.full_name))}
-     </div>`
-   }
-
-   <div class="sectiontitle" style="margin-top:8px">
-
-    <div>
-     <h2>${esc(p.full_name||"WorkLynk User")}</h2>
-
-     <div>
-      ${esc(
-       p.headline||
-       "Add your professional headline"
-      )}
-     </div>
-
-     <div class="small muted">
-      ${esc(p.location||"Add location")}
-      ${p.company_name?" · "+esc(p.company_name):""}
-     </div>
-    </div>
-
-    <button
-     class="btn"
-     onclick="openModal('profileEdit')"
-    >
-     Edit Profile
-    </button>
-
-   </div>
-
-   <p style="margin-top:13px;line-height:1.55">
-    ${esc(
-     p.about||
-     "Tell the professional world what you do, what you build and what opportunities you seek."
-    )}
-   </p>
-
-   <div class="chips">
-    ${String(p.skills||"")
-     .split(",")
-     .filter(Boolean)
-     .map(s=>
-      `<span class="chip">${esc(s.trim())}</span>`
-     ).join("")
-    }
-   </div>
-
-  </div>
-
- </section>
-
-
- <section class="card">
-
-  <div class="sectiontitle">
-   <h3>Professional Dashboard</h3>
-
-   <button
-    class="btn gray"
-    onclick="openModal('achievement')"
-   >
-    🏆 Add Achievement
-   </button>
-  </div>
-
-  <div class="stats">
-
-   <div class="stat">
-    <b id="postStat">0</b>
-    <span class="small muted">Posts</span>
-   </div>
-
-   <div class="stat">
-    <b id="connStat">0</b>
-    <span class="small muted">Connections</span>
-   </div>
-
-   <div class="stat">
-    <b id="appStat">0</b>
-    <span class="small muted">Applications</span>
-   </div>
-
-  </div>
-
- </section>
-
-
- <section class="card">
-
-  <h3>Experience & Education</h3>
-
-  <div class="grid2" style="margin-top:12px">
-
-   <div class="listitem">
-    <b>💼 Experience</b>
-    <p class="small muted" style="margin-top:7px">
-     ${esc(
-      p.experience||
-      "Add your experience from Edit Profile."
-     )}
-    </p>
-   </div>
-
-   <div class="listitem">
-    <b>🎓 Education</b>
-    <p class="small muted" style="margin-top:7px">
-     ${esc(
-      p.education||
-      "Add your education from Edit Profile."
-     )}
-    </p>
-   </div>
-
-  </div>
-
- </section>
-
-
- <section class="card">
-
-  <h3>🔗 Professional Links</h3>
-
-  <div class="chips">
-
-   ${
-    p.linkedin_url
-    ?
-    `<a class="chip"
-       href="${safeUrl(p.linkedin_url)}"
-       target="_blank"
-       rel="noopener">
-       LinkedIn
-     </a>`
-    :""
-   }
-
-   ${
-    p.github_url
-    ?
-    `<a class="chip"
-       href="${safeUrl(p.github_url)}"
-       target="_blank"
-       rel="noopener">
-       GitHub
-     </a>`
-    :""
-   }
-
-   ${
-    p.portfolio_url
-    ?
-    `<a class="chip"
-       href="${safeUrl(p.portfolio_url)}"
-       target="_blank"
-       rel="noopener">
-       Portfolio
-     </a>`
-    :""
-   }
-
-  </div>
-
- </section>
- `;
-
- const posts=await db(
-  "posts",
-  ()=>supabaseClient
-   .from("posts")
-   .select("id")
-   .eq("user_id",currentUser.id)
- );
-
- document.getElementById("postStat").textContent=
-  posts?.length||0;
-
- const connections=await db(
-  "connections",
-  ()=>supabaseClient
-   .from("connections")
-   .select("id")
-   .eq("status","accepted")
-   .or(
-    `requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
-   )
- );
-
- document.getElementById("connStat").textContent=
-  connections?.length||0;
-
- const applications=await db(
-  "job_applications",
-  ()=>supabaseClient
-   .from("job_applications")
-   .select("id")
-   .eq("applicant_id",currentUser.id)
- );
-
- document.getElementById("appStat").textContent=
-  applications?.length||0;
-}
-
-async function saveProfile(){
-
- const form=document.getElementById("profileForm");
-
- if(!form)return;
-
- const data=Object.fromEntries(
-  new FormData(form).entries()
- );
-
- data.skills=data.skills||"";
- data.updated_at=new Date().toISOString();
-
- const r=await supabaseClient
-  .from("profiles")
-  .upsert({
-   id:currentUser.id,
-   email:currentUser.email,
-   ...data
-  });
-
- if(r.error){
-  toast(r.error.message);
-  return;
- }
-
- toast("Profile updated");
- closeModal();
-
- await loadProfile();
- renderProfile();
-}
-
-
-/* =========================================================
-   CHAT
-========================================================= */
-
-async function renderChat(){
-
- document.getElementById("app").innerHTML=`
-
- <section class="card">
-
-  <div class="sectiontitle">
-   <div>
-    <h2>💬 Messaging</h2>
-    <p class="muted">
-     Chat with your professional network.
-    </p>
-   </div>
-  </div>
-
-  <div class="chatBox">
-
-   <div class="chatUsers" id="chatUsers">
-    Loading...
-   </div>
-
-   <div class="chatMain">
-
-    <div class="messages" id="messages">
-     <div class="empty">
-      Select a connection to start chatting.
-     </div>
-    </div>
-
-    <div class="sendRow">
-
-     <input
-      id="chatInput"
-      placeholder="Write a message..."
-      onkeydown="
-       if(event.key==='Enter')
-       sendMessage()
-      "
-     >
-
-     <button
-      class="btn"
-      onclick="sendMessage()"
-     >
-      Send
-     </button>
-
-    </div>
-
-   </div>
-
-  </div>
-
- </section>
- `;
-
- const connections=await db(
-  "connections",
-  ()=>supabaseClient
-   .from("connections")
-   .select("requester_id,receiver_id")
-   .eq("status","accepted")
-   .or(
-    `requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
-   )
- );
-
- const ids=(connections||[])
-  .map(c=>
-   c.requester_id===currentUser.id
-   ?c.receiver_id
-   :c.requester_id
   );
 
- let profiles=[];
 
- if(ids.length){
+let currentAdminEmail = "";
+let editingNews = null;
 
-  profiles=await db(
-   "profiles",
-   ()=>supabaseClient
-    .from("profiles")
-    .select("*")
-    .in("id",ids)
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function loginAdmin(){
+
+  const email =
+    document.getElementById("adminEmail").value.trim();
+
+  if(!email){
+    toast("Admin email enter చేయండి","error");
+    return;
+  }
+
+  currentAdminEmail = email;
+
+  document.getElementById("loginStep")
+    .classList.add("hidden");
+
+  document.getElementById("otpStep")
+    .classList.remove("hidden");
+
+}
+
+
+function verifyAdmin(){
+
+  const otp =
+    document.getElementById("adminOtp").value.trim();
+
+  if(otp !== "123456"){
+    toast("Invalid OTP","error");
+    return;
+  }
+
+  localStorage.setItem(
+    "oneMinuteAdminDemo",
+    "true"
   );
- }
 
- const users=document.getElementById("chatUsers");
+  localStorage.setItem(
+    "oneMinuteAdminEmail",
+    currentAdminEmail
+  );
 
- users.innerHTML=(profiles||[])
-  .map(profile=>`
-   <button
-    class="chatUser"
-    onclick="openChat('${profile.id}',this)"
-   >
-    <b>${esc(profile.full_name)}</b>
-    <div class="small muted">
-     ${esc(profile.headline||"")}
-    </div>
-   </button>
-  `)
-  .join("")||
-  `<div class="empty">
-    No accepted connections yet.
-   </div>`;
+  showApp();
 
- subscribeMessages();
-}
-
-function openChat(id,button){
-
- currentChatUser=id;
-
- document.querySelectorAll(".chatUser")
-  .forEach(x=>x.classList.remove("active"));
-
- button?.classList.add("active");
-
- loadMessages();
-}
-
-async function loadMessages(){
-
- if(!currentChatUser)return;
-
- const filter=
-  `and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser}),`+
-  `and(sender_id.eq.${currentChatUser},receiver_id.eq.${currentUser.id})`;
-
- const messages=await db(
-  "messages",
-  ()=>supabaseClient
-   .from("messages")
-   .select("*")
-   .or(filter)
-   .order("created_at",{ascending:true})
- );
-
- const el=document.getElementById("messages");
-
- if(!el)return;
-
- el.innerHTML=(messages||[])
-  .map(message=>`
-   <div class="bubble ${
-    message.sender_id===currentUser.id
-    ?"me":""
-   }">
-
-    ${esc(message.content)}
-
-    <div class="small muted" style="margin-top:4px">
-     ${new Date(
-      message.created_at
-     ).toLocaleTimeString()}
-    </div>
-
-   </div>
-  `)
-  .join("")||
-  `<div class="empty">No messages yet.</div>`;
-
- el.scrollTop=el.scrollHeight;
-}
-
-async function sendMessage(){
-
- if(!currentChatUser){
-  toast("Select a connection first");
-  return;
- }
-
- const input=document.getElementById("chatInput");
- const content=input?.value.trim();
-
- if(!content)return;
-
- input.value="";
-
- const r=await supabaseClient
-  .from("messages")
-  .insert({
-   sender_id:currentUser.id,
-   receiver_id:currentChatUser,
-   content
-  });
-
- if(r.error){
-  toast(r.error.message);
-  return;
- }
-
- loadMessages();
-}
-
-function subscribeMessages(){
-
- if(messageChannel){
-  supabaseClient.removeChannel(messageChannel);
- }
-
- messageChannel=
-  supabaseClient
-   .channel("worklynk-messages")
-   .on(
-    "postgres_changes",
-    {
-     event:"INSERT",
-     schema:"public",
-     table:"messages"
-    },
-    payload=>{
-     if(
-      currentPage==="chat" &&
-      currentChatUser &&
-      (
-       payload.new.sender_id===currentChatUser||
-       payload.new.receiver_id===currentChatUser
-      )
-     ){
-      loadMessages();
-     }
-    }
-   )
-   .subscribe();
 }
 
 
-/* =========================================================
-   NOTIFICATIONS
-========================================================= */
+function logoutAdmin(){
 
-async function renderNotifications(){
+  localStorage.removeItem("oneMinuteAdminDemo");
+  localStorage.removeItem("oneMinuteAdminEmail");
 
- document.getElementById("app").innerHTML=`
-
- <section class="card">
-
-  <div class="sectiontitle">
-
-   <div>
-    <h2>🔔 Notifications</h2>
-    <p class="muted">
-     Stay updated with your WorkLynk activity.
-    </p>
-   </div>
-
-   <button
-    class="btn gray"
-    onclick="markNotifications()"
-   >
-    Mark all read
-   </button>
-
-  </div>
-
-  <div id="notifs">
-   ${loading("Loading notifications...")}
-  </div>
-
- </section>
- `;
-
- const notifications=await db(
-  "notifications",
-  ()=>supabaseClient
-   .from("notifications")
-   .select("*")
-   .eq("user_id",currentUser.id)
-   .order("created_at",{ascending:false})
-   .limit(100)
- );
-
- cache.notifications=notifications||[];
-
- document.getElementById("notifs").innerHTML=
- cache.notifications.map(n=>`
-
-  <div
-   class="listitem"
-   style="${
-    n.is_read
-    ?""
-    :"border-left:4px solid var(--blue)"
-   }"
-  >
-
-   <b>${esc(n.type||"Update")}</b>
-
-   <p style="margin-top:5px">
-    ${esc(
-     n.message||
-     "You have a new WorkLynk notification."
-    )}
-   </p>
-
-   <div class="small muted" style="margin-top:5px">
-    ${new Date(
-     n.created_at
-    ).toLocaleString()}
-   </div>
-
-  </div>
-
- `).join("")||
- `<div class="empty">
-  No notifications yet.
- </div>`;
-}
-
-async function markNotifications(){
-
- const r=await supabaseClient
-  .from("notifications")
-  .update({is_read:true})
-  .eq("user_id",currentUser.id);
-
- if(r.error){
-  toast(r.error.message);
-  return;
- }
-
- toast("Notifications marked read");
- renderNotifications();
-}
-
-
-/* =========================================================
-   LYNK AI
-========================================================= */
-
-function renderAI(){
-
- document.getElementById("app").innerHTML=`
-
- <section class="card aiHero">
-
-  <div class="sectiontitle">
-
-   <div>
-    <h2>🤖 Lynk AI</h2>
-
-    <p style="opacity:.85">
-     Your professional growth assistant.
-    </p>
-   </div>
-
-   <span
-    class="chip"
-    style="background:rgba(255,255,255,.15);color:#fff"
-   >
-    AI
-   </span>
-
-  </div>
-
-  <div class="chips">
-
-   <button
-    class="btn gray"
-    onclick="aiQuick('Improve my professional profile')"
-   >
-    Improve Profile
-   </button>
-
-   <button
-    class="btn gray"
-    onclick="aiQuick('Write a professional LinkedIn-style post')"
-   >
-    Write Post
-   </button>
-
-   <button
-    class="btn gray"
-    onclick="aiQuick('Create my professional resume summary')"
-   >
-    Resume Summary
-   </button>
-
-   <button
-    class="btn gray"
-    onclick="aiQuick('Prepare me for a technical interview')"
-   >
-    Interview Prep
-   </button>
-
-   <button
-    class="btn gray"
-    onclick="aiQuick('Write a job application message')"
-   >
-    Job Application
-   </button>
-
-   <button
-    class="btn gray"
-    onclick="aiQuick('Suggest jobs based on my skills')"
-   >
-    Career Ideas
-   </button>
-
-  </div>
-
- </section>
-
-
- <section class="card">
-
-  <div id="aiChat" class="aiChat">
-
-   <div class="aiMsg bot">
-    <b>🤖 Lynk AI</b><br><br>
-    Hi! I can help you improve your professional profile,
-    create posts, prepare for interviews, write applications
-    and plan your career.
-   </div>
-
-  </div>
-
-  <div class="aiForm">
-
-   <input
-    id="aiInput"
-    placeholder="Ask Lynk AI anything..."
-    onkeydown="
-     if(event.key==='Enter')
-     askAI()
-    "
-   >
-
-   <button
-    class="btn"
-    onclick="askAI()"
-   >
-    Ask
-   </button>
-
-  </div>
-
-  <p class="small muted" style="margin-top:8px">
-   Production AI should use a secure Supabase Edge Function.
-   Never expose an AI secret key in this HTML file.
-  </p>
-
- </section>
- `;
+  location.reload();
 
 }
 
-function aiQuick(text){
 
- const input=document.getElementById("aiInput");
+function showApp(){
 
- if(!input)return;
+  document
+    .getElementById("loginScreen")
+    .classList.add("hidden");
 
- input.value=text;
+  document
+    .getElementById("app")
+    .classList.remove("hidden");
 
- askAI();
-}
+  loadCategories();
+  loadNews();
 
-async function askAI(){
-
- const input=document.getElementById("aiInput");
- const chat=document.getElementById("aiChat");
-
- if(!input||!chat)return;
-
- const question=input.value.trim();
-
- if(!question)return;
-
- input.value="";
-
- chat.innerHTML+=`
-  <div class="aiMsg me">
-   ${esc(question)}
-  </div>
- `;
-
- const endpoint=
-  window.LYNK_AI_ENDPOINT||"";
-
- /*
-   REAL AI
- */
- if(endpoint){
-
-  try{
-
-   const response=await fetch(
-    endpoint,
-    {
-     method:"POST",
-     headers:{
-      "Content-Type":"application/json"
-     },
-     body:JSON.stringify({
-      message:question,
-      user_id:currentUser?.id||null,
-      profile:currentProfile||null
-     })
-    }
-   );
-
-   const data=await response.json();
-
-   const answer=
-    data.answer||
-    data.message||
-    "No AI response.";
-
-   chat.innerHTML+=`
-    <div class="aiMsg bot">
-     <b>🤖 Lynk AI</b><br><br>
-     ${esc(answer)}
-    </div>
-   `;
-
-   chat.scrollTop=chat.scrollHeight;
-
-   return;
-
-  }catch(error){
-   console.warn(error);
-  }
- }
-
- /*
-   FALLBACK AI
-   Keeps the UI functional even before
-   a real AI Edge Function is connected.
- */
-
- const answer=localAI(question);
-
- chat.innerHTML+=`
-  <div class="aiMsg bot">
-   <b>🤖 Lynk AI</b><br><br>
-   ${esc(answer)}
-  </div>
- `;
-
- chat.scrollTop=chat.scrollHeight;
-}
-
-function localAI(question){
-
- const q=question.toLowerCase();
-
- if(q.includes("profile")){
-
-  return `
-Your WorkLynk profile should have:
-
-1. Strong professional headline
-2. Clear About section
-3. 5–10 relevant skills
-4. Measurable achievements
-5. Experience and education
-6. Portfolio/GitHub/LinkedIn links
-
-Suggested headline:
-"${currentProfile?.headline||
-"Java Developer | Spring Boot | Azure | Building scalable solutions"}"
- `;
- }
-
- if(q.includes("post")){
-
-  return `
-Professional post structure:
-
-HOOK:
-Start with a strong one-line idea.
-
-VALUE:
-Share the lesson, technology, experience or result.
-
-EXAMPLE:
-Give one practical example.
-
-CONCLUSION:
-Tell people what you learned.
-
-QUESTION:
-End with a question that encourages discussion.
- `;
- }
-
- if(q.includes("resume")){
-
-  return `
-Resume summary:
-
-${currentProfile?.full_name||"Professional"} is a results-driven
-professional specializing in ${
-  currentProfile?.skills||
-  "technology, business and professional solutions"
-}.
-Experienced in collaborating with teams, solving business problems
-and delivering scalable solutions. Open to high-impact opportunities.
- `;
- }
-
- if(q.includes("interview")){
-
-  return `
-Interview preparation plan:
-
-• 60-second self introduction
-• Current project architecture
-• Your exact responsibilities
-• Technologies used
-• Difficult production issue
-• Database/SQL questions
-• API questions
-• Cloud questions
-• Testing
-• Performance optimization
-• Behavioral questions
-
-Always explain answers using real project examples.
- `;
- }
-
- if(q.includes("application")||q.includes("job")){
-
-  return `
-Job application template:
-
-Hello,
-
-I am interested in this opportunity because my experience in
-${
- currentProfile?.skills||
- "relevant technologies"
-}
-matches the requirements of the role.
-
-I can contribute through practical project experience,
-problem solving and collaboration.
-
-I would appreciate the opportunity to discuss how I can
-contribute to the team.
-
-Regards,
-${currentProfile?.full_name||"Your Name"}
- `;
- }
-
- return `
-I can help with:
-
-• Professional profile
-• Resume
-• Job applications
-• Interview preparation
-• Professional posts
-• Career planning
-• Skills development
-
-For full generative AI responses, connect the secure
-LYNK_AI_ENDPOINT to your Supabase Edge Function.
- `;
 }
 
 
-/* =========================================================
-   GLOBAL SEARCH
-========================================================= */
+window.addEventListener("DOMContentLoaded",()=>{
 
-async function searchAll(query){
+  if(
+    localStorage.getItem("oneMinuteAdminDemo")
+    === "true"
+  ){
 
- query=query.trim();
+    currentAdminEmail =
+      localStorage.getItem(
+        "oneMinuteAdminEmail"
+      ) || "";
 
- if(!query)return;
+    showApp();
 
- document.getElementById("app").innerHTML=`
-
- <section class="card">
-  <h2>🔎 Search</h2>
-  <p class="muted">
-   Results for “${esc(query)}”
-  </p>
- </section>
-
- <div id="searchResults">
-  ${loading("Searching WorkLynk...")}
- </div>
- `;
-
- const [
-  people,
-  jobs,
-  businesses,
-  projects
- ]=await Promise.all([
-
-  db(
-   "profiles",
-   ()=>supabaseClient
-    .from("profiles")
-    .select("*")
-    .or(
-     `full_name.ilike.%${query}%,headline.ilike.%${query}%,company_name.ilike.%${query}%`
-    )
-    .limit(20)
-  ),
-
-  db(
-   "jobs",
-   ()=>supabaseClient
-    .from("jobs")
-    .select("*")
-    .or(
-     `title.ilike.%${query}%,company_name.ilike.%${query}%,location.ilike.%${query}%`
-    )
-    .limit(20)
-  ),
-
-  db(
-   "businesses",
-   ()=>supabaseClient
-    .from("businesses")
-    .select("*")
-    .ilike("name",`%${query}%`)
-    .limit(20)
-  ),
-
-  db(
-   "projects",
-   ()=>supabaseClient
-    .from("projects")
-    .select("*")
-    .ilike("title",`%${query}%`)
-    .limit(20)
-  )
-
- ]);
-
- const result=document.getElementById(
-  "searchResults"
- );
-
- result.innerHTML=`
-
- <section class="card">
-
-  <h3>👥 People</h3>
-
-  ${
-   (people||[]).map(p=>`
-    <div class="listitem">
-     <b>${esc(p.full_name)}</b>
-     <div class="muted">
-      ${esc(p.headline||p.company_name||"")}
-     </div>
-     <div class="small muted">
-      ${esc(p.location||"")}
-     </div>
-    </div>
-   `).join("")||
-   `<p class="muted" style="margin-top:10px">
-    No people found.
-   </p>`
   }
 
- </section>
-
-
- <section class="card">
-
-  <h3>💼 Jobs</h3>
-
-  ${
-   (jobs||[]).map(j=>`
-    <div class="listitem">
-
-     <b>${esc(j.title)}</b>
-
-     <div class="muted">
-      ${esc(j.company_name||"")}
-      ·
-      ${esc(j.location||"")}
-     </div>
-
-     <button
-      class="btn"
-      style="margin-top:9px"
-      onclick="applyJob('${j.id}')"
-     >
-      Apply
-     </button>
-
-    </div>
-   `).join("")||
-   `<p class="muted" style="margin-top:10px">
-    No jobs found.
-   </p>`
-  }
-
- </section>
-
-
- <section class="card">
-
-  <h3>🏢 Businesses</h3>
-
-  ${
-   (businesses||[]).map(b=>`
-    <div class="listitem">
-     <b>${esc(b.name)}</b>
-     <div class="muted">
-      ${esc(b.industry||"")}
-     </div>
-    </div>
-   `).join("")||
-   `<p class="muted" style="margin-top:10px">
-    No businesses found.
-   </p>`
-  }
-
- </section>
-
-
- <section class="card">
-
-  <h3>🚀 Projects</h3>
-
-  ${
-   (projects||[]).map(p=>`
-    <div class="listitem">
-
-     <b>${esc(p.title)}</b>
-
-     <p class="muted" style="margin-top:5px">
-      ${esc(
-       String(p.description||"")
-       .slice(0,180)
-      )}
-     </p>
-
-     <button
-      class="btn"
-      style="margin-top:9px"
-      onclick="openModal(
-       'proposal',
-       '${p.id}'
-      )"
-     >
-      Send Proposal
-     </button>
-
-    </div>
-   `).join("")||
-   `<p class="muted" style="margin-top:10px">
-    No projects found.
-   </p>`
-  }
-
- </section>
- `;
-}
-
-
-/* =========================================================
-   CREATE / EDIT MODALS
-========================================================= */
-
-function openModal(type,arg=null){
-
- const root=document.getElementById("modalRoot");
-
- let title="";
- let body="";
- let footer="";
-
-
- /* AUTH */
-
- if(type==="auth"){
-
-  title="Welcome to WorkLynk";
-
-  body=`
-
-   <div class="field">
-    <label>Email</label>
-    <input
-     id="authEmail"
-     type="email"
-     placeholder="you@example.com"
-    >
-   </div>
-
-   <div class="field">
-    <label>Password</label>
-    <input
-     id="authPass"
-     type="password"
-     placeholder="Minimum 6 characters"
-    >
-   </div>
-
-   <div class="field">
-    <label>Full Name — for new account</label>
-    <input
-     id="authName"
-     placeholder="Your professional name"
-    >
-   </div>
-
-  `;
-
-  footer=`
-   <button class="btn gray" onclick="closeModal()">
-    Cancel
-   </button>
-
-   <button class="btn outline" onclick="signIn()">
-    Sign In
-   </button>
-
-   <button class="btn" onclick="signUp()">
-    Create Account
-   </button>
-  `;
- }
-
-
- /* CREATE POST */
-
- if(type==="createPost"){
-
-  title="Create Professional Post";
-
-  body=`
-
-   <div class="field">
-    <label>Post</label>
-
-    <textarea
-     id="postCaption"
-     placeholder="Share an insight, achievement, project, opportunity..."
-    ></textarea>
-   </div>
-
-   <div class="field">
-    <label>Media URL — optional</label>
-
-    <input
-     id="postMedia"
-     placeholder="https://..."
-    >
-   </div>
-
-   <div class="field">
-    <label>Media Type</label>
-
-    <select id="postMediaType">
-     <option value="image">Image</option>
-     <option value="video">Video</option>
-    </select>
-   </div>
-
-  `;
-
-  footer=`
-   <button class="btn gray" onclick="closeModal()">
-    Cancel
-   </button>
-
-   <button class="btn" onclick="createPost()">
-    Publish
-   </button>
-  `;
- }
-
-
- /* PROFILE */
-
- if(type==="profileEdit"){
-
-  const p=currentProfile||{};
-
-  title="Edit Professional Profile";
-
-  body=`
-
-   <form id="profileForm">
-
-    <div class="field">
-     <label>Full Name</label>
-     <input
-      name="full_name"
-      value="${esc(p.full_name)}"
-     >
-    </div>
-
-    <div class="field">
-     <label>Professional Headline</label>
-     <input
-      name="headline"
-      value="${esc(p.headline)}"
-      placeholder="Java Developer | Spring Boot | Azure"
-     >
-    </div>
-
-    <div class="field">
-     <label>About</label>
-     <textarea name="about">${esc(p.about)}</textarea>
-    </div>
-
-    <div class="grid2">
-
-     <div class="field">
-      <label>Company</label>
-      <input
-       name="company_name"
-       value="${esc(p.company_name)}"
-      >
-     </div>
-
-     <div class="field">
-      <label>Location</label>
-      <input
-       name="location"
-       value="${esc(p.location)}"
-      >
-     </div>
-
-    </div>
-
-    <div class="field">
-     <label>Skills — comma separated</label>
-     <input
-      name="skills"
-      value="${esc(p.skills)}"
-      placeholder="Java, Spring Boot, SQL, Azure"
-     >
-    </div>
-
-    <div class="field">
-     <label>Experience</label>
-     <textarea
-      name="experience"
-      placeholder="Describe your experience..."
-     >${esc(p.experience)}</textarea>
-    </div>
-
-    <div class="field">
-     <label>Education</label>
-     <textarea
-      name="education"
-     >${esc(p.education)}</textarea>
-    </div>
-
-    <div class="field">
-     <label>LinkedIn URL</label>
-     <input
-      name="linkedin_url"
-      value="${esc(p.linkedin_url)}"
-     >
-    </div>
-
-    <div class="field">
-     <label>GitHub URL</label>
-     <input
-      name="github_url"
-      value="${esc(p.github_url)}"
-     >
-    </div>
-
-    <div class="field">
-     <label>Portfolio URL</label>
-     <input
-      name="portfolio_url"
-      value="${esc(p.portfolio_url)}"
-     >
-    </div>
-
-    <div class="field">
-     <label>Avatar URL</label>
-     <input
-      name="avatar_url"
-      value="${esc(p.avatar_url)}"
-      placeholder="https://..."
-     >
-    </div>
-
-    <div class="field">
-     <label>Resume URL</label>
-     <input
-      name="resume_url"
-      value="${esc(p.resume_url)}"
-      placeholder="https://..."
-     >
-    </div>
-
-   </form>
-  `;
-
-  footer=`
-
-   <button
-    class="btn gray"
-    onclick="closeModal()"
-   >
-    Cancel
-   </button>
-
-   <button
-    class="btn"
-    onclick="saveProfile()"
-   >
-    Save Profile
-   </button>
-
-   <button
-    class="btn danger"
-    onclick="signOut()"
-   >
-    Logout
-   </button>
-  `;
- }
-
-
- /* JOB */
-
- if(type==="createJob"){
-
-  title="Post a Job";
-
-  body=`
-
-   <div class="field">
-    <label>Job Title</label>
-    <input id="jobTitle" placeholder="Senior Java Developer">
-   </div>
-
-   <div class="grid2">
-
-    <div class="field">
-     <label>Company</label>
-     <input
-      id="jobCompany"
-      value="${esc(currentProfile?.company_name)}"
-     >
-    </div>
-
-    <div class="field">
-     <label>Location</label>
-     <input
-      id="jobLocation"
-      placeholder="Hyderabad / Remote"
-     >
-    </div>
-
-   </div>
-
-   <div class="grid2">
-
-    <div class="field">
-     <label>Job Type</label>
-
-     <select id="jobType">
-      <option>Full-time</option>
-      <option>Part-time</option>
-      <option>Contract</option>
-      <option>Internship</option>
-     </select>
-    </div>
-
-    <div class="field">
-     <label>Work Mode</label>
-
-     <select id="jobMode">
-      <option>Remote</option>
-      <option>Hybrid</option>
-      <option>On-site</option>
-     </select>
-    </div>
-
-   </div>
-
-   <div class="field">
-    <label>Skills</label>
-    <input
-     id="jobSkills"
-     placeholder="Java, Spring Boot, SQL, Azure"
-    >
-   </div>
-
-   <div class="field">
-    <label>Description</label>
-    <textarea
-     id="jobDesc"
-     placeholder="Describe the role, responsibilities and requirements..."
-    ></textarea>
-   </div>
-  `;
-
-  footer=`
-   <button class="btn gray" onclick="closeModal()">Cancel</button>
-   <button class="btn" onclick="createJob()">Publish Job</button>
-  `;
- }
-
-
- /* APPLY */
-
- if(type==="applyJob"){
-
-  title="Apply for Job";
-
-  body=`
-
-   <div class="field">
-    <label>Resume URL</label>
-    <input
-     id="resumeUrl"
-     value="${esc(currentProfile?.resume_url)}"
-     placeholder="https://..."
-    >
-   </div>
-
-   <div class="field">
-    <label>Cover Message</label>
-    <textarea
-     id="coverMsg"
-     placeholder="Explain why you are a good fit..."
-    ></textarea>
-   </div>
-
-  `;
-
-  footer=`
-   <button class="btn gray" onclick="closeModal()">Cancel</button>
-   <button class="btn" onclick="submitApplication('${arg}')">
-    Submit Application
-   </button>
-  `;
- }
-
-
- /* PROJECT */
-
- if(type==="createProject"){
-
-  title="Start a Project";
-
-  body=`
-
-   <div class="field">
-    <label>Project Title</label>
-    <input
-     id="projectTitle"
-     placeholder="Build an AI-powered platform"
-    >
-   </div>
-
-   <div class="field">
-    <label>Description</label>
-    <textarea
-     id="projectDesc"
-     placeholder="Explain your idea and what you want to build..."
-    ></textarea>
-   </div>
-
-   <div class="grid2">
-
-    <div class="field">
-     <label>Required Skills</label>
-     <input
-      id="projectSkills"
-      placeholder="React, Java, AI, Design"
-     >
-    </div>
-
-    <div class="field">
-     <label>Work Mode</label>
-     <select id="projectMode">
-      <option>Remote</option>
-      <option>Hybrid</option>
-      <option>On-site</option>
-     </select>
-    </div>
-
-   </div>
-
-  `;
-
-  footer=`
-   <button class="btn gray" onclick="closeModal()">Cancel</button>
-   <button class="btn" onclick="createProject()">Create Project</button>
-  `;
- }
-
-
- /* PROPOSAL */
-
- if(type==="proposal"){
-
-  title="Send Project Proposal";
-
-  body=`
-
-   <div class="field">
-    <label>Your Proposal</label>
-    <textarea
-     id="proposalMsg"
-     placeholder="Explain how you can help this project..."
-    ></textarea>
-   </div>
-
-   <div class="field">
-    <label>Bid Amount</label>
-    <input
-     id="bidAmount"
-     type="number"
-     min="0"
-     placeholder="0"
-    >
-   </div>
-
-  `;
-
-  footer=`
-   <button class="btn gray" onclick="closeModal()">Cancel</button>
-   <button
-    class="btn"
-    onclick="submitProposal('${arg}')"
-   >
-    Send Proposal
-   </button>
-  `;
- }
-
-
- /* ACHIEVEMENT */
-
- if(type==="achievement"){
-
-  title="Add Achievement";
-
-  body=`
-
-   <div class="field">
-    <label>Achievement Title</label>
-    <input id="achTitle" placeholder="Certification / Award / Achievement">
-   </div>
-
-   <div class="field">
-    <label>Issuer</label>
-    <input id="achIssuer" placeholder="Company / Organization">
-   </div>
-
-   <div class="field">
-    <label>Description</label>
-    <textarea id="achDesc"></textarea>
-   </div>
-
-  `;
-
-  footer=`
-   <button class="btn gray" onclick="closeModal()">Cancel</button>
-   <button class="btn" onclick="createAchievement()">Add Achievement</button>
-  `;
- }
-
-
- /* BUSINESS */
-
- if(type==="createBusiness"){
-
-  title="Create Business Page";
-
-  body=`
-
-   <div class="field">
-    <label>Business Name</label>
-    <input id="bizName">
-   </div>
-
-   <div class="grid2">
-
-    <div class="field">
-     <label>Industry</label>
-     <input id="bizIndustry">
-    </div>
-
-    <div class="field">
-     <label>Location</label>
-     <input id="bizLocation">
-    </div>
-
-   </div>
-
-   <div class="field">
-    <label>About</label>
-    <textarea id="bizAbout"></textarea>
-   </div>
-
-   <div class="field">
-    <label>Website</label>
-    <input id="bizWebsite" placeholder="https://...">
-   </div>
-
-  `;
-
-  footer=`
-   <button class="btn gray" onclick="closeModal()">Cancel</button>
-   <button class="btn" onclick="createBusiness()">Create Business</button>
-  `;
- }
-
-
- root.innerHTML=`
-
- <div
-  class="modalback"
-  onclick="
-   if(event.target===this)
-   closeModal()
-  "
- >
-
-  <div class="modal">
-
-   <div class="modalHead">
-
-    <h3>${title}</h3>
-
-    <button
-     class="iconbtn"
-     onclick="closeModal()"
-    >
-     ✕
-    </button>
-
-   </div>
-
-   <div class="modalBody">
-    ${body}
-   </div>
-
-   <div class="modalFoot">
-    ${footer}
-   </div>
-
-  </div>
-
- </div>
- `;
-}
-
-function closeModal(){
- document.getElementById("modalRoot").innerHTML="";
-}
-
-
-/* =========================================================
-   AUTH ACTIONS
-========================================================= */
-
-async function signUp(){
-
- const email=
-  document.getElementById("authEmail")
-   ?.value.trim();
-
- const password=
-  document.getElementById("authPass")
-   ?.value;
-
- const name=
-  document.getElementById("authName")
-   ?.value.trim();
-
- if(!email||!password){
-  toast("Email and password required");
-  return;
- }
-
- if(password.length<6){
-  toast("Password must contain at least 6 characters");
-  return;
- }
-
- const result=
-  await supabaseClient.auth.signUp({
-   email,
-   password,
-   options:{
-    data:{
-     full_name:name
-    }
-   }
-  });
-
- if(result.error){
-  toast(result.error.message);
-  return;
- }
-
- if(result.data.user){
-
-  await supabaseClient
-   .from("profiles")
-   .upsert({
-    id:result.data.user.id,
-    email,
-    full_name:name||
-     email.split("@")[0]
-   });
- }
-
- toast(
-  "Account created. Check email if confirmation is enabled."
- );
-
- closeModal();
-
- await ensureSession();
-}
-
-async function signIn(){
-
- const email=
-  document.getElementById("authEmail")
-   ?.value.trim();
-
- const password=
-  document.getElementById("authPass")
-   ?.value;
-
- const result=
-  await supabaseClient.auth
-   .signInWithPassword({
-    email,
-    password
-   });
-
- if(result.error){
-  toast(result.error.message);
-  return;
- }
-
- closeModal();
-
- await ensureSession();
-
- toast("Welcome back to WorkLynk");
-
- showPage(currentPage);
-}
-
-async function ensureSession(){
-
- const {
-  data:{session}
- }=await supabaseClient.auth.getSession();
-
- currentUser=session?.user||null;
-
- if(currentUser){
-  await loadProfile();
- }
-}
-
-async function signOut(){
-
- await supabaseClient.auth.signOut();
-
- currentUser=null;
- currentProfile=null;
-
- closeModal();
-
- toast("Signed out");
-
- renderHome();
-}
-
-
-/* =========================================================
-   CREATE ACTIONS
-========================================================= */
-
-async function createPost(){
-
- if(!(await requireAuth()))return;
-
- const caption=
-  document.getElementById("postCaption")
-   ?.value.trim();
-
- const media=
-  document.getElementById("postMedia")
-   ?.value.trim();
-
- const mediaType=
-  document.getElementById("postMediaType")
-   ?.value;
-
- if(!caption&&!media){
-  toast("Write something before publishing");
-  return;
- }
-
- const result=
-  await supabaseClient
-   .from("posts")
-   .insert({
-    user_id:currentUser.id,
-    caption:caption||"",
-    media_url:media||null,
-    media_type:media?mediaType:null
-   });
-
- if(result.error){
-  toast(result.error.message);
-  return;
- }
-
- toast("Post published");
-
- closeModal();
-
- showPage("home");
-}
-
-
-async function createJob(){
-
- const title=
-  document.getElementById("jobTitle")
-   ?.value.trim();
-
- if(!title){
-  toast("Job title is required");
-  return;
- }
-
- const skills=
-  document.getElementById("jobSkills")
-   ?.value
-   .split(",")
-   .map(x=>x.trim())
-   .filter(Boolean);
-
- const result=
-  await supabaseClient
-   .from("jobs")
-   .insert({
-    user_id:currentUser.id,
-    title,
-    company_name:
-     document.getElementById("jobCompany").value.trim(),
-    location:
-     document.getElementById("jobLocation").value.trim(),
-    job_type:
-     document.getElementById("jobType").value,
-    work_mode:
-     document.getElementById("jobMode").value,
-    skills,
-    description:
-     document.getElementById("jobDesc").value.trim()
-   });
-
- if(result.error){
-  toast(result.error.message);
-  return;
- }
-
- toast("Job published");
-
- closeModal();
-
- renderJobs();
-}
-
-
-async function submitApplication(jobId){
-
- const result=
-  await supabaseClient
-   .from("job_applications")
-   .insert({
-    job_id:jobId,
-    applicant_id:currentUser.id,
-    resume_url:
-     document.getElementById("resumeUrl").value.trim(),
-    cover_message:
-     document.getElementById("coverMsg").value.trim(),
-    status:"submitted"
-   });
-
- if(result.error){
-  toast(result.error.message);
-  return;
- }
-
- toast("Application submitted");
-
- closeModal();
-}
-
-
-async function createProject(){
-
- const title=
-  document.getElementById("projectTitle")
-   ?.value.trim();
-
- if(!title){
-  toast("Project title is required");
-  return;
- }
-
- const result=
-  await supabaseClient
-   .from("projects")
-   .insert({
-    owner_id:currentUser.id,
-    title,
-    description:
-     document.getElementById("projectDesc").value.trim(),
-    required_skills:
-     document.getElementById("projectSkills")
-      .value
-      .split(",")
-      .map(x=>x.trim())
-      .filter(Boolean),
-    work_mode:
-     document.getElementById("projectMode").value,
-    status:"open"
-   });
-
- if(result.error){
-  toast(result.error.message);
-  return;
- }
-
- toast("Project created");
-
- closeModal();
-
- renderProjects();
-}
-
-
-async function submitProposal(projectId){
-
- const message=
-  document.getElementById("proposalMsg")
-   ?.value.trim();
-
- if(!message){
-  toast("Proposal message required");
-  return;
- }
-
- const result=
-  await supabaseClient
-   .from("project_proposals")
-   .insert({
-    project_id:projectId,
-    proposer_id:currentUser.id,
-    message,
-    bid_amount:
-     Number(
-      document.getElementById("bidAmount").value
-     )||0,
-    status:"submitted"
-   });
-
- if(result.error){
-  toast(result.error.message);
-  return;
- }
-
- toast("Proposal sent");
-
- closeModal();
-}
-
-
-async function createAchievement(){
-
- const title=
-  document.getElementById("achTitle")
-   ?.value.trim();
-
- if(!title){
-  toast("Achievement title required");
-  return;
- }
-
- const result=
-  await supabaseClient
-   .from("achievements")
-   .insert({
-    user_id:currentUser.id,
-    title,
-    issuer:
-     document.getElementById("achIssuer").value.trim(),
-    description:
-     document.getElementById("achDesc").value.trim()
-   });
-
- if(result.error){
-  toast(result.error.message);
-  return;
- }
-
- toast("Achievement added");
-
- closeModal();
-}
-
-
-async function createBusiness(){
-
- const name=
-  document.getElementById("bizName")
-   ?.value.trim();
-
- if(!name){
-  toast("Business name required");
-  return;
- }
-
- const result=
-  await supabaseClient
-   .from("businesses")
-   .insert({
-    owner_id:currentUser.id,
-    name,
-    industry:
-     document.getElementById("bizIndustry").value.trim(),
-    location:
-     document.getElementById("bizLocation").value.trim(),
-    about:
-     document.getElementById("bizAbout").value.trim(),
-    website:
-     document.getElementById("bizWebsite").value.trim()
-   });
-
- if(result.error){
-  toast(result.error.message);
-  return;
- }
-
- toast("Business created");
-
- closeModal();
-
- renderBusiness();
-}
-
-
-/* =========================================================
-   ESCAPE MODAL
-========================================================= */
-
-document.addEventListener("keydown",event=>{
- if(event.key==="Escape"){
-  closeModal();
- }
 });
 
 
 /* =========================================================
-   START
+   IMAGE PREVIEW
 ========================================================= */
 
-initialize();
+function previewImage(input){
+
+  const file = input.files[0];
+
+  if(!file) return;
+
+  const preview =
+    document.getElementById("imagePreview");
+
+  preview.src =
+    URL.createObjectURL(file);
+
+  preview.style.display = "block";
+
+  document.getElementById("imageName")
+    .textContent = "Selected: " + file.name;
+
+}
+
+
+/* =========================================================
+   VIDEO PREVIEW
+========================================================= */
+
+function previewVideo(
+  input,
+  previewId,
+  nameId
+){
+
+  const file = input.files[0];
+
+  if(!file) return;
+
+  const video =
+    document.getElementById(previewId);
+
+  video.src =
+    URL.createObjectURL(file);
+
+  video.style.display = "block";
+
+  document.getElementById(nameId)
+    .textContent = "Selected: " + file.name;
+
+}
+
+
+/* =========================================================
+   STORAGE UPLOAD
+========================================================= */
+
+async function uploadFile(
+  bucket,
+  file,
+  folder
+){
+
+  if(!file) return null;
+
+  const safeName =
+    file.name
+      .replace(/[^a-zA-Z0-9._-]/g,"_");
+
+  const path =
+    folder + "/" +
+    Date.now() + "_" +
+    Math.random()
+      .toString(36)
+      .substring(2,8) +
+    "_" +
+    safeName;
+
+
+  const {error} =
+    await supabaseClient
+      .storage
+      .from(bucket)
+      .upload(
+        path,
+        file,
+        {
+          cacheControl:"3600",
+          upsert:false
+        }
+      );
+
+  if(error){
+    throw error;
+  }
+
+
+  const {data} =
+    supabaseClient
+      .storage
+      .from(bucket)
+      .getPublicUrl(path);
+
+
+  return {
+    url:data.publicUrl,
+    path:path
+  };
+
+}
+
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+async function loadCategories(){
+
+  const select =
+    document.getElementById("categoryId");
+
+  const {data,error} =
+    await supabaseClient
+      .from("categories")
+      .select("id,name,slug")
+      .eq("active",true)
+      .order("sort_order",{ascending:true});
+
+  if(error){
+
+    console.error(error);
+
+    return;
+
+  }
+
+
+  select.innerHTML =
+    '<option value="">Select Category</option>';
+
+
+  (data || []).forEach(category=>{
+
+    const option =
+      document.createElement("option");
+
+    option.value = category.id;
+
+    option.textContent =
+      category.name;
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
+/* =========================================================
+   SAVE NEWS
+========================================================= */
+
+async function saveNews(){
+
+  const title =
+    document.getElementById("title")
+      .value.trim();
+
+  const tagline =
+    document.getElementById("tagline")
+      .value.trim();
+
+  const description =
+    document.getElementById("description")
+      .value.trim();
+
+  const categoryId =
+    document.getElementById("categoryId")
+      .value || null;
+
+  const tag =
+    document.getElementById("tag")
+      .value.trim();
+
+  const source =
+    document.getElementById("source")
+      .value.trim();
+
+  const sourceUrl =
+    document.getElementById("sourceUrl")
+      .value.trim();
+
+  const voiceText =
+    document.getElementById("voiceText")
+      .value.trim();
+
+  const breaking =
+    document.getElementById("breaking")
+      .checked;
+
+  const featured =
+    document.getElementById("featured")
+      .checked;
+
+  const publishNow =
+    document.getElementById("publishNow")
+      .checked;
+
+
+  const promotionTitle =
+    document.getElementById("promotionTitle")
+      .value.trim();
+
+  const promotionText =
+    document.getElementById("promotionText")
+      .value.trim();
+
+  const promotionLink =
+    document.getElementById("promotionLink")
+      .value.trim();
+
+
+  if(!title){
+
+    toast("Headline తప్పనిసరి","error");
+    return;
+
+  }
+
+  if(!description){
+
+    toast("Matter తప్పనిసరి","error");
+    return;
+
+  }
+
+
+  const saveBtn =
+    document.getElementById("saveBtn");
+
+  saveBtn.disabled = true;
+
+  saveBtn.textContent =
+    "Uploading...";
+
+
+  try{
+
+    /* ================= IMAGE ================= */
+
+    let imageUrl = editingNews?.image_url || null;
+    let imagePath = editingNews?.image_path || null;
+
+    const imageFile =
+      document.getElementById("imageFile")
+        .files[0];
+
+    if(imageFile){
+
+      const uploaded =
+        await uploadFile(
+          "news-images",
+          imageFile,
+          "images"
+        );
+
+      imageUrl =
+        uploaded.url;
+
+      imagePath =
+        uploaded.path;
+
+    }
+
+
+    /* ================= NEWS VIDEO ================= */
+
+    let videoUrl =
+      editingNews?.video_url || null;
+
+    let videoPath =
+      editingNews?.video_path || null;
+
+    const videoFile =
+      document.getElementById("videoFile")
+        .files[0];
+
+    if(videoFile){
+
+      const uploaded =
+        await uploadFile(
+          "news-videos",
+          videoFile,
+          "videos"
+        );
+
+      videoUrl =
+        uploaded.url;
+
+      videoPath =
+        uploaded.path;
+
+    }
+
+
+    /* ================= PROMOTION ================= */
+
+    let promotionVideoUrl =
+      editingNews?.promotion_video_url || null;
+
+    const promotionFile =
+      document
+        .getElementById("promotionVideoFile")
+        .files[0];
+
+    if(promotionFile){
+
+      const uploaded =
+        await uploadFile(
+          "news-promotions",
+          promotionFile,
+          "promotions"
+        );
+
+      promotionVideoUrl =
+        uploaded.url;
+
+    }
+
+
+    /* ================= MEDIA TYPE ================= */
+
+    let mediaType = "image";
+
+    if(imageUrl && videoUrl){
+      mediaType = "both";
+    }
+    else if(videoUrl){
+      mediaType = "video";
+    }
+
+
+    const contentType =
+      promotionVideoUrl ||
+      promotionTitle ||
+      promotionText
+      ? "promotion"
+      : "news";
+
+
+    /* ================= USER ================= */
+
+    let userId = null;
+
+    try{
+
+      const {
+        data:{user}
+      } =
+        await supabaseClient
+          .auth
+          .getUser();
+
+      if(user){
+        userId = user.id;
+      }
+
+    }catch(e){}
+
+
+    /* ================= PAYLOAD ================= */
+
+    const payload = {
+
+      title:title,
+
+      tagline:tagline || null,
+
+      description:description,
+
+      category_id:categoryId,
+
+      tag:tag || null,
+
+      image_url:imageUrl,
+
+      image_path:imagePath,
+
+      video_url:videoUrl,
+
+      video_path:videoPath,
+
+      source:source || null,
+
+      source_url:sourceUrl || null,
+
+      voice_text:
+        voiceText ||
+        `${title}. ${description}`,
+
+      breaking:breaking,
+
+      featured:featured,
+
+      published:publishNow,
+
+      status:
+        publishNow
+        ? "published"
+        : "draft",
+
+      approval_status:
+        publishNow
+        ? "approved"
+        : "pending",
+
+      demo_approved:publishNow,
+
+      final_approved:publishNow,
+
+      published_at:
+        publishNow
+        ? new Date().toISOString()
+        : null,
+
+      media_type:mediaType,
+
+      content_type:contentType,
+
+      promotion_enabled:
+        !!(
+          promotionVideoUrl ||
+          promotionTitle ||
+          promotionText
+        ),
+
+      promotion_title:
+        promotionTitle || null,
+
+      promotion_text:
+        promotionText || null,
+
+      promotion_video_url:
+        promotionVideoUrl || null,
+
+      promotion_link:
+        promotionLink || null,
+
+      user_id:userId
+
+    };
+
+
+    let result;
+
+
+    /* ================= UPDATE ================= */
+
+    if(editingNews){
+
+      result =
+        await supabaseClient
+          .from("news")
+          .update(payload)
+          .eq("id",editingNews.id);
+
+    }
+
+    /* ================= INSERT ================= */
+
+    else{
+
+      result =
+        await supabaseClient
+          .from("news")
+          .insert(payload);
+
+    }
+
+
+    if(result.error){
+
+      throw result.error;
+
+    }
+
+
+    toast(
+      editingNews
+      ? "News updated successfully!"
+      : "News published successfully!",
+      "success"
+    );
+
+
+    resetForm();
+
+    await loadNews();
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    toast(
+      error.message ||
+      "Something went wrong",
+      "error"
+    );
+
+  }
+  finally{
+
+    saveBtn.disabled = false;
+
+    saveBtn.textContent =
+      editingNews
+      ? "Update News"
+      : "🚀 Publish News";
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD NEWS
+========================================================= */
+
+async function loadNews(){
+
+  const container =
+    document.getElementById("newsList");
+
+  container.innerHTML =
+    "Loading news...";
+
+
+  const {data,error} =
+    await supabaseClient
+      .from("news")
+      .select(`
+        id,
+        title,
+        tagline,
+        description,
+        category_id,
+        category,
+        tag,
+        image_url,
+        video_url,
+        source,
+        breaking,
+        featured,
+        published,
+        status,
+        published_at,
+        created_at,
+        promotion_enabled,
+        promotion_video_url
+      `)
+      .order(
+        "created_at",
+        {ascending:false}
+      )
+      .limit(50);
+
+
+  if(error){
+
+    container.innerHTML =
+      `<div style="color:#b91c1c">
+        ${escapeHtml(error.message)}
+      </div>`;
+
+    return;
+
+  }
+
+
+  if(!data || !data.length){
+
+    container.innerHTML =
+      `<div style="
+        padding:30px;
+        text-align:center;
+        color:#6b7280;
+      ">
+        No news found.
+      </div>`;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    data.map(item=>{
+
+      const thumb =
+        item.image_url ||
+        "https://placehold.co/300x200?text=News";
+
+
+      return `
+
+        <div class="news-item">
+
+          <img
+            class="news-thumb"
+            src="${escapeAttr(thumb)}"
+            onerror="this.src='https://placehold.co/300x200?text=News'"
+          >
+
+          <div class="news-info">
+
+            <h3>
+              ${escapeHtml(item.title || "")}
+            </h3>
+
+            <p>
+              ${escapeHtml(
+                item.tagline || ""
+              )}
+            </p>
+
+            <div class="badges">
+
+              ${
+                item.published
+                ?
+                `<span class="badge green">
+                  Published
+                </span>`
+                :
+                `<span class="badge">
+                  Draft
+                </span>`
+              }
+
+              ${
+                item.breaking
+                ?
+                `<span class="badge red">
+                  Breaking
+                </span>`
+                :
+                ""
+              }
+
+              ${
+                item.video_url
+                ?
+                `<span class="badge">
+                  🎬 Video
+                </span>`
+                :
+                ""
+              }
+
+              ${
+                item.promotion_video_url
+                ?
+                `<span class="badge">
+                  📢 Promo
+                </span>`
+                :
+                ""
+              }
+
+            </div>
+
+          </div>
+
+
+          <div class="item-actions">
+
+            <button
+              class="icon-btn"
+              onclick="editNews('${item.id}')"
+            >
+              ✏️ Edit
+            </button>
+
+            <button
+              class="icon-btn"
+              onclick="togglePublish(
+                '${item.id}',
+                ${item.published}
+              )"
+            >
+              ${
+                item.published
+                ? "⏸ Unpublish"
+                : "🚀 Publish"
+              }
+            </button>
+
+            <button
+              class="icon-btn delete-btn"
+              onclick="deleteNews('${item.id}')"
+            >
+              🗑 Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   EDIT NEWS
+========================================================= */
+
+async function editNews(id){
+
+  const {data,error} =
+    await supabaseClient
+      .from("news")
+      .select("*")
+      .eq("id",id)
+      .single();
+
+
+  if(error){
+
+    toast(error.message,"error");
+    return;
+
+  }
+
+
+  editingNews = data;
+
+
+  document.getElementById("editId")
+    .value = id;
+
+  document.getElementById("title")
+    .value = data.title || "";
+
+  document.getElementById("tagline")
+    .value = data.tagline || "";
+
+  document.getElementById("description")
+    .value = data.description || "";
+
+  document.getElementById("tag")
+    .value = data.tag || "";
+
+  document.getElementById("source")
+    .value = data.source || "";
+
+  document.getElementById("sourceUrl")
+    .value = data.source_url || "";
+
+  document.getElementById("voiceText")
+    .value = data.voice_text || "";
+
+  document.getElementById("breaking")
+    .checked = !!data.breaking;
+
+  document.getElementById("featured")
+    .checked = !!data.featured;
+
+  document.getElementById("publishNow")
+    .checked = !!data.published;
+
+  document.getElementById("promotionTitle")
+    .value =
+      data.promotion_title || "";
+
+  document.getElementById("promotionText")
+    .value =
+      data.promotion_text || "";
+
+  document.getElementById("promotionLink")
+    .value =
+      data.promotion_link || "";
+
+
+  document.getElementById("categoryId")
+    .value =
+      data.category_id || "";
+
+
+  /* existing image */
+
+  if(data.image_url){
+
+    const preview =
+      document.getElementById("imagePreview");
+
+    preview.src =
+      data.image_url;
+
+    preview.style.display =
+      "block";
+
+    document.getElementById("imageName")
+      .textContent =
+      "Current image";
+
+  }
+
+
+  /* existing video */
+
+  if(data.video_url){
+
+    const video =
+      document.getElementById("videoPreview");
+
+    video.src =
+      data.video_url;
+
+    video.style.display =
+      "block";
+
+    document.getElementById("videoName")
+      .textContent =
+      "Current news video";
+
+  }
+
+
+  /* existing promotion */
+
+  if(data.promotion_video_url){
+
+    const video =
+      document.getElementById(
+        "promotionVideoPreview"
+      );
+
+    video.src =
+      data.promotion_video_url;
+
+    video.style.display =
+      "block";
+
+    document.getElementById(
+      "promotionVideoName"
+    ).textContent =
+      "Current promotion video";
+
+  }
+
+
+  document.getElementById("saveBtn")
+    .textContent =
+    "Update News";
+
+
+  document.getElementById("formStatus")
+    .textContent =
+    "Editing selected news";
+
+
+  document
+    .getElementById("editor")
+    .scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+}
+
+
+/* =========================================================
+   DELETE NEWS
+========================================================= */
+
+async function deleteNews(id){
+
+  const ok =
+    confirm(
+      "ఈ news ని permanently delete చేయాలా?"
+    );
+
+  if(!ok) return;
+
+
+  const {error} =
+    await supabaseClient
+      .from("news")
+      .delete()
+      .eq("id",id);
+
+
+  if(error){
+
+    toast(error.message,"error");
+    return;
+
+  }
+
+
+  toast(
+    "News deleted successfully",
+    "success"
+  );
+
+  loadNews();
+
+}
+
+
+/* =========================================================
+   PUBLISH / UNPUBLISH
+========================================================= */
+
+async function togglePublish(
+  id,
+  currentlyPublished
+){
+
+  const publish =
+    !currentlyPublished;
+
+
+  const updateData = {
+
+    published:publish,
+
+    status:
+      publish
+      ? "published"
+      : "draft",
+
+    approval_status:
+      publish
+      ? "approved"
+      : "pending",
+
+    demo_approved:publish,
+
+    final_approved:publish,
+
+    published_at:
+      publish
+      ? new Date().toISOString()
+      : null
+
+  };
+
+
+  const {error} =
+    await supabaseClient
+      .from("news")
+      .update(updateData)
+      .eq("id",id);
+
+
+  if(error){
+
+    toast(error.message,"error");
+    return;
+
+  }
+
+
+  toast(
+    publish
+    ? "News published"
+    : "News unpublished",
+    "success"
+  );
+
+  loadNews();
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetForm(){
+
+  editingNews = null;
+
+  document
+    .getElementById("editId")
+    .value = "";
+
+  document
+    .getElementById("title")
+    .value = "";
+
+  document
+    .getElementById("tagline")
+    .value = "";
+
+  document
+    .getElementById("description")
+    .value = "";
+
+  document
+    .getElementById("tag")
+    .value = "";
+
+  document
+    .getElementById("source")
+    .value = "";
+
+  document
+    .getElementById("sourceUrl")
+    .value = "";
+
+  document
+    .getElementById("voiceText")
+    .value = "";
+
+  document
+    .getElementById("promotionTitle")
+    .value = "";
+
+  document
+    .getElementById("promotionText")
+    .value = "";
+
+  document
+    .getElementById("promotionLink")
+    .value = "";
+
+  document
+    .getElementById("imageFile")
+    .value = "";
+
+  document
+    .getElementById("videoFile")
+    .value = "";
+
+  document
+    .getElementById("promotionVideoFile")
+    .value = "";
+
+  document
+    .getElementById("breaking")
+    .checked = false;
+
+  document
+    .getElementById("featured")
+    .checked = false;
+
+  document
+    .getElementById("publishNow")
+    .checked = true;
+
+
+  const image =
+    document.getElementById(
+      "imagePreview"
+    );
+
+  image.src = "";
+  image.style.display = "none";
+
+
+  const video =
+    document.getElementById(
+      "videoPreview"
+    );
+
+  video.src = "";
+  video.style.display = "none";
+
+
+  const promo =
+    document.getElementById(
+      "promotionVideoPreview"
+    );
+
+  promo.src = "";
+  promo.style.display = "none";
+
+
+  document.getElementById(
+    "imageName"
+  ).textContent = "";
+
+  document.getElementById(
+    "videoName"
+  ).textContent = "";
+
+  document.getElementById(
+    "promotionVideoName"
+  ).textContent = "";
+
+
+  document.getElementById(
+    "saveBtn"
+  ).textContent =
+    "🚀 Publish News";
+
+
+  document.getElementById(
+    "formStatus"
+  ).textContent =
+    "Ready to publish your news.";
+
+}
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+function scrollToNews(){
+
+  document
+    .getElementById("newsListSection")
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+function toast(
+  message,
+  type=""
+){
+
+  const el =
+    document.getElementById("toast");
+
+  el.textContent =
+    message;
+
+  el.className =
+    "show " + type;
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(()=>{
+      el.className = "";
+    },3000);
+
+}
+
+
+/* =========================================================
+   SECURITY HELPERS
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttr(value){
+
+  return escapeHtml(value);
+
+}
 
 </script>
 
