@@ -19,8 +19,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body{
+html,body{
     width:100%;
     height:100%;
     margin:0;
@@ -34,19 +33,15 @@ body{
     color:#111;
 }
 
-button,
-input,
-textarea,
-select{
+button,input,textarea,select{
     font-family:inherit;
 }
 
 button{
     border:0;
     outline:0;
+    cursor:pointer;
 }
-
-/* APP */
 
 .app{
     width:100vw;
@@ -156,7 +151,6 @@ button{
 .header{
     height:56px;
     width:100%;
-    flex-shrink:0;
     background:#fff;
     border-bottom:1px solid #eee;
     display:flex;
@@ -272,12 +266,8 @@ button{
 }
 
 @keyframes ticker{
-    from{
-        transform:translateX(100%);
-    }
-    to{
-        transform:translateX(-100%);
-    }
+    from{transform:translateX(100%);}
+    to{transform:translateX(-100%);}
 }
 
 /* ================= FEED ================= */
@@ -288,26 +278,24 @@ button{
     left:0;
     right:0;
     bottom:0;
-    overflow-y:auto;
-    overflow-x:hidden;
-    scroll-snap-type:y mandatory;
-    scroll-behavior:smooth;
-    scrollbar-width:none;
+    overflow:hidden;
     background:#fff;
+    touch-action:pan-y;
 }
 
-.feed::-webkit-scrollbar{
-    display:none;
+.feed-track{
+    width:100%;
+    height:100%;
+    transition:transform .32s cubic-bezier(.22,.61,.36,1);
+    will-change:transform;
 }
 
 /* ================= NEWS CARD ================= */
 
 .news-card{
     width:100%;
-    height:calc(100dvh - 127px);
-    min-height:calc(100dvh - 127px);
-    scroll-snap-align:start;
-    scroll-snap-stop:always;
+    height:100%;
+    min-height:100%;
     position:relative;
     display:flex;
     flex-direction:column;
@@ -315,13 +303,13 @@ button{
     overflow:hidden;
 }
 
-/* MEDIA */
+/* ================= MEDIA ================= */
 
 .media{
     width:100%;
-    height:43%;
-    min-height:210px;
-    max-height:330px;
+    height:40%;
+    min-height:190px;
+    max-height:300px;
     flex-shrink:0;
     position:relative;
     overflow:hidden;
@@ -360,38 +348,39 @@ button{
     font-weight:700;
 }
 
-/* CONTENT */
+/* ================= CONTENT ================= */
 
 .news-content{
     flex:1;
     overflow:hidden;
-    padding:13px 16px 4px;
+    padding:10px 16px 4px;
 }
 
 .news-title{
     font-size:21px;
-    line-height:1.32;
+    line-height:1.30;
     font-weight:900;
-    margin-bottom:8px;
+    margin:0 0 4px 0;
 }
 
 .news-body{
     font-size:14px;
-    line-height:1.6;
+    line-height:1.52;
     color:#444;
     white-space:pre-line;
     overflow:hidden;
+    margin:0;
 }
 
 .news-meta{
     display:flex;
     justify-content:space-between;
-    margin-top:9px;
+    margin-top:7px;
     font-size:10px;
     color:#999;
 }
 
-/* ================= CARD ACTIONS ================= */
+/* ================= ACTIONS ================= */
 
 .card-actions{
     height:57px;
@@ -430,6 +419,10 @@ button{
     color:#d32f2f;
 }
 
+.card-action.save.active{
+    color:#ff416c;
+}
+
 .whatsapp-btn{
     width:42px;
     height:42px;
@@ -442,18 +435,6 @@ button{
     font-size:20px;
 }
 
-/* ================= BOTTOM NAV ================= */
-
-.bottom{
-    position:absolute;
-    bottom:0;
-    left:0;
-    right:0;
-    height:0;
-    z-index:70;
-    pointer-events:none;
-}
-
 /* ================= LOADING ================= */
 
 .loading{
@@ -464,6 +445,37 @@ button{
     align-items:center;
     color:#888;
     font-size:13px;
+}
+
+/* ================= ERROR ================= */
+
+.db-error{
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:25px;
+}
+
+.db-error-box{
+    width:100%;
+    max-width:320px;
+}
+
+.db-error-title{
+    font-size:17px;
+    font-weight:900;
+    margin-bottom:8px;
+}
+
+.db-error-text{
+    color:#888;
+    font-size:11px;
+    line-height:1.5;
+    word-break:break-word;
+    margin-bottom:14px;
 }
 
 /* ================= OVERLAY ================= */
@@ -627,6 +639,10 @@ button{
     font-weight:900;
 }
 
+.primary:disabled{
+    opacity:.6;
+}
+
 .status{
     min-height:18px;
     text-align:center;
@@ -634,7 +650,7 @@ button{
     margin:7px 0;
 }
 
-/* COMMENTS */
+/* ================= COMMENTS ================= */
 
 .comments-list{
     max-height:330px;
@@ -676,8 +692,6 @@ button{
     font-weight:800;
 }
 
-/* ================= EMPTY ================= */
-
 .empty{
     width:100%;
     height:100%;
@@ -689,30 +703,35 @@ button{
     padding:25px;
 }
 
-/* ================= DESKTOP ================= */
-
-@media(min-width:431px){
-
-    .app{
-        height:100dvh;
-    }
+.saved-item{
+    width:100%;
+    text-align:left;
+    border:0;
+    background:#f6f6f6;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:7px;
 }
-
-/* ================= SMALL SCREEN ================= */
 
 @media(max-height:650px){
 
     .media{
-        height:39%;
-        min-height:170px;
+        height:37%;
+        min-height:165px;
+    }
+
+    .news-content{
+        padding-top:8px;
     }
 
     .news-title{
         font-size:18px;
+        margin-bottom:3px;
     }
 
     .news-body{
         font-size:13px;
+        line-height:1.48;
     }
 }
 </style>
@@ -723,6 +742,7 @@ button{
 <div class="app">
 
 <!-- LOGIN -->
+
 <div class="login-screen" id="loginScreen">
 
     <div class="login-box">
@@ -751,11 +771,7 @@ button{
                 inputmode="numeric"
                 maxlength="10"
                 placeholder="10 digit mobile number"
-                oninput="
-                this.value=this.value
-                .replace(/\D/g,'')
-                .slice(0,10)
-                "
+                oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)"
             >
 
         </div>
@@ -763,9 +779,7 @@ button{
         <button
             class="continue-btn"
             onclick="mobileLogin()">
-
             Continue
-
         </button>
 
         <div
@@ -827,44 +841,37 @@ button{
 
 <div class="category-bar">
 
-    <button
-        class="category active"
+    <button class="category active"
         onclick="filterCategory('All',this)">
         అన్ని
     </button>
 
-    <button
-        class="category"
+    <button class="category"
         onclick="filterCategory('Business',this)">
         బిజినెస్
     </button>
 
-    <button
-        class="category"
+    <button class="category"
         onclick="filterCategory('Sports',this)">
         స్పోర్ట్స్
     </button>
 
-    <button
-        class="category"
+    <button class="category"
         onclick="filterCategory('Cinema',this)">
         సినిమా
     </button>
 
-    <button
-        class="category"
+    <button class="category"
         onclick="filterCategory('Tech',this)">
         టెక్
     </button>
 
-    <button
-        class="category"
+    <button class="category"
         onclick="filterCategory('Politics',this)">
         పాలిటిక్స్
     </button>
 
-    <button
-        class="category"
+    <button class="category"
         onclick="filterCategory('Local',this)">
         లోకల్
     </button>
@@ -887,15 +894,14 @@ button{
 
 </div>
 
-<!-- NEWS FEED -->
+<!-- FEED -->
 
 <main
     class="feed"
     id="feed">
 
     <div class="loading">
-        <i class="fa-solid fa-spinner fa-spin"></i>
-        &nbsp; వార్తలు లోడ్ అవుతున్నాయి...
+        Login చేసి వార్తలు చూడండి...
     </div>
 
 </main>
@@ -1079,8 +1085,7 @@ button{
 
         <textarea
             id="createBody"
-            placeholder="వార్త పూర్తి వివరాలు రాయండి...">
-        </textarea>
+            placeholder="వార్త పూర్తి వివరాలు రాయండి..."></textarea>
 
     </div>
 
@@ -1119,9 +1124,11 @@ button{
 
     <button
         class="primary"
+        id="publishButton"
         onclick="createNews()">
 
         <i class="fa-solid fa-cloud-arrow-up"></i>
+
         Publish News
 
     </button>
@@ -1158,8 +1165,7 @@ button{
 
         <textarea
             id="suggestionText"
-            placeholder="మీ suggestion లేదా వార్త ఇక్కడ రాయండి...">
-        </textarea>
+            placeholder="మీ suggestion లేదా వార్త ఇక్కడ రాయండి..."></textarea>
 
     </div>
 
@@ -1190,6 +1196,7 @@ button{
         onclick="submitSuggestion()">
 
         <i class="fa-solid fa-paper-plane"></i>
+
         Send Suggestion
 
     </button>
@@ -1269,8 +1276,7 @@ button{
 
     </div>
 
-    <div id="searchResults">
-    </div>
+    <div id="searchResults"></div>
 
 </div>
 
@@ -1278,9 +1284,9 @@ button{
 
 <script>
 
-/* ===============================
+/* =========================================================
    SUPABASE
-================================ */
+========================================================= */
 
 const SUPABASE_URL =
 "https://eaowxilhfzyukzetgqxo.supabase.co";
@@ -1288,63 +1294,113 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_Z3xsADypaOjX8GEQEOLUdg_vbxynHRx";
 
-const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-
 const BUCKET =
 "news-media";
 
-/* ===============================
+let supabaseClient = null;
+
+try{
+
+    if(
+        window.supabase &&
+        typeof window.supabase.createClient === "function"
+    ){
+
+        supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+    }
+
+}catch(error){
+
+    console.error(
+        "Supabase init error:",
+        error
+    );
+
+}
+
+/* =========================================================
    STATE
-================================ */
+========================================================= */
 
-let allNews=[];
-let visibleNews=[];
-let currentCategory="All";
-let currentIndex=0;
-let currentNews=null;
+let allNews = [];
+let visibleNews = [];
 
-/* ===============================
+let currentCategory = "All";
+let currentIndex = 0;
+let currentNews = null;
+
+let touchStartY = 0;
+let touchStartX = 0;
+let touchTracking = false;
+
+/* =========================================================
    LOGIN
-================================ */
+========================================================= */
+
+function isValidMobile(value){
+
+    return /^[6-9][0-9]{9}$/.test(
+        String(value || "")
+    );
+
+}
 
 function mobileLogin(){
 
     const input =
-        document.getElementById("phoneInput");
-
-    const phone =
-        input.value.trim();
+        document.getElementById(
+            "phoneInput"
+        );
 
     const error =
-        document.getElementById("loginError");
+        document.getElementById(
+            "loginError"
+        );
 
-    if(!/^[6-9][0-9]{9}$/.test(phone)){
+    const phone =
+        String(
+            input.value || ""
+        ).replace(
+            /\D/g,
+            ""
+        );
+
+    if(!isValidMobile(phone)){
 
         error.innerText =
-        "సరైన 10-digit mobile number ఇవ్వండి.";
+            "సరైన 10-digit mobile number ఇవ్వండి.";
 
         return;
     }
 
+    error.innerText = "";
+
     localStorage.setItem(
         "oneMinuteMobile",
-        "+91"+phone
+        "+91" + phone
     );
 
     document.getElementById(
         "loginScreen"
-    ).style.display="none";
+    ).style.display = "none";
 
     document.getElementById(
         "menuPhone"
-    ).innerText="+91 "+phone;
+    ).innerText =
+        "+91 " + phone;
 
     loadNews();
+
 }
+
+/* =========================================================
+   CHECK LOGIN
+========================================================= */
 
 function checkLogin(){
 
@@ -1353,21 +1409,35 @@ function checkLogin(){
             "oneMinuteMobile"
         );
 
-    if(saved){
+    if(
+        saved &&
+        /^\+91[6-9][0-9]{9}$/.test(saved)
+    ){
 
         document.getElementById(
             "loginScreen"
-        ).style.display="none";
+        ).style.display =
+            "none";
 
         document.getElementById(
             "menuPhone"
-        ).innerText=saved;
+        ).innerText =
+            saved;
 
         return true;
     }
 
+    document.getElementById(
+        "loginScreen"
+    ).style.display =
+        "flex";
+
     return false;
 }
+
+/* =========================================================
+   CHANGE MOBILE NUMBER
+========================================================= */
 
 function logout(){
 
@@ -1375,247 +1445,489 @@ function logout(){
         "oneMinuteMobile"
     );
 
-    location.reload();
+    closeAll();
+
+    document.getElementById(
+        "phoneInput"
+    ).value = "";
+
+    document.getElementById(
+        "loginError"
+    ).innerText = "";
+
+    document.getElementById(
+        "loginScreen"
+    ).style.display =
+        "flex";
+
+    document.getElementById(
+        "phoneInput"
+    ).focus();
+
 }
 
-/* ===============================
-   NORMALIZE
-================================ */
-
-function normalizeNews(row){
-
-    return {
-
-        id:
-        row.id ??
-        row.news_id ??
-        crypto.randomUUID(),
-
-        title:
-        row.title ??
-        row.headline ??
-        row.news_title ??
-        row.name ??
-        "తాజా వార్త",
-
-        body:
-        row.body ??
-        row.content ??
-        row.description ??
-        row.text ??
-        row.news_body ??
-        row.article ??
-        "",
-
-        image:
-        row.image_url ??
-        row.image ??
-        row.image_src ??
-        row.imageSrc ??
-        row.thumbnail ??
-        row.photo_url ??
-        "",
-
-        video:
-        row.video_url ??
-        row.video ??
-        row.video_src ??
-        row.videoSrc ??
-        "",
-
-        media:
-        row.media_url ??
-        "",
-
-        mediaType:
-        row.media_type ??
-        row.mediaType ??
-        "",
-
-        category:
-        row.category ??
-        row.section ??
-        row.type_category ??
-        "News",
-
-        likes:Number(
-            row.likes ??
-            row.like_count ??
-            row.likes_count ??
-            0
-        ),
-
-        dislikes:Number(
-            row.dislikes ??
-            row.dislike_count ??
-            row.dislikes_count ??
-            0
-        ),
-
-        comments:Number(
-            row.comments ??
-            row.comment_count ??
-            row.comments_count ??
-            0
-        ),
-
-        created:
-        row.created_at ??
-        row.published_at ??
-        row.date ??
-        new Date().toISOString()
-    };
-}
-
-/* ===============================
-   LOAD
-================================ */
+/* =========================================================
+   LOAD NEWS
+========================================================= */
 
 async function loadNews(){
 
     const feed =
-        document.getElementById("feed");
+        document.getElementById(
+            "feed"
+        );
 
-    feed.innerHTML=`
+    if(!feed)
+        return;
+
+    feed.innerHTML = `
         <div class="loading">
             <i class="fa-solid fa-spinner fa-spin"></i>
-            &nbsp; Loading...
+            &nbsp; వార్తలు లోడ్ అవుతున్నాయి...
         </div>
     `;
+
+    currentIndex = 0;
+    currentNews = null;
+
+    if(!supabaseClient){
+
+        showDatabaseError(
+            "Supabase connection load కాలేదు.",
+            "Internet connection check చేయండి."
+        );
+
+        return;
+    }
 
     try{
 
         let result =
-        await supabaseClient
-        .from("news")
-        .select("*")
-        .eq("is_published",true)
-        .order(
-            "created_at",
-            {ascending:false}
-        )
-        .limit(100);
+            await supabaseClient
+            .from("news")
+            .select("*")
+            .eq(
+                "is_published",
+                true
+            )
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            )
+            .limit(100);
 
         if(result.error){
 
             result =
-            await supabaseClient
-            .from("news")
-            .select("*")
-            .order(
-                "created_at",
-                {ascending:false}
-            )
-            .limit(100);
+                await supabaseClient
+                .from("news")
+                .select("*")
+                .order(
+                    "created_at",
+                    {
+                        ascending:false
+                    }
+                )
+                .limit(100);
+
+        }
+
+        if(result.error){
+
+            result =
+                await supabaseClient
+                .from("news")
+                .select("*")
+                .limit(100);
+
         }
 
         if(result.error)
             throw result.error;
 
-        allNews =
-        (result.data||[])
-        .map(normalizeNews);
+        const rows =
+            Array.isArray(result.data)
+            ? result.data
+            : [];
 
-        applyFilter();
+        allNews =
+            rows.map(
+                normalizeNews
+            );
+
+        allNews.sort(
+            function(a,b){
+
+                return (
+                    new Date(b.created).getTime() -
+                    new Date(a.created).getTime()
+                );
+
+            }
+        );
+
+        currentCategory = "All";
+
+        document
+        .querySelectorAll(
+            ".category"
+        )
+        .forEach(
+            function(button,index){
+
+                button.classList.toggle(
+                    "active",
+                    index === 0
+                );
+
+            }
+        );
+
+        visibleNews =
+            [...allNews];
+
+        currentIndex = 0;
+
+        renderFeed();
         updateTicker();
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "LOAD NEWS:",
+            error
+        );
 
-        feed.innerHTML=`
-            <div class="empty">
-                <div>
-                    <b>వార్తలు లోడ్ కాలేదు</b>
-                    <br><br>
-                    <button
+        showDatabaseError(
+            "వార్తలు లోడ్ కాలేదు",
+            getErrorMessage(error)
+        );
+
+    }
+
+}
+
+/* =========================================================
+   NORMALIZE
+========================================================= */
+
+function normalizeNews(row,index){
+
+    row = row || {};
+
+    let id =
+        row.id ??
+        row.news_id;
+
+    if(
+        id === null ||
+        id === undefined
+    ){
+
+        id =
+            "local_" +
+            index +
+            "_" +
+            Date.now();
+
+    }
+
+    return {
+
+        id:String(id),
+
+        title:
+            row.title ??
+            row.headline ??
+            row.news_title ??
+            "తాజా వార్త",
+
+        body:
+            row.body ??
+            row.content ??
+            row.description ??
+            row.text ??
+            row.news_body ??
+            row.article ??
+            "",
+
+        image:
+            row.image_url ??
+            row.image ??
+            row.image_src ??
+            row.thumbnail ??
+            row.photo_url ??
+            "",
+
+        video:
+            row.video_url ??
+            row.video ??
+            row.video_src ??
+            "",
+
+        media:
+            row.media_url ??
+            "",
+
+        mediaType:
+            row.media_type ??
+            row.mediaType ??
+            "",
+
+        category:
+            row.category ??
+            row.section ??
+            row.type_category ??
+            "News",
+
+        likes:
+            Number(
+                row.likes ??
+                row.like_count ??
+                row.likes_count ??
+                0
+            ) || 0,
+
+        dislikes:
+            Number(
+                row.dislikes ??
+                row.dislike_count ??
+                row.dislikes_count ??
+                0
+            ) || 0,
+
+        comments:
+            Number(
+                row.comments ??
+                row.comment_count ??
+                row.comments_count ??
+                0
+            ) || 0,
+
+        created:
+            row.created_at ??
+            row.published_at ??
+            row.date ??
+            new Date().toISOString()
+
+    };
+
+}
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function getErrorMessage(error){
+
+    if(!error)
+        return "Unknown error";
+
+    return (
+        error.message ||
+        error.details ||
+        error.hint ||
+        String(error)
+    );
+
+}
+
+function showDatabaseError(
+    title,
+    message
+){
+
+    document.getElementById(
+        "feed"
+    ).innerHTML = `
+
+        <div class="db-error">
+
+            <div class="db-error-box">
+
+                <div class="db-error-title">
+                    ${escapeHtml(title)}
+                </div>
+
+                <div class="db-error-text">
+                    ${escapeHtml(message)}
+                </div>
+
+                <button
                     class="primary"
                     style="max-width:170px"
                     onclick="loadNews()">
+
                     Retry
-                    </button>
-                </div>
+
+                </button>
+
             </div>
-        `;
-    }
+
+        </div>
+
+    `;
+
 }
 
-/* ===============================
+/* =========================================================
    FILTER
-================================ */
+========================================================= */
 
 function filterCategory(
     category,
     button
 ){
 
-    currentCategory=category;
+    currentCategory =
+        category;
 
     document
-    .querySelectorAll(".category")
-    .forEach(x=>{
-        x.classList.remove("active");
-    });
+    .querySelectorAll(
+        ".category"
+    )
+    .forEach(
+        function(item){
 
-    button.classList.add("active");
+            item.classList.remove(
+                "active"
+            );
 
-    applyFilter();
-}
+        }
+    );
 
-function applyFilter(){
+    if(button){
 
-    if(currentCategory==="All"){
+        button.classList.add(
+            "active"
+        );
 
-        visibleNews=[
-            ...allNews
-        ];
+    }
+
+    currentIndex = 0;
+
+    if(category === "All"){
+
+        visibleNews =
+            [...allNews];
 
     }else{
 
-        visibleNews=
-        allNews.filter(n=>
-            String(n.category)
-            .toLowerCase()===
-            currentCategory.toLowerCase()
-        );
+        visibleNews =
+            allNews.filter(
+                function(news){
+
+                    return String(
+                        news.category
+                    )
+                    .trim()
+                    .toLowerCase()
+                    ===
+                    String(category)
+                    .trim()
+                    .toLowerCase();
+
+                }
+            );
+
     }
 
     renderFeed();
+
 }
 
-/* ===============================
-   RENDER
-================================ */
+/* =========================================================
+   RENDER FEED
+========================================================= */
 
 function renderFeed(){
 
     const feed =
-        document.getElementById("feed");
+        document.getElementById(
+            "feed"
+        );
 
     if(!visibleNews.length){
 
-        feed.innerHTML=`
+        feed.innerHTML = `
+
             <div class="empty">
-                ఈ categoryలో వార్తలు లేవు.
+
+                ${
+                    allNews.length
+                    ? "ఈ categoryలో వార్తలు లేవు."
+                    : "Databaseలో ఇంకా వార్తలు లేవు."
+                }
+
             </div>
+
         `;
+
+        currentNews = null;
 
         return;
     }
 
-    feed.innerHTML=
-    visibleNews
-    .map((news,index)=>{
+    currentIndex =
+        Math.max(
+            0,
+            Math.min(
+                currentIndex,
+                visibleNews.length - 1
+            )
+        );
 
-        const media =
-            getMediaHtml(news);
+    feed.innerHTML = `
 
-        const reaction =
-            localStorage.getItem(
-                "reaction_"+news.id
-            );
+        <div
+            class="feed-track"
+            id="feedTrack">
 
-        return `
+            ${
+                visibleNews
+                .map(
+                    function(news,index){
+
+                        return buildNewsCard(
+                            news,
+                            index
+                        );
+
+                    }
+                )
+                .join("")
+            }
+
+        </div>
+
+    `;
+
+    updateFeedPosition(false);
+
+}
+
+/* =========================================================
+   BUILD CARD
+========================================================= */
+
+function buildNewsCard(
+    news,
+    index
+){
+
+    const reaction =
+        localStorage.getItem(
+            "reaction_" + news.id
+        );
+
+    const saved =
+        localStorage.getItem(
+            "saved_" + news.id
+        ) === "yes";
+
+    return `
 
         <article
             class="news-card"
@@ -1623,32 +1935,44 @@ function renderFeed(){
 
             <div class="media">
 
-                ${media}
+                ${getMediaHtml(news)}
 
                 <div class="media-badge">
-                    ${index===0?"LATEST":"NEWS"}
+
+                    ${
+                        index === 0
+                        ? "LATEST"
+                        : "NEWS"
+                    }
+
                 </div>
 
                 <div class="category-label">
-                    ${escapeHtml(news.category)}
+
+                    ${escapeHtml(
+                        news.category
+                    )}
+
                 </div>
 
             </div>
 
             <div class="news-content">
 
-                <h2 class="news-title">
-                    ${escapeHtml(news.title)}
-                </h2>
+                <h2 class="news-title">${escapeHtml(
+                    news.title
+                )}</h2>
 
-                <p class="news-body">
-                    ${escapeHtml(news.body)}
-                </p>
+                <p class="news-body">${escapeHtml(
+                    news.body
+                )}</p>
 
                 <div class="news-meta">
 
                     <span>
-                        ${timeAgo(news.created)}
+                        ${timeAgo(
+                            news.created
+                        )}
                     </span>
 
                     <span>
@@ -1663,8 +1987,9 @@ function renderFeed(){
 
                 <button
                     class="card-action ${
-                    reaction==="like"
-                    ?"like active":""
+                        reaction === "like"
+                        ? "like active"
+                        : ""
                     }"
                     data-action="like">
 
@@ -1678,8 +2003,9 @@ function renderFeed(){
 
                 <button
                     class="card-action ${
-                    reaction==="dislike"
-                    ?"dislike active":""
+                        reaction === "dislike"
+                        ? "dislike active"
+                        : ""
                     }"
                     data-action="dislike">
 
@@ -1712,13 +2038,25 @@ function renderFeed(){
                 </button>
 
                 <button
-                    class="card-action"
+                    class="card-action save ${
+                        saved
+                        ? "active"
+                        : ""
+                    }"
                     data-action="save">
 
-                    <i class="fa-regular fa-bookmark"></i>
+                    <i class="${
+                        saved
+                        ? "fa-solid"
+                        : "fa-regular"
+                    } fa-bookmark"></i>
 
                     <span>
-                        Save
+                        ${
+                            saved
+                            ? "Saved"
+                            : "Save"
+                        }
                     </span>
 
                 </button>
@@ -1727,45 +2065,42 @@ function renderFeed(){
 
         </article>
 
-        `;
+    `;
 
-    }).join("");
-
-    currentIndex=0;
-
-    attachScroll();
 }
 
-/* ===============================
+/* =========================================================
    MEDIA
-================================ */
+========================================================= */
 
 function getMediaHtml(news){
 
-    let url="";
-    let type="";
+    let url = "";
+    let type = "";
 
     if(news.video){
 
-        url=news.video;
-        type="video";
+        url = news.video;
+        type = "video";
 
     }else if(news.image){
 
-        url=news.image;
-        type="image";
+        url = news.image;
+        type = "image";
 
     }else if(news.media){
 
-        url=news.media;
-        type=
-        news.mediaType ||
-        detectMediaType(url);
+        url = news.media;
+        type =
+            news.mediaType ||
+            detectMediaType(url);
+
     }
 
     if(!url){
 
         return `
+
             <div style="
                 width:100%;
                 height:100%;
@@ -1774,120 +2109,228 @@ function getMediaHtml(news){
                 justify-content:center;
                 color:#aaa;
                 font-size:50px">
+
                 <i class="fa-regular fa-newspaper"></i>
+
             </div>
+
         `;
+
     }
 
     if(
-        type==="video" ||
+        type === "video" ||
         isVideo(url)
     ){
 
         return `
+
             <video
                 src="${escapeAttr(url)}"
-                controls
                 playsinline
+                muted
+                controls
                 preload="metadata">
             </video>
+
         `;
+
     }
 
     return `
+
         <img
             src="${escapeAttr(url)}"
             alt="News"
             loading="lazy"
-            onerror="
-            this.style.display='none'
-            ">
+            onerror="this.style.display='none'">
+
     `;
-}
 
-function detectMediaType(url){
-
-    return isVideo(url)
-        ?"video"
-        :"image";
 }
 
 function isVideo(url){
 
     return /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i
-    .test(url);
+        .test(
+            String(url || "")
+        );
+
 }
 
-/* ===============================
-   SCROLL
-================================ */
+function detectMediaType(url){
 
-function attachScroll(){
+    return isVideo(url)
+        ? "video"
+        : "image";
 
-    const feed =
-        document.getElementById("feed");
+}
 
-    feed.onscroll=()=>{
+/* =========================================================
+   PAGE-BY-PAGE POSITION
+========================================================= */
 
-        const cards =
-        [...document.querySelectorAll(
-            ".news-card"
-        )];
+function updateFeedPosition(
+    animate = true
+){
 
-        if(!cards.length)
-            return;
+    const track =
+        document.getElementById(
+            "feedTrack"
+        );
 
-        let best=0;
-        let distance=Infinity;
+    if(!track)
+        return;
 
-        cards.forEach((card,i)=>{
+    track.style.transition =
+        animate
+        ? "transform .32s cubic-bezier(.22,.61,.36,1)"
+        : "none";
 
-            const d=
-            Math.abs(
-                card.offsetTop-
-                feed.scrollTop
+    track.style.transform =
+        "translate3d(0,-" +
+        (
+            currentIndex * 100
+        ) +
+        "%,0)";
+
+    currentNews =
+        visibleNews[
+            currentIndex
+        ] || null;
+
+    setTimeout(
+        playCurrentVideo,
+        animate ? 320 : 0
+    );
+
+}
+
+/* =========================================================
+   GO TO NEXT/PREVIOUS
+========================================================= */
+
+function goToNews(index){
+
+    if(!visibleNews.length)
+        return;
+
+    if(index < 0)
+        index = 0;
+
+    if(index >= visibleNews.length)
+        index = visibleNews.length - 1;
+
+    if(index === currentIndex){
+
+        updateFeedPosition(false);
+        return;
+
+    }
+
+    currentIndex =
+        index;
+
+    updateFeedPosition(true);
+
+}
+
+/* =========================================================
+   VIDEO
+========================================================= */
+
+function playCurrentVideo(){
+
+    document
+    .querySelectorAll(
+        ".media video"
+    )
+    .forEach(
+        function(video){
+
+            try{
+                video.pause();
+            }catch(e){}
+
+        }
+    );
+
+    const card =
+        document.querySelector(
+            '.news-card[data-index="' +
+            currentIndex +
+            '"]'
+        );
+
+    if(!card)
+        return;
+
+    const video =
+        card.querySelector(
+            ".media video"
+        );
+
+    if(video){
+
+        video.muted = true;
+
+        const promise =
+            video.play();
+
+        if(
+            promise &&
+            promise.catch
+        ){
+
+            promise.catch(
+                function(){}
             );
 
-            if(d<distance){
+        }
 
-                distance=d;
-                best=i;
-            }
-        });
+    }
 
-        currentIndex=best;
-        currentNews=
-            visibleNews[best]||null;
-    };
 }
 
-/* ===============================
+/* =========================================================
    LIKE
-================================ */
+========================================================= */
 
 async function handleLike(index){
 
-    const news=
+    const news =
         visibleNews[index];
 
-    if(!news) return;
+    if(!news)
+        return;
 
-    const key=
-        "reaction_"+news.id;
+    const key =
+        "reaction_" + news.id;
 
-    const old=
+    const old =
         localStorage.getItem(key);
 
-    if(old==="like"){
+    if(old === "like"){
 
-        news.likes--;
+        news.likes =
+            Math.max(
+                0,
+                news.likes - 1
+            );
 
         localStorage.removeItem(key);
 
     }else{
 
-        if(old==="dislike")
-            news.dislikes--;
+        if(old === "dislike"){
+
+            news.dislikes =
+                Math.max(
+                    0,
+                    news.dislikes - 1
+                );
+
+        }
 
         news.likes++;
 
@@ -1895,50 +2338,65 @@ async function handleLike(index){
             key,
             "like"
         );
+
     }
+
+    const keepIndex =
+        currentIndex;
 
     renderFeed();
 
-    try{
+    currentIndex =
+        Math.min(
+            keepIndex,
+            visibleNews.length - 1
+        );
 
-        await supabaseClient
-        .from("news")
-        .update({
-            likes:Math.max(0,news.likes),
-            dislikes:Math.max(0,news.dislikes)
-        })
-        .eq("id",news.id);
+    updateFeedPosition(false);
 
-    }catch(e){}
+    updateReaction(news);
+
 }
 
-/* ===============================
+/* =========================================================
    DISLIKE
-================================ */
+========================================================= */
 
 async function handleDislike(index){
 
-    const news=
+    const news =
         visibleNews[index];
 
-    if(!news) return;
+    if(!news)
+        return;
 
-    const key=
-        "reaction_"+news.id;
+    const key =
+        "reaction_" + news.id;
 
-    const old=
+    const old =
         localStorage.getItem(key);
 
-    if(old==="dislike"){
+    if(old === "dislike"){
 
-        news.dislikes--;
+        news.dislikes =
+            Math.max(
+                0,
+                news.dislikes - 1
+            );
 
         localStorage.removeItem(key);
 
     }else{
 
-        if(old==="like")
-            news.likes--;
+        if(old === "like"){
+
+            news.likes =
+                Math.max(
+                    0,
+                    news.likes - 1
+                );
+
+        }
 
         news.dislikes++;
 
@@ -1946,771 +2404,587 @@ async function handleDislike(index){
             key,
             "dislike"
         );
+
     }
+
+    const keepIndex =
+        currentIndex;
 
     renderFeed();
 
-    try{
+    currentIndex =
+        Math.min(
+            keepIndex,
+            visibleNews.length - 1
+        );
 
-        await supabaseClient
-        .from("news")
-        .update({
-            likes:Math.max(0,news.likes),
-            dislikes:Math.max(0,news.dislikes)
-        })
-        .eq("id",news.id);
+    updateFeedPosition(false);
 
-    }catch(e){}
+    updateReaction(news);
+
 }
 
-/* ===============================
+/* =========================================================
+   UPDATE REACTION
+========================================================= */
+
+async function updateReaction(news){
+
+    if(
+        !supabaseClient ||
+        !news ||
+        !news.id
+    )
+        return;
+
+    try{
+
+        const result =
+            await supabaseClient
+            .from("news")
+            .update({
+
+                likes:
+                    Number(
+                        news.likes || 0
+                    ),
+
+                dislikes:
+                    Number(
+                        news.dislikes || 0
+                    )
+
+            })
+            .eq(
+                "id",
+                news.id
+            );
+
+        if(result.error){
+
+            console.warn(
+                "Reaction update:",
+                result.error
+            );
+
+        }
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+/* =========================================================
    SHARE
-================================ */
+========================================================= */
 
 function shareNews(index){
 
-    const news=
+    const news =
         visibleNews[index];
 
-    if(!news) return;
+    if(!news)
+        return;
 
-    const text=
-        news.title+
-        "\n\n"+
-        news.body+
+    const text =
+        news.title +
+        "\n\n" +
+        news.body +
         "\n\nOne Minute News";
 
+    const url =
+        "https://api.whatsapp.com/send?text=" +
+        encodeURIComponent(text);
+
     window.open(
-        "https://api.whatsapp.com/send?text="+
-        encodeURIComponent(text),
+        url,
         "_blank"
     );
+
 }
 
-/* ===============================
-   COMMENTS
-================================ */
+/* =========================================================
+   COMMENTS OPEN
+========================================================= */
 
 async function openComments(index){
 
-    currentNews=
+    currentNews =
         visibleNews[index];
 
     if(!currentNews)
         return;
 
-    document
-    .getElementById("commentsModal")
-    .classList.add("open");
+    document.getElementById(
+        "commentsModal"
+    ).classList.add("open");
 
-    document
-    .getElementById("overlay")
-    .classList.add("show");
+    document.getElementById(
+        "overlay"
+    ).classList.add("show");
+
+    document.getElementById(
+        "commentInput"
+    ).value = "";
 
     await loadComments();
+
+    setTimeout(
+        function(){
+
+            document.getElementById(
+                "commentInput"
+            ).focus();
+
+        },
+        200
+    );
+
 }
+
+/* =========================================================
+   LOAD COMMENTS
+========================================================= */
 
 async function loadComments(){
 
-    const list=
+    const list =
         document.getElementById(
             "commentsList"
         );
 
-    list.innerHTML=
-        `<div class="loading">
+    if(!currentNews){
+
+        list.innerHTML =
+            `<div style="text-align:center;color:#999;padding:30px">
+                News unavailable
+            </div>`;
+
+        return;
+    }
+
+    if(!supabaseClient){
+
+        list.innerHTML =
+            `<div style="text-align:center;color:#d32f2f;padding:30px">
+                Supabase unavailable
+            </div>`;
+
+        return;
+    }
+
+    list.innerHTML =
+        `<div style="text-align:center;color:#999;padding:25px">
             Loading...
         </div>`;
 
     try{
 
-        const result=
-        await supabaseClient
-        .from("comments")
-        .select("*")
-        .eq(
-            "news_id",
-            currentNews.id
-        )
-        .order(
-            "created_at",
-            {ascending:true}
-        );
+        /*
+          IMPORTANT:
+          comments.news_id MUST be UUID.
+          currentNews.id is passed directly.
+        */
+
+        let result =
+            await supabaseClient
+            .from("comments")
+            .select("*")
+            .eq(
+                "news_id",
+                currentNews.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending:true
+                }
+            );
+
+        if(result.error){
+
+            result =
+                await supabaseClient
+                .from("comments")
+                .select("*")
+                .eq(
+                    "news_id",
+                    currentNews.id
+                );
+
+        }
 
         if(result.error)
             throw result.error;
 
-        const rows=
-            result.data||[];
+        const rows =
+            Array.isArray(result.data)
+            ? result.data
+            : [];
 
-        document
-        .getElementById(
+        document.getElementById(
             "modalCommentCount"
-        )
-        .innerText=rows.length;
+        ).innerText =
+            rows.length;
 
         if(!rows.length){
 
-            list.innerHTML=
-            `<div style="
-                text-align:center;
-                color:#999;
-                padding:30px">
-                ఇంకా comments లేవు.
-            </div>`;
+            list.innerHTML =
+                `<div style="text-align:center;color:#999;padding:30px">
+                    ఇంకా comments లేవు.
+                </div>`;
 
             return;
         }
 
-        list.innerHTML=
-        rows.map(c=>`
-            <div class="comment">
-                <b>
-                    ${escapeHtml(
-                        c.name||"Reader"
-                    )}
-                </b>
+        list.innerHTML =
+            rows.map(
+                function(comment){
+
+                    return `
+
+                        <div class="comment">
+
+                            <b>
+                                ${escapeHtml(
+                                    comment.name ||
+                                    comment.user_name ||
+                                    "Reader"
+                                )}
+                            </b>
+
+                            ${escapeHtml(
+                                comment.comment ||
+                                comment.text ||
+                                comment.content ||
+                                ""
+                            )}
+
+                        </div>
+
+                    `;
+
+                }
+            ).join("");
+
+        list.scrollTop =
+            list.scrollHeight;
+
+    }catch(error){
+
+        console.error(
+            "COMMENTS ERROR:",
+            error
+        );
+
+        list.innerHTML =
+            `<div style="text-align:center;color:#d32f2f;padding:25px">
+
+                Comments unavailable
+
+                <br><br>
+
                 ${escapeHtml(
-                    c.comment||""
+                    getErrorMessage(error)
                 )}
-            </div>
-        `).join("");
 
-    }catch(e){
+            </div>`;
 
-        list.innerHTML=
-        `<div style="
-            text-align:center;
-            color:#999;
-            padding:30px">
-            Comments unavailable
-        </div>`;
     }
+
 }
+
+/* =========================================================
+   ADD COMMENT - UUID SAFE
+========================================================= */
 
 async function addComment(){
 
-    const input=
+    const input =
         document.getElementById(
             "commentInput"
         );
 
-    const text=
+    const text =
         input.value.trim();
-
-    if(!text || !currentNews)
-        return;
-
-    try{
-
-        const result=
-        await supabaseClient
-        .from("comments")
-        .insert({
-
-            news_id:currentNews.id,
-
-            name:"Reader",
-
-            comment:text,
-
-            created_at:
-                new Date().toISOString()
-        });
-
-        if(result.error)
-            throw result.error;
-
-        input.value="";
-
-        currentNews.comments++;
-
-        await loadComments();
-
-    }catch(e){
-
-        alert(
-            "Comment save కాలేదు. Supabase comments table check చేయండి."
-        );
-    }
-}
-
-/* ===============================
-   CREATE NEWS
-================================ */
-
-function openCreateNews(){
-
-    closeAll();
-
-    document
-    .getElementById("createModal")
-    .classList.add("open");
-
-    document
-    .getElementById("overlay")
-    .classList.add("show");
-}
-
-function previewNewsFile(){
-
-    const file=
-        document.getElementById(
-            "newsFile"
-        ).files[0];
-
-    const image=
-        document.getElementById(
-            "newsPreviewImage"
-        );
-
-    const video=
-        document.getElementById(
-            "newsPreviewVideo"
-        );
-
-    image.style.display="none";
-    video.style.display="none";
-
-    if(!file)
-        return;
-
-    const url=
-        URL.createObjectURL(file);
-
-    if(
-        file.type.startsWith("video/")
-    ){
-
-        video.src=url;
-        video.style.display="block";
-
-    }else{
-
-        image.src=url;
-        image.style.display="block";
-    }
-}
-
-/* ===============================
-   UPLOAD
-================================ */
-
-async function uploadMedia(file,folder){
-
-    const safe=
-        file.name
-        .replace(
-            /[^a-zA-Z0-9._-]/g,
-            "_"
-        );
-
-    const path=
-        folder+
-        "/"+
-        Date.now()+
-        "_"+
-        safe;
-
-    const result=
-        await supabaseClient
-        .storage
-        .from(BUCKET)
-        .upload(
-            path,
-            file,
-            {
-                upsert:false,
-                contentType:file.type
-            }
-        );
-
-    if(result.error)
-        throw result.error;
-
-    const publicUrl=
-        supabaseClient
-        .storage
-        .from(BUCKET)
-        .getPublicUrl(path);
-
-    return {
-        url:
-            publicUrl.data.publicUrl,
-
-        type:
-            file.type.startsWith("video/")
-            ?"video"
-            :"image"
-    };
-}
-
-/* ===============================
-   CREATE NEWS
-================================ */
-
-async function createNews(){
-
-    const title=
-        document.getElementById(
-            "createTitle"
-        ).value.trim();
-
-    const body=
-        document.getElementById(
-            "createBody"
-        ).value.trim();
-
-    const category=
-        document.getElementById(
-            "createCategory"
-        ).value;
-
-    const file=
-        document.getElementById(
-            "newsFile"
-        ).files[0];
-
-    const status=
-        document.getElementById(
-            "createStatus"
-        );
-
-    if(!title){
-
-        status.innerText=
-            "Headline ఇవ్వండి.";
-
-        return;
-    }
-
-    if(!body){
-
-        status.innerText=
-            "News details ఇవ్వండి.";
-
-        return;
-    }
-
-    status.innerText=
-        "Publishing...";
-
-    try{
-
-        let mediaUrl="";
-        let mediaType="";
-
-        if(file){
-
-            const uploaded=
-                await uploadMedia(
-                    file,
-                    "news"
-                );
-
-            mediaUrl=
-                uploaded.url;
-
-            mediaType=
-                uploaded.type;
-        }
-
-        let payload={
-
-            title:title,
-
-            body:body,
-
-            category:category,
-
-            media_url:mediaUrl,
-
-            media_type:mediaType,
-
-            is_published:true,
-
-            likes:0,
-
-            dislikes:0,
-
-            comments:0,
-
-            created_at:
-                new Date().toISOString()
-        };
-
-        let result=
-            await supabaseClient
-            .from("news")
-            .insert(payload);
-
-        if(result.error){
-
-            result=
-            await supabaseClient
-            .from("news")
-            .insert({
-
-                title:title,
-
-                body:body,
-
-                category:category,
-
-                image_url:
-                    mediaType==="image"
-                    ?mediaUrl:null,
-
-                video_url:
-                    mediaType==="video"
-                    ?mediaUrl:null,
-
-                is_published:true,
-
-                likes:0,
-                dislikes:0,
-                comments:0,
-
-                created_at:
-                    new Date().toISOString()
-            });
-        }
-
-        if(result.error)
-            throw result.error;
-
-        status.innerText=
-            "✓ News published successfully";
-
-        document.getElementById(
-            "createTitle"
-        ).value="";
-
-        document.getElementById(
-            "createBody"
-        ).value="";
-
-        document.getElementById(
-            "newsFile"
-        ).value="";
-
-        setTimeout(()=>{
-
-            closeModal(
-                "createModal"
-            );
-
-            loadNews();
-
-        },700);
-
-    }catch(error){
-
-        console.error(error);
-
-        status.innerText=
-            "Publish failed: "+
-            (error.message||"Check Supabase");
-    }
-}
-
-/* ===============================
-   SUGGESTION
-================================ */
-
-function openSuggestion(){
-
-    closeAll();
-
-    document
-    .getElementById(
-        "suggestionModal"
-    )
-    .classList.add("open");
-
-    document
-    .getElementById(
-        "overlay"
-    )
-    .classList.add("show");
-}
-
-async function submitSuggestion(){
-
-    const text=
-        document
-        .getElementById(
-            "suggestionText"
-        )
-        .value.trim();
-
-    const file=
-        document
-        .getElementById(
-            "suggestionFile"
-        ).files[0];
-
-    const status=
-        document
-        .getElementById(
-            "suggestionStatus"
-        );
 
     if(!text){
 
-        status.innerText=
-            "Suggestion రాయండి.";
+        input.focus();
+        return;
+
+    }
+
+    if(!currentNews){
+
+        alert(
+            "News unavailable"
+        );
 
         return;
     }
 
-    status.innerText=
-        "Sending...";
+    if(!supabaseClient){
+
+        alert(
+            "Supabase connection unavailable"
+        );
+
+        return;
+    }
+
+    const button =
+        document.querySelector(
+            ".comment-form button"
+        );
+
+    button.disabled = true;
+    button.innerText = "Sending...";
 
     try{
 
-        let mediaUrl="";
-        let mediaType="";
-
-        if(file){
-
-            const uploaded=
-                await uploadMedia(
-                    file,
-                    "suggestions"
-                );
-
-            mediaUrl=
-                uploaded.url;
-
-            mediaType=
-                uploaded.type;
-        }
-
-        const phone=
+        const phone =
             localStorage.getItem(
                 "oneMinuteMobile"
             );
 
-        const result=
-        await supabaseClient
-        .from("suggestions")
-        .insert({
+        /*
+          news_id is UUID.
+          Do NOT convert it to bigint.
+        */
 
-            phone:phone,
+        let result =
+            await supabaseClient
+            .from("comments")
+            .insert({
 
-            suggestion:text,
+                news_id:
+                    currentNews.id,
 
-            media_url:mediaUrl,
+                name:
+                    "Reader",
 
-            media_type:mediaType,
+                phone:
+                    phone,
 
-            status:"new",
+                comment:
+                    text,
 
-            created_at:
-                new Date().toISOString()
-        });
+                created_at:
+                    new Date().toISOString()
+
+            });
+
+        /*
+          If phone column doesn't exist,
+          retry without phone.
+        */
+
+        if(result.error){
+
+            result =
+                await supabaseClient
+                .from("comments")
+                .insert({
+
+                    news_id:
+                        currentNews.id,
+
+                    name:
+                        "Reader",
+
+                    comment:
+                        text,
+
+                    created_at:
+                        new Date().toISOString()
+
+                });
+
+        }
+
+        /*
+          If name column also doesn't exist,
+          retry with only UUID + comment.
+        */
+
+        if(result.error){
+
+            result =
+                await supabaseClient
+                .from("comments")
+                .insert({
+
+                    news_id:
+                        currentNews.id,
+
+                    comment:
+                        text
+
+                });
+
+        }
 
         if(result.error)
             throw result.error;
 
-        status.innerText=
-            "✓ Suggestion sent";
+        input.value = "";
 
-        document
-        .getElementById(
-            "suggestionText"
-        ).value="";
+        currentNews.comments =
+            Number(
+                currentNews.comments || 0
+            ) + 1;
 
-        document
-        .getElementById(
-            "suggestionFile"
-        ).value="";
+        await loadComments();
+
+        const card =
+            document.querySelector(
+                '.news-card[data-index="' +
+                currentIndex +
+                '"]'
+            );
+
+        if(card){
+
+            const span =
+                card.querySelector(
+                    '[data-action="comment"] span'
+                );
+
+            if(span){
+
+                span.innerText =
+                    currentNews.comments;
+
+            }
+
+        }
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "ADD COMMENT ERROR:",
+            error
+        );
 
-        status.innerText=
-            "Suggestion save కాలేదు.";
+        alert(
+            "Comment save కాలేదు:\n" +
+            getErrorMessage(error)
+        );
+
+    }finally{
+
+        button.disabled = false;
+        button.innerText = "పంపు";
+
     }
+
 }
 
-/* ===============================
-   SEARCH
-================================ */
-
-function openSearch(){
-
-    closeAll();
-
-    document
-    .getElementById(
-        "searchModal"
-    )
-    .classList.add("open");
-
-    document
-    .getElementById(
-        "overlay"
-    )
-    .classList.add("show");
-
-    setTimeout(()=>{
-
-        document
-        .getElementById(
-            "searchInput"
-        )
-        .focus();
-
-    },200);
-}
-
-function searchNews(value){
-
-    const box=
-        document.getElementById(
-            "searchResults"
-        );
-
-    const q=
-        value.trim().toLowerCase();
-
-    if(!q){
-
-        box.innerHTML="";
-        return;
-    }
-
-    const results=
-        allNews.filter(n=>
-            (
-                n.title+
-                " "+
-                n.body+
-                " "+
-                n.category
-            )
-            .toLowerCase()
-            .includes(q)
-        );
-
-    if(!results.length){
-
-        box.innerHTML=
-        `<div style="
-            text-align:center;
-            color:#999;
-            padding:20px">
-            News not found
-        </div>`;
-
-        return;
-    }
-
-    box.innerHTML=
-    results.slice(0,20)
-    .map(n=>`
-
-        <button
-            style="
-                width:100%;
-                text-align:left;
-                border:0;
-                background:#f6f6f6;
-                padding:12px;
-                border-radius:10px;
-                margin-bottom:7px"
-            onclick="jumpToNews('${escapeAttr(n.id)}')">
-
-            <b>
-                ${escapeHtml(n.title)}
-            </b>
-
-            <div style="
-                font-size:10px;
-                color:#888;
-                margin-top:4px">
-                ${escapeHtml(n.category)}
-            </div>
-
-        </button>
-
-    `).join("");
-}
-
-function jumpToNews(id){
-
-    closeAll();
-
-    const index=
-        visibleNews.findIndex(
-            n=>String(n.id)===String(id)
-        );
-
-    if(index<0){
-
-        currentCategory="All";
-
-        visibleNews=[
-            ...allNews
-        ];
-
-        renderFeed();
-
-        setTimeout(
-            ()=>jumpToNews(id),
-            100
-        );
-
-        return;
-    }
-
-    const cards=
-        document.querySelectorAll(
-            ".news-card"
-        );
-
-    if(cards[index]){
-
-        cards[index].scrollIntoView({
-            behavior:"smooth",
-            block:"start"
-        });
-    }
-}
-
-/* ===============================
-   SAVED
-================================ */
+/* =========================================================
+   SAVE
+========================================================= */
 
 function saveNews(index){
 
-    const news=
+    const news =
         visibleNews[index];
 
-    if(!news) return;
+    if(!news)
+        return;
 
-    const key=
-        "saved_"+news.id;
+    const key =
+        "saved_" + news.id;
 
-    const old=
-        localStorage.getItem(key);
+    const old =
+        localStorage.getItem(key)
+        === "yes";
 
-    localStorage.setItem(
-        key,
-        old==="yes"?"no":"yes"
+    if(old){
+
+        localStorage.removeItem(key);
+
+    }else{
+
+        localStorage.setItem(
+            key,
+            "yes"
+        );
+
+    }
+
+    const card =
+        document.querySelector(
+            '.news-card[data-index="' +
+            index +
+            '"]'
+        );
+
+    if(!card)
+        return;
+
+    const button =
+        card.querySelector(
+            '[data-action="save"]'
+        );
+
+    if(!button)
+        return;
+
+    const nowSaved =
+        !old;
+
+    button.classList.toggle(
+        "active",
+        nowSaved
     );
+
+    const icon =
+        button.querySelector("i");
+
+    const span =
+        button.querySelector("span");
+
+    if(icon){
+
+        icon.className =
+            nowSaved
+            ? "fa-solid fa-bookmark"
+            : "fa-regular fa-bookmark";
+
+    }
+
+    if(span){
+
+        span.innerText =
+            nowSaved
+            ? "Saved"
+            : "Save";
+
+    }
+
 }
+
+/* =========================================================
+   SAVED
+========================================================= */
 
 function openSaved(){
 
-    const saved=
-        allNews.filter(n=>
-            localStorage.getItem(
-                "saved_"+n.id
-            )==="yes"
+    const saved =
+        allNews.filter(
+            function(news){
+
+                return localStorage.getItem(
+                    "saved_" + news.id
+                ) === "yes";
+
+            }
         );
 
     closeAll();
@@ -2724,154 +2998,923 @@ function openSaved(){
         return;
     }
 
-    visibleNews=saved;
+    visibleNews =
+        saved;
+
+    currentIndex = 0;
 
     renderFeed();
+
 }
 
-/* ===============================
+/* =========================================================
+   CREATE NEWS OPEN
+========================================================= */
+
+function openCreateNews(){
+
+    closeAll();
+
+    document.getElementById(
+        "createModal"
+    ).classList.add("open");
+
+    document.getElementById(
+        "overlay"
+    ).classList.add("show");
+
+}
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+function previewNewsFile(){
+
+    const file =
+        document.getElementById(
+            "newsFile"
+        ).files[0];
+
+    const image =
+        document.getElementById(
+            "newsPreviewImage"
+        );
+
+    const video =
+        document.getElementById(
+            "newsPreviewVideo"
+        );
+
+    image.style.display = "none";
+    video.style.display = "none";
+
+    if(!file)
+        return;
+
+    const url =
+        URL.createObjectURL(file);
+
+    if(
+        file.type.startsWith("video/")
+    ){
+
+        video.src = url;
+        video.style.display = "block";
+
+    }else{
+
+        image.src = url;
+        image.style.display = "block";
+
+    }
+
+}
+
+/* =========================================================
+   UPLOAD MEDIA
+========================================================= */
+
+async function uploadMedia(
+    file,
+    folder
+){
+
+    if(!supabaseClient)
+        throw new Error(
+            "Supabase unavailable"
+        );
+
+    if(!file)
+        throw new Error(
+            "File missing"
+        );
+
+    const safeName =
+        file.name.replace(
+            /[^a-zA-Z0-9._-]/g,
+            "_"
+        );
+
+    const path =
+        folder +
+        "/" +
+        Date.now() +
+        "_" +
+        Math.random()
+        .toString(36)
+        .slice(2,8) +
+        "_" +
+        safeName;
+
+    const result =
+        await supabaseClient
+        .storage
+        .from(BUCKET)
+        .upload(
+            path,
+            file,
+            {
+                upsert:false,
+                contentType:
+                    file.type ||
+                    "application/octet-stream"
+            }
+        );
+
+    if(result.error)
+        throw result.error;
+
+    const publicResult =
+        supabaseClient
+        .storage
+        .from(BUCKET)
+        .getPublicUrl(path);
+
+    return {
+
+        url:
+            publicResult.data.publicUrl,
+
+        type:
+            file.type.startsWith("video/")
+            ? "video"
+            : "image"
+
+    };
+
+}
+
+/* =========================================================
+   CREATE NEWS
+========================================================= */
+
+async function createNews(){
+
+    const title =
+        document.getElementById(
+            "createTitle"
+        ).value.trim();
+
+    const body =
+        document.getElementById(
+            "createBody"
+        ).value.trim();
+
+    const category =
+        document.getElementById(
+            "createCategory"
+        ).value;
+
+    const file =
+        document.getElementById(
+            "newsFile"
+        ).files[0];
+
+    const status =
+        document.getElementById(
+            "createStatus"
+        );
+
+    const button =
+        document.getElementById(
+            "publishButton"
+        );
+
+    if(!title){
+
+        status.innerText =
+            "Headline ఇవ్వండి.";
+
+        return;
+    }
+
+    if(!body){
+
+        status.innerText =
+            "News details ఇవ్వండి.";
+
+        return;
+    }
+
+    if(!supabaseClient){
+
+        status.innerText =
+            "Supabase connection unavailable.";
+
+        return;
+    }
+
+    button.disabled = true;
+    status.innerText = "Publishing...";
+
+    try{
+
+        let mediaUrl = "";
+        let mediaType = "";
+
+        if(file){
+
+            const uploaded =
+                await uploadMedia(
+                    file,
+                    "news"
+                );
+
+            mediaUrl =
+                uploaded.url;
+
+            mediaType =
+                uploaded.type;
+
+        }
+
+        const now =
+            new Date().toISOString();
+
+        let result =
+            await supabaseClient
+            .from("news")
+            .insert({
+
+                title:title,
+                body:body,
+                category:category,
+
+                media_url:
+                    mediaUrl || null,
+
+                media_type:
+                    mediaType || null,
+
+                is_published:true,
+
+                likes:0,
+                dislikes:0,
+                comments:0,
+
+                created_at:now
+
+            });
+
+        if(result.error){
+
+            result =
+                await supabaseClient
+                .from("news")
+                .insert({
+
+                    title:title,
+                    body:body,
+                    category:category,
+
+                    image_url:
+                        mediaType === "image"
+                        ? mediaUrl
+                        : null,
+
+                    video_url:
+                        mediaType === "video"
+                        ? mediaUrl
+                        : null,
+
+                    is_published:true,
+
+                    likes:0,
+                    dislikes:0,
+                    comments:0,
+
+                    created_at:now
+
+                });
+
+        }
+
+        if(result.error){
+
+            result =
+                await supabaseClient
+                .from("news")
+                .insert({
+
+                    title:title,
+                    body:body,
+                    category:category,
+                    is_published:true
+
+                });
+
+        }
+
+        if(result.error)
+            throw result.error;
+
+        status.innerText =
+            "✓ News published successfully";
+
+        document.getElementById(
+            "createTitle"
+        ).value = "";
+
+        document.getElementById(
+            "createBody"
+        ).value = "";
+
+        document.getElementById(
+            "newsFile"
+        ).value = "";
+
+        document.getElementById(
+            "newsPreviewImage"
+        ).style.display = "none";
+
+        document.getElementById(
+            "newsPreviewVideo"
+        ).style.display = "none";
+
+        setTimeout(
+            function(){
+
+                closeModal(
+                    "createModal"
+                );
+
+                loadNews();
+
+            },
+            800
+        );
+
+    }catch(error){
+
+        console.error(
+            "CREATE NEWS:",
+            error
+        );
+
+        status.innerText =
+            "Publish failed: " +
+            getErrorMessage(error);
+
+    }finally{
+
+        button.disabled = false;
+
+    }
+
+}
+
+/* =========================================================
+   SUGGESTION OPEN
+========================================================= */
+
+function openSuggestion(){
+
+    closeAll();
+
+    document.getElementById(
+        "suggestionModal"
+    ).classList.add("open");
+
+    document.getElementById(
+        "overlay"
+    ).classList.add("show");
+
+}
+
+/* =========================================================
+   SUBMIT SUGGESTION
+========================================================= */
+
+async function submitSuggestion(){
+
+    const text =
+        document.getElementById(
+            "suggestionText"
+        ).value.trim();
+
+    const file =
+        document.getElementById(
+            "suggestionFile"
+        ).files[0];
+
+    const status =
+        document.getElementById(
+            "suggestionStatus"
+        );
+
+    if(!text){
+
+        status.innerText =
+            "Suggestion రాయండి.";
+
+        return;
+
+    }
+
+    if(!supabaseClient){
+
+        status.innerText =
+            "Supabase connection unavailable.";
+
+        return;
+
+    }
+
+    status.innerText =
+        "Sending...";
+
+    try{
+
+        let mediaUrl = "";
+        let mediaType = "";
+
+        if(file){
+
+            const uploaded =
+                await uploadMedia(
+                    file,
+                    "suggestions"
+                );
+
+            mediaUrl =
+                uploaded.url;
+
+            mediaType =
+                uploaded.type;
+
+        }
+
+        const phone =
+            localStorage.getItem(
+                "oneMinuteMobile"
+            );
+
+        const now =
+            new Date().toISOString();
+
+        let result =
+            await supabaseClient
+            .from("suggestions")
+            .insert({
+
+                phone:phone,
+
+                suggestion:text,
+
+                media_url:
+                    mediaUrl || null,
+
+                media_type:
+                    mediaType || null,
+
+                status:"new",
+
+                created_at:now
+
+            });
+
+        if(result.error){
+
+            result =
+                await supabaseClient
+                .from("suggestions")
+                .insert({
+
+                    phone:phone,
+                    suggestion:text,
+                    status:"new"
+
+                });
+
+        }
+
+        if(result.error)
+            throw result.error;
+
+        status.innerText =
+            "✓ Suggestion sent";
+
+        document.getElementById(
+            "suggestionText"
+        ).value = "";
+
+        document.getElementById(
+            "suggestionFile"
+        ).value = "";
+
+    }catch(error){
+
+        console.error(
+            "SUGGESTION:",
+            error
+        );
+
+        status.innerText =
+            "Suggestion save కాలేదు: " +
+            getErrorMessage(error);
+
+    }
+
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function openSearch(){
+
+    closeAll();
+
+    document.getElementById(
+        "searchModal"
+    ).classList.add("open");
+
+    document.getElementById(
+        "overlay"
+    ).classList.add("show");
+
+    setTimeout(
+        function(){
+
+            document.getElementById(
+                "searchInput"
+            ).focus();
+
+        },
+        200
+    );
+
+}
+
+function searchNews(value){
+
+    const box =
+        document.getElementById(
+            "searchResults"
+        );
+
+    const q =
+        String(
+            value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+    if(!q){
+
+        box.innerHTML = "";
+        return;
+
+    }
+
+    const results =
+        allNews.filter(
+            function(news){
+
+                return (
+                    String(news.title || "") +
+                    " " +
+                    String(news.body || "") +
+                    " " +
+                    String(news.category || "")
+                )
+                .toLowerCase()
+                .includes(q);
+
+            }
+        );
+
+    if(!results.length){
+
+        box.innerHTML =
+            `<div style="text-align:center;color:#999;padding:20px">
+                News not found
+            </div>`;
+
+        return;
+
+    }
+
+    box.innerHTML =
+        results
+        .slice(0,20)
+        .map(
+            function(news){
+
+                return `
+
+                    <button
+                        class="saved-item"
+                        data-news-id="${escapeAttr(news.id)}">
+
+                        <b>
+                            ${escapeHtml(
+                                news.title
+                            )}
+                        </b>
+
+                        <div style="
+                            font-size:10px;
+                            color:#888;
+                            margin-top:4px">
+
+                            ${escapeHtml(
+                                news.category
+                            )}
+
+                        </div>
+
+                    </button>
+
+                `;
+
+            }
+        )
+        .join("");
+
+}
+
+/* =========================================================
+   SEARCH RESULT CLICK
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const item =
+            event.target.closest(
+                ".saved-item[data-news-id]"
+            );
+
+        if(!item)
+            return;
+
+        jumpToNews(
+            item.dataset.newsId
+        );
+
+    }
+);
+
+function jumpToNews(id){
+
+    closeAll();
+
+    let index =
+        visibleNews.findIndex(
+            function(news){
+
+                return String(news.id)
+                    === String(id);
+
+            }
+        );
+
+    if(index >= 0){
+
+        goToNews(index);
+        return;
+
+    }
+
+    currentCategory = "All";
+
+    document
+    .querySelectorAll(
+        ".category"
+    )
+    .forEach(
+        function(item){
+
+            item.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+    const allButton =
+        document.querySelector(
+            ".category"
+        );
+
+    if(allButton)
+        allButton.classList.add(
+            "active"
+        );
+
+    visibleNews =
+        [...allNews];
+
+    currentIndex = 0;
+
+    renderFeed();
+
+    setTimeout(
+        function(){
+
+            const newIndex =
+                visibleNews.findIndex(
+                    function(news){
+
+                        return String(news.id)
+                            === String(id);
+
+                    }
+                );
+
+            if(newIndex >= 0){
+
+                goToNews(
+                    newIndex
+                );
+
+            }
+
+        },
+        50
+    );
+
+}
+
+/* =========================================================
    MENU
-================================ */
+========================================================= */
 
 function openMenu(){
 
-    document
-    .getElementById(
+    document.getElementById(
         "sideMenu"
-    )
-    .classList.add("open");
+    ).classList.add("open");
 
-    document
-    .getElementById(
+    document.getElementById(
         "overlay"
-    )
-    .classList.add("show");
+    ).classList.add("show");
+
 }
+
+/* =========================================================
+   CLOSE
+========================================================= */
 
 function closeAll(){
 
-    document
-    .getElementById(
+    document.getElementById(
         "sideMenu"
-    )
-    .classList.remove("open");
+    ).classList.remove("open");
 
-    document
-    .getElementById(
+    document.getElementById(
         "overlay"
-    )
-    .classList.remove("show");
+    ).classList.remove("show");
 
     document
-    .querySelectorAll(".modal")
-    .forEach(m=>
-        m.classList.remove("open")
+    .querySelectorAll(
+        ".modal"
+    )
+    .forEach(
+        function(modal){
+
+            modal.classList.remove(
+                "open"
+            );
+
+        }
     );
+
 }
 
 function closeModal(id){
 
-    document
-    .getElementById(id)
-    .classList.remove("open");
+    const modal =
+        document.getElementById(id);
 
-    document
-    .getElementById(
+    if(modal){
+
+        modal.classList.remove(
+            "open"
+        );
+
+    }
+
+    document.getElementById(
         "overlay"
-    )
-    .classList.remove("show");
+    ).classList.remove("show");
+
 }
 
-/* ===============================
+/* =========================================================
    TICKER
-================================ */
+========================================================= */
 
 function updateTicker(){
 
-    const text=
+    const text =
         allNews
         .slice(0,8)
-        .map(n=>n.title)
+        .map(
+            function(news){
+
+                return news.title;
+
+            }
+        )
+        .filter(Boolean)
         .join(" • ");
 
-    document
-    .getElementById(
+    document.getElementById(
         "tickerText"
-    )
-    .innerText=
+    ).innerText =
         text ||
-        "తాజా వార్తలు...";
+        "తాజా వార్తలు One Minute Newsలో...";
+
 }
 
-/* ===============================
-   HELPERS
-================================ */
+/* =========================================================
+   TIME
+========================================================= */
 
 function timeAgo(date){
 
-    const d=new Date(date);
+    const d =
+        new Date(date);
 
     if(isNaN(d.getTime()))
         return "ఇప్పుడు";
 
-    const mins=
+    const mins =
         Math.floor(
-            (Date.now()-d.getTime())
-            /60000
+            (
+                Date.now() -
+                d.getTime()
+            ) / 60000
         );
 
-    if(mins<1)
+    if(mins < 1)
         return "ఇప్పుడు";
 
-    if(mins<60)
-        return mins+" నిమిషాల క్రితం";
+    if(mins < 60)
+        return mins +
+            " నిమిషాల క్రితం";
 
-    const hours=
-        Math.floor(mins/60);
+    const hours =
+        Math.floor(
+            mins / 60
+        );
 
-    if(hours<24)
-        return hours+" గంటల క్రితం";
+    if(hours < 24)
+        return hours +
+            " గంటల క్రితం";
 
-    return (
-        Math.floor(hours/24)+
-        " రోజుల క్రితం"
-    );
+    return Math.floor(
+        hours / 24
+    ) + " రోజుల క్రితం";
+
 }
+
+/* =========================================================
+   ESCAPE
+========================================================= */
 
 function escapeHtml(value){
 
-    return String(value??"")
+    return String(
+        value ?? ""
+    )
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
+
 }
 
 function escapeAttr(value){
 
     return escapeHtml(value);
+
 }
 
-/* ===============================
+/* =========================================================
    CARD ACTIONS
-================================ */
+========================================================= */
 
 document
 .getElementById("feed")
 .addEventListener(
     "click",
-    function(e){
+    function(event){
 
-        const button=
-            e.target.closest(
+        const button =
+            event.target.closest(
                 "[data-action]"
             );
 
         if(!button)
             return;
 
-        const card=
+        const card =
             button.closest(
                 ".news-card"
             );
@@ -2879,114 +3922,250 @@ document
         if(!card)
             return;
 
-        const index=
-            Number(card.dataset.index);
+        const index =
+            Number(
+                card.dataset.index
+            );
 
-        const action=
+        const action =
             button.dataset.action;
 
-        if(action==="like")
+        if(action === "like"){
+
+            event.stopPropagation();
             handleLike(index);
 
-        if(action==="dislike")
+        }
+
+        if(action === "dislike"){
+
+            event.stopPropagation();
             handleDislike(index);
 
-        if(action==="share")
+        }
+
+        if(action === "share"){
+
+            event.stopPropagation();
             shareNews(index);
 
-        if(action==="comment")
+        }
+
+        if(action === "comment"){
+
+            event.stopPropagation();
             openComments(index);
 
-        if(action==="save")
+        }
+
+        if(action === "save"){
+
+            event.stopPropagation();
             saveNews(index);
+
+        }
+
     }
 );
 
-/* ===============================
+/* =========================================================
    TOUCH SWIPE
-================================ */
-
-let touchStartY=0;
+========================================================= */
 
 document
 .getElementById("feed")
 .addEventListener(
     "touchstart",
-    e=>{
-        touchStartY=
-            e.changedTouches[0]
-            .screenY;
+    function(event){
+
+        const target =
+            event.target;
+
+        if(
+            target.closest(
+                "button,input,textarea,select,video"
+            )
+        ){
+
+            touchTracking = false;
+            return;
+
+        }
+
+        touchTracking = true;
+
+        touchStartY =
+            event.changedTouches[0].screenY;
+
+        touchStartX =
+            event.changedTouches[0].screenX;
+
     },
-    {passive:true}
+    {
+        passive:true
+    }
 );
 
 document
 .getElementById("feed")
 .addEventListener(
     "touchend",
-    e=>{
+    function(event){
 
-        const end=
-            e.changedTouches[0]
-            .screenY;
-
-        const diff=
-            touchStartY-end;
-
-        if(Math.abs(diff)<45)
+        if(!touchTracking)
             return;
 
-        const cards=
-            document.querySelectorAll(
-                ".news-card"
+        const endY =
+            event.changedTouches[0].screenY;
+
+        const endX =
+            event.changedTouches[0].screenX;
+
+        const diffY =
+            touchStartY - endY;
+
+        const diffX =
+            touchStartX - endX;
+
+        touchTracking = false;
+
+        if(
+            Math.abs(diffY) < 50 ||
+            Math.abs(diffY) <= Math.abs(diffX)
+        ){
+
+            return;
+
+        }
+
+        /*
+          EXACTLY ONE NEWS PER SWIPE
+        */
+
+        if(diffY > 0){
+
+            goToNews(
+                currentIndex + 1
             );
-
-        if(!cards.length)
-            return;
-
-        if(diff>0){
-
-            currentIndex=
-                Math.min(
-                    currentIndex+1,
-                    cards.length-1
-                );
 
         }else{
 
-            currentIndex=
-                Math.max(
-                    currentIndex-1,
-                    0
-                );
+            goToNews(
+                currentIndex - 1
+            );
+
         }
 
-        cards[currentIndex]
-        .scrollIntoView({
-            behavior:"smooth",
-            block:"start"
-        });
-
     },
-    {passive:true}
+    {
+        passive:true
+    }
 );
 
-/* ===============================
-   START
-================================ */
+/* =========================================================
+   KEYBOARD
+========================================================= */
 
-window.addEventListener(
-    "load",
-    ()=>{
+document.addEventListener(
+    "keydown",
+    function(event){
 
-        if(checkLogin()){
+        if(
+            event.key === "ArrowDown"
+        ){
 
-            loadNews();
+            goToNews(
+                currentIndex + 1
+            );
+
+        }
+
+        if(
+            event.key === "ArrowUp"
+        ){
+
+            goToNews(
+                currentIndex - 1
+            );
 
         }
 
     }
 );
+
+/* =========================================================
+   ENTER LOGIN
+========================================================= */
+
+document.getElementById(
+    "phoneInput"
+).addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Enter"
+        ){
+
+            mobileLogin();
+
+        }
+
+    }
+);
+
+/* =========================================================
+   START
+========================================================= */
+
+function startApp(){
+
+    const loggedIn =
+        checkLogin();
+
+    if(loggedIn){
+
+        loadNews();
+
+    }else{
+
+        document.getElementById(
+            "feed"
+        ).innerHTML = `
+            <div class="loading">
+                Login చేసి వార్తలు చూడండి...
+            </div>
+        `;
+
+        setTimeout(
+            function(){
+
+                document.getElementById(
+                    "phoneInput"
+                ).focus();
+
+            },
+            200
+        );
+
+    }
+
+}
+
+if(
+    document.readyState === "loading"
+){
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        startApp
+    );
+
+}else{
+
+    startApp();
+
+}
 
 </script>
 
