@@ -2,824 +2,1285 @@
 <html lang="te">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
 <title>One Minute News</title>
 
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
-    font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    -webkit-tap-highlight-color:transparent;
 }
 
 html,
 body{
     width:100%;
     height:100%;
+    margin:0;
+    padding:0;
+    overflow:hidden;
 }
 
 body{
-    background-color:#eef2f5;
+    background:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#111;
+}
+
+button,
+input,
+textarea,
+select{
+    font-family:inherit;
+}
+
+button{
+    border:0;
+    outline:0;
+}
+
+/* APP */
+
+.app{
+    width:100vw;
+    height:100dvh;
+    max-width:430px;
+    margin:0 auto;
+    background:#fff;
+    position:relative;
+    overflow:hidden;
+}
+
+/* ================= LOGIN ================= */
+
+.login-screen{
+    position:absolute;
+    inset:0;
+    z-index:1000;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+}
+
+.login-box{
+    width:100%;
+    max-width:350px;
+    text-align:center;
+}
+
+.login-logo{
+    width:72px;
+    height:72px;
+    margin:0 auto 18px;
+    border-radius:18px;
+    background:linear-gradient(135deg,#ff416c,#ff4b2b);
+    color:#fff;
     display:flex;
     justify-content:center;
     align-items:center;
-    min-height:100vh;
+    font-size:15px;
+    font-weight:900;
 }
 
-/* =========================================================
-   MAIN APP
-========================================================= */
+.login-title{
+    font-size:27px;
+    font-weight:900;
+    margin-bottom:7px;
+}
 
-.app-container{
+.login-sub{
+    color:#777;
+    font-size:14px;
+    margin-bottom:25px;
+}
+
+.phone-wrap{
+    height:54px;
     width:100%;
-    max-width:420px;
-    background:#fff;
-    height:100vh;
-    max-height:850px;
-    position:relative;
-    border-radius:16px;
-    overflow:hidden;
-    box-shadow:0 10px 25px rgba(0,0,0,0.1);
     display:flex;
-    flex-direction:column;
+    align-items:center;
+    background:#f7f7f7;
+    border:1px solid #ddd;
+    border-radius:14px;
+    overflow:hidden;
 }
 
-/* =========================================================
-   HEADER
-========================================================= */
+.phone-prefix{
+    height:100%;
+    display:flex;
+    align-items:center;
+    padding:0 13px;
+    font-weight:800;
+    border-right:1px solid #ddd;
+}
+
+.phone-wrap input{
+    flex:1;
+    height:100%;
+    border:0;
+    outline:0;
+    background:transparent;
+    padding:0 13px;
+    font-size:17px;
+}
+
+.continue-btn{
+    width:100%;
+    height:54px;
+    margin-top:13px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#ff416c,#ff4b2b);
+    color:#fff;
+    font-weight:900;
+    font-size:16px;
+}
+
+.login-error{
+    color:#d32f2f;
+    font-size:12px;
+    min-height:20px;
+    margin-top:9px;
+}
+
+/* ================= HEADER ================= */
 
 .header{
-    padding:14px 18px;
-    border-bottom:1px solid #f0f0f0;
+    height:56px;
+    width:100%;
+    flex-shrink:0;
+    background:#fff;
+    border-bottom:1px solid #eee;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    background:#fff;
-    z-index:10;
-    flex-shrink:0;
+    padding:7px 10px;
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:80;
 }
 
 .brand{
-    font-weight:800;
-    font-size:19px;
-    color:#1a1a1a;
     display:flex;
     align-items:center;
-    gap:8px;
-    letter-spacing:-0.5px;
+    gap:7px;
+    font-size:16px;
+    font-weight:900;
 }
 
 .brand-icon{
-    background:linear-gradient(135deg,#ff416c,#ff4b2b);
-    color:white;
-    padding:4px 8px;
-    font-size:11px;
+    padding:5px 7px;
     border-radius:6px;
+    color:#fff;
+    font-size:9px;
     font-weight:900;
-    text-transform:uppercase;
+    background:linear-gradient(135deg,#ff416c,#ff4b2b);
 }
 
-/* =========================================================
-   NEWS FEED
-========================================================= */
+.header-actions{
+    display:flex;
+    gap:7px;
+}
 
-.news-feed{
-    flex:1;
-    overflow-y:auto;
-    overflow-x:hidden;
+.icon-btn{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#f5f5f5;
+    color:#444;
+}
 
-    scroll-snap-type:y mandatory;
-    scroll-behavior:smooth;
+/* ================= CATEGORY ================= */
 
-    -webkit-overflow-scrolling:touch;
-
+.category-bar{
+    position:absolute;
+    top:56px;
+    left:0;
+    width:100%;
+    height:42px;
+    z-index:75;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:5px 9px;
+    overflow-x:auto;
+    background:#fff;
+    border-bottom:1px solid #eee;
     scrollbar-width:none;
 }
 
-.news-feed::-webkit-scrollbar{
+.category-bar::-webkit-scrollbar{
     display:none;
 }
 
-/* =========================================================
-   EACH NEWS
-========================================================= */
-
-.news-card{
-    width:100%;
-    min-height:100%;
-    height:100%;
-
-    scroll-snap-align:start;
-    scroll-snap-stop:always;
-
-    display:flex;
-    flex-direction:column;
-
-    padding-bottom:70px;
-
-    background:#fff;
+.category{
+    flex-shrink:0;
+    padding:7px 12px;
+    border-radius:18px;
+    background:#f2f2f2;
+    color:#555;
+    font-size:11px;
+    font-weight:800;
 }
 
-/* =========================================================
-   MEDIA
-========================================================= */
+.category.active{
+    background:#ff416c;
+    color:#fff;
+}
 
-.media-container{
+/* ================= TICKER ================= */
+
+.ticker{
+    position:absolute;
+    top:98px;
+    left:0;
     width:100%;
-    height:250px;
-    min-height:250px;
-
-    background:#111;
-
+    height:29px;
+    z-index:74;
     display:flex;
     align-items:center;
-    justify-content:center;
-
+    background:#111;
+    color:#fff;
     overflow:hidden;
-    position:relative;
+}
 
+.breaking{
+    height:100%;
+    display:flex;
+    align-items:center;
+    padding:0 8px;
+    background:#e60023;
+    font-size:9px;
+    font-weight:900;
     flex-shrink:0;
 }
 
-.media-container img,
-.media-container video{
-    width:100%;
-    height:100%;
-    object-fit:cover;
+.ticker-track{
+    white-space:nowrap;
+    padding-left:12px;
+    font-size:10px;
+    animation:ticker 24s linear infinite;
 }
 
-.media-container video{
+@keyframes ticker{
+    from{
+        transform:translateX(100%);
+    }
+    to{
+        transform:translateX(-100%);
+    }
+}
+
+/* ================= FEED ================= */
+
+.feed{
+    position:absolute;
+    top:127px;
+    left:0;
+    right:0;
+    bottom:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+    scroll-snap-type:y mandatory;
+    scroll-behavior:smooth;
+    scrollbar-width:none;
+    background:#fff;
+}
+
+.feed::-webkit-scrollbar{
+    display:none;
+}
+
+/* ================= NEWS CARD ================= */
+
+.news-card{
+    width:100%;
+    height:calc(100dvh - 127px);
+    min-height:calc(100dvh - 127px);
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    background:#fff;
+    overflow:hidden;
+}
+
+/* MEDIA */
+
+.media{
+    width:100%;
+    height:43%;
+    min-height:210px;
+    max-height:330px;
+    flex-shrink:0;
+    position:relative;
+    overflow:hidden;
     background:#111;
 }
 
-/* =========================================================
-   MEDIA BADGE
-========================================================= */
+.media img,
+.media video{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+}
 
 .media-badge{
     position:absolute;
-    top:12px;
-    right:12px;
-
-    background:rgba(0,0,0,0.65);
+    top:10px;
+    left:10px;
+    padding:5px 8px;
+    border-radius:5px;
+    background:#e60023;
     color:#fff;
-
-    padding:6px 9px;
-    border-radius:20px;
-
-    font-size:11px;
-    font-weight:700;
-
-    z-index:2;
+    font-size:9px;
+    font-weight:900;
 }
 
-/* =========================================================
-   CONTENT
-========================================================= */
+.category-label{
+    position:absolute;
+    bottom:9px;
+    left:10px;
+    padding:5px 9px;
+    border-radius:13px;
+    background:rgba(0,0,0,.7);
+    color:#fff;
+    font-size:10px;
+    font-weight:700;
+}
+
+/* CONTENT */
 
 .news-content{
-    padding:20px;
     flex:1;
-    overflow-y:auto;
+    overflow:hidden;
+    padding:13px 16px 4px;
 }
 
 .news-title{
     font-size:21px;
-    font-weight:800;
-    color:#111;
-    margin-bottom:14px;
-    line-height:1.4;
+    line-height:1.32;
+    font-weight:900;
+    margin-bottom:8px;
 }
 
-.news-text{
-    font-size:15.5px;
+.news-body{
+    font-size:14px;
+    line-height:1.6;
     color:#444;
-    line-height:1.65;
     white-space:pre-line;
-    font-weight:400;
+    overflow:hidden;
 }
-
-/* =========================================================
-   TIME / CATEGORY
-========================================================= */
 
 .news-meta{
     display:flex;
-    align-items:center;
-    gap:8px;
-
-    margin-bottom:12px;
-}
-
-.news-category{
-    display:inline-flex;
-    align-items:center;
-
-    background:#fff1f4;
-    color:#ff416c;
-
-    padding:5px 10px;
-
-    border-radius:20px;
-
-    font-size:11px;
-    font-weight:800;
-}
-
-.news-time{
-    font-size:11px;
+    justify-content:space-between;
+    margin-top:9px;
+    font-size:10px;
     color:#999;
 }
 
-/* =========================================================
-   BOTTOM BAR
-========================================================= */
+/* ================= CARD ACTIONS ================= */
 
-.bottom-bar{
-    position:absolute;
-    bottom:0;
+.card-actions{
+    height:57px;
+    flex-shrink:0;
     width:100%;
-
-    background:#ffffff;
-
-    border-top:1px solid #f0f0f0;
-
+    border-top:1px solid #eee;
+    background:#fff;
     display:flex;
+    align-items:center;
     justify-content:space-around;
-    align-items:center;
-
-    padding:10px 0;
-
-    box-shadow:0 -4px 12px rgba(0,0,0,0.03);
-
-    z-index:20;
 }
 
-.action-btn{
-    background:none;
-    border:none;
-
+.card-action{
+    min-width:48px;
+    height:48px;
+    background:transparent;
     display:flex;
+    flex-direction:column;
+    justify-content:center;
     align-items:center;
-
-    gap:6px;
-
+    gap:3px;
     color:#666;
-
-    font-size:14px;
-    font-weight:600;
-
-    cursor:pointer;
-
-    outline:none;
-
-    transition:0.2s;
+    font-size:10px;
+    font-weight:700;
 }
 
-.action-btn i{
-    font-size:20px;
+.card-action i{
+    font-size:18px;
 }
 
-.action-btn:active{
-    transform:scale(0.92);
-}
-
-.action-btn.active-like{
+.card-action.like.active{
     color:#2e7d32;
 }
 
-.action-btn.active-dislike{
+.card-action.dislike.active{
     color:#d32f2f;
 }
 
-.share-btn{
-    background:#25D366;
-    color:white;
-
-    width:44px;
-    height:44px;
-
+.whatsapp-btn{
+    width:42px;
+    height:42px;
     border-radius:50%;
-
+    background:#25D366;
+    color:#fff;
     display:flex;
-    align-items:center;
     justify-content:center;
-
-    border:none;
-
-    cursor:pointer;
-
-    box-shadow:0 4px 10px rgba(37,211,102,0.3);
-
-    transition:transform 0.2s;
+    align-items:center;
+    font-size:20px;
 }
 
-.share-btn:active{
-    transform:scale(0.95);
-}
+/* ================= BOTTOM NAV ================= */
 
-.share-btn i{
-    font-size:22px;
-    color:white;
-}
-
-/* =========================================================
-   COMMENTS
-========================================================= */
-
-.comments-modal{
+.bottom{
     position:absolute;
-
-    bottom:-100%;
-    left:0;
-
-    width:100%;
-    height:65%;
-
-    background:white;
-
-    border-top-left-radius:20px;
-    border-top-right-radius:20px;
-
-    box-shadow:0 -10px 25px rgba(0,0,0,0.15);
-
-    transition:0.3s cubic-bezier(0.4,0,0.2,1);
-
-    padding:18px;
-
-    display:flex;
-    flex-direction:column;
-
-    z-index:100;
-}
-
-.comments-modal.open{
     bottom:0;
+    left:0;
+    right:0;
+    height:0;
+    z-index:70;
+    pointer-events:none;
 }
 
-.modal-header{
+/* ================= LOADING ================= */
+
+.loading{
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#888;
+    font-size:13px;
+}
+
+/* ================= OVERLAY ================= */
+
+.overlay{
+    position:absolute;
+    inset:0;
+    z-index:150;
+    background:rgba(0,0,0,.45);
+    display:none;
+}
+
+.overlay.show{
+    display:block;
+}
+
+/* ================= SIDE MENU ================= */
+
+.side-menu{
+    position:absolute;
+    top:0;
+    right:-88%;
+    width:84%;
+    height:100%;
+    background:#fff;
+    z-index:200;
+    transition:.28s ease;
+    box-shadow:-10px 0 35px rgba(0,0,0,.2);
+}
+
+.side-menu.open{
+    right:0;
+}
+
+.menu-head{
+    padding:18px 15px;
+    border-bottom:1px solid #eee;
     display:flex;
     justify-content:space-between;
     align-items:center;
-
-    font-weight:700;
-
-    border-bottom:1px solid #f0f0f0;
-
-    padding-bottom:12px;
-
-    font-size:16px;
-
-    color:#222;
 }
+
+.menu-user{
+    font-weight:900;
+}
+
+.menu-phone{
+    color:#888;
+    font-size:12px;
+    margin-top:3px;
+}
+
+.close{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#f2f2f2;
+}
+
+.menu-list{
+    padding:10px;
+}
+
+.menu-item{
+    width:100%;
+    min-height:50px;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:12px;
+    border-radius:11px;
+    text-align:left;
+    font-weight:700;
+}
+
+.menu-item i{
+    width:24px;
+    color:#ff416c;
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-100%;
+    max-height:88%;
+    background:#fff;
+    z-index:300;
+    border-radius:20px 20px 0 0;
+    padding:16px;
+    transition:.3s ease;
+    overflow-y:auto;
+}
+
+.modal.open{
+    bottom:0;
+}
+
+.modal-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:17px;
+    font-weight:900;
+    margin-bottom:15px;
+}
+
+.form-group{
+    margin-bottom:12px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:5px;
+    color:#555;
+    font-size:11px;
+    font-weight:800;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+    width:100%;
+    border:1px solid #ddd;
+    background:#fafafa;
+    border-radius:10px;
+    padding:11px;
+    outline:none;
+}
+
+.form-group textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+.file-box{
+    padding:11px;
+    border:1px dashed #ccc;
+    border-radius:10px;
+    background:#fafafa;
+}
+
+.preview{
+    display:none;
+    width:100%;
+    max-height:170px;
+    object-fit:cover;
+    margin-top:8px;
+    border-radius:9px;
+}
+
+.primary{
+    width:100%;
+    height:48px;
+    border-radius:11px;
+    background:linear-gradient(135deg,#ff416c,#ff4b2b);
+    color:#fff;
+    font-weight:900;
+}
+
+.status{
+    min-height:18px;
+    text-align:center;
+    font-size:11px;
+    margin:7px 0;
+}
+
+/* COMMENTS */
 
 .comments-list{
-    flex:1;
-
-    overflow-y:auto;
-
-    margin:12px 0;
+    max-height:330px;
+    overflow:auto;
+    margin-bottom:10px;
 }
 
-.comment-item{
-    font-size:14px;
-
-    padding:10px 12px;
-
-    border-radius:8px;
-
-    background:#f8f9fa;
-
-    margin-bottom:8px;
-
-    color:#333;
+.comment{
+    background:#f5f5f5;
+    padding:10px;
+    border-radius:9px;
+    margin-bottom:7px;
+    font-size:13px;
 }
 
-.comment-item b{
-    color:#111;
-    margin-right:4px;
+.comment b{
+    display:block;
+    margin-bottom:3px;
 }
 
-/* =========================================================
-   COMMENT INPUT
-========================================================= */
-
-.comment-input-sec{
+.comment-form{
     display:flex;
-    gap:8px;
-    margin-top:auto;
+    gap:7px;
 }
 
-.comment-input-sec input{
+.comment-form input{
     flex:1;
-
-    padding:12px;
-
     border:1px solid #ddd;
-
-    border-radius:25px;
-
+    border-radius:22px;
+    padding:10px 13px;
     outline:none;
-
-    font-size:14px;
 }
 
-.comment-input-sec input:focus{
-    border-color:#ff416c;
-}
-
-.comment-input-sec button{
-    padding:0 20px;
-
+.comment-form button{
+    border-radius:22px;
+    padding:0 15px;
     background:#ff416c;
-
-    color:white;
-
-    border:none;
-
-    border-radius:25px;
-
-    font-weight:600;
-
-    cursor:pointer;
+    color:#fff;
+    font-weight:800;
 }
 
-/* =========================================================
-   LOADING
-========================================================= */
-
-.loading{
-    height:100%;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    flex-direction:column;
-
-    gap:12px;
-
-    color:#777;
-}
-
-.loading i{
-    font-size:25px;
-}
-
-/* =========================================================
-   EMPTY
-========================================================= */
+/* ================= EMPTY ================= */
 
 .empty{
+    width:100%;
     height:100%;
-
     display:flex;
-
-    align-items:center;
     justify-content:center;
-
+    align-items:center;
     text-align:center;
-
-    padding:30px;
-
     color:#777;
+    padding:25px;
 }
 
-/* =========================================================
-   INFO MODAL
-========================================================= */
+/* ================= DESKTOP ================= */
 
-.info-modal{
-    position:absolute;
+@media(min-width:431px){
 
-    left:20px;
-    right:20px;
-
-    top:50%;
-
-    transform:translateY(-50%) scale(.95);
-
-    background:#fff;
-
-    border-radius:18px;
-
-    padding:20px;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.2);
-
-    z-index:150;
-
-    display:none;
-
-    opacity:0;
-
-    transition:.2s;
+    .app{
+        height:100dvh;
+    }
 }
 
-.info-modal.open{
-    display:block;
+/* ================= SMALL SCREEN ================= */
 
-    opacity:1;
+@media(max-height:650px){
 
-    transform:translateY(-50%) scale(1);
-}
-
-.info-title{
-    font-size:18px;
-    font-weight:800;
-
-    margin-bottom:12px;
-
-    color:#111;
-}
-
-.info-text{
-    font-size:14px;
-    color:#555;
-    line-height:1.6;
-}
-
-.info-close{
-    position:absolute;
-
-    top:12px;
-    right:15px;
-
-    border:none;
-    background:none;
-
-    font-size:20px;
-
-    color:#777;
-
-    cursor:pointer;
-}
-
-/* =========================================================
-   ERROR BUTTON
-========================================================= */
-
-.retry-btn{
-    margin-top:15px;
-
-    padding:10px 18px;
-
-    border:none;
-
-    border-radius:20px;
-
-    background:#ff416c;
-
-    color:#fff;
-
-    font-weight:600;
-
-    cursor:pointer;
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:420px){
-
-    body{
-        background:#fff;
+    .media{
+        height:39%;
+        min-height:170px;
     }
 
-    .app-container{
-        border-radius:0;
-
-        max-height:none;
-
-        box-shadow:none;
+    .news-title{
+        font-size:18px;
     }
 
+    .news-body{
+        font-size:13px;
+    }
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="app-container">
+<div class="app">
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
 
-    <div class="header">
+    <div class="login-box">
 
-        <div class="brand">
+        <div class="login-logo">
+            1 MIN
+        </div>
 
-            <span class="brand-icon">
-                1 MIN
-            </span>
-
+        <div class="login-title">
             One Minute News
-
         </div>
 
-        <i
-            class="fa-solid fa-arrows-rotate"
-            onclick="loadNews(true)"
-            style="cursor:pointer;color:#888">
-        </i>
-
-    </div>
-
-
-    <!-- =====================================================
-         NEWS FEED
-    ====================================================== -->
-
-    <div
-        class="news-feed"
-        id="newsFeed">
-
-        <div class="loading">
-
-            <i class="fa-solid fa-spinner fa-spin"></i>
-
-            <span>
-                News loading...
-            </span>
-
+        <div class="login-sub">
+            మీ మొబైల్ నంబర్ నమోదు చేసి కొనసాగండి
         </div>
 
-    </div>
+        <div class="phone-wrap">
 
-
-    <!-- =====================================================
-         BOTTOM ACTION BAR
-    ====================================================== -->
-
-    <div class="bottom-bar">
-
-        <button
-            class="action-btn"
-            id="likeBtn"
-            onclick="handleLike()">
-
-            <i class="fa-regular fa-thumbs-up"></i>
-
-            <span id="likeCount">
-                0
-            </span>
-
-        </button>
-
-
-        <button
-            class="action-btn"
-            id="dislikeBtn"
-            onclick="handleDislike()">
-
-            <i class="fa-regular fa-thumbs-down"></i>
-
-            <span id="dislikeCount">
-                0
-            </span>
-
-        </button>
-
-
-        <button
-            class="share-btn"
-            onclick="handleShare()">
-
-            <i class="fa-brands fa-whatsapp"></i>
-
-        </button>
-
-
-        <button
-            class="action-btn"
-            onclick="toggleComments()">
-
-            <i class="fa-regular fa-comment"></i>
-
-            <span id="commentCount">
-                0
-            </span>
-
-        </button>
-
-
-        <button
-            class="action-btn"
-            onclick="showCurrentNewsInfo()">
-
-            <i class="fa-solid fa-ellipsis-vertical"></i>
-
-        </button>
-
-    </div>
-
-
-    <!-- =====================================================
-         COMMENTS MODAL
-    ====================================================== -->
-
-    <div
-        class="comments-modal"
-        id="commentsModal">
-
-        <div class="modal-header">
-
-            <span>
-
-                కామెంట్స్
-                (
-                <span id="modalCommentCount">
-                    0
-                </span>
-                )
-
-            </span>
-
-            <i
-                class="fa-solid fa-xmark"
-                onclick="toggleComments()"
-                style="
-                    cursor:pointer;
-                    font-size:18px;
-                    color:#666">
-            </i>
-
-        </div>
-
-
-        <div
-            class="comments-list"
-            id="commentsList">
-
-        </div>
-
-
-        <div class="comment-input-sec">
+            <div class="phone-prefix">
+                +91
+            </div>
 
             <input
-                type="text"
-                id="commentInput"
-                placeholder="మీ అభిప్రాయాన్ని రాయండి..."
-                onkeydown="if(event.key==='Enter') addComment()">
-
-            <button onclick="addComment()">
-                పంపు
-            </button>
+                id="phoneInput"
+                type="tel"
+                inputmode="numeric"
+                maxlength="10"
+                placeholder="10 digit mobile number"
+                oninput="
+                this.value=this.value
+                .replace(/\D/g,'')
+                .slice(0,10)
+                "
+            >
 
         </div>
 
-    </div>
-
-
-    <!-- =====================================================
-         INFO MODAL
-    ====================================================== -->
-
-    <div
-        class="info-modal"
-        id="infoModal">
-
         <button
-            class="info-close"
-            onclick="closeInfoModal()">
+            class="continue-btn"
+            onclick="mobileLogin()">
 
-            <i class="fa-solid fa-xmark"></i>
+            Continue
 
         </button>
 
         <div
-            class="info-title"
-            id="infoTitle">
-            News
-        </div>
-
-        <div
-            class="info-text"
-            id="infoText">
+            class="login-error"
+            id="loginError">
         </div>
 
     </div>
 
 </div>
 
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="brand">
+
+        <span class="brand-icon">
+            1 MIN
+        </span>
+
+        <span>
+            One Minute News
+        </span>
+
+    </div>
+
+    <div class="header-actions">
+
+        <button
+            class="icon-btn"
+            onclick="openSearch()">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+        </button>
+
+        <button
+            class="icon-btn"
+            onclick="loadNews()">
+
+            <i class="fa-solid fa-arrows-rotate"></i>
+
+        </button>
+
+        <button
+            class="icon-btn"
+            onclick="openMenu()">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+    </div>
+
+</header>
+
+<!-- CATEGORY -->
+
+<div class="category-bar">
+
+    <button
+        class="category active"
+        onclick="filterCategory('All',this)">
+        అన్ని
+    </button>
+
+    <button
+        class="category"
+        onclick="filterCategory('Business',this)">
+        బిజినెస్
+    </button>
+
+    <button
+        class="category"
+        onclick="filterCategory('Sports',this)">
+        స్పోర్ట్స్
+    </button>
+
+    <button
+        class="category"
+        onclick="filterCategory('Cinema',this)">
+        సినిమా
+    </button>
+
+    <button
+        class="category"
+        onclick="filterCategory('Tech',this)">
+        టెక్
+    </button>
+
+    <button
+        class="category"
+        onclick="filterCategory('Politics',this)">
+        పాలిటిక్స్
+    </button>
+
+    <button
+        class="category"
+        onclick="filterCategory('Local',this)">
+        లోకల్
+    </button>
+
+</div>
+
+<!-- TICKER -->
+
+<div class="ticker">
+
+    <div class="breaking">
+        BREAKING
+    </div>
+
+    <div
+        class="ticker-track"
+        id="tickerText">
+        తాజా వార్తలు One Minute Newsలో...
+    </div>
+
+</div>
+
+<!-- NEWS FEED -->
+
+<main
+    class="feed"
+    id="feed">
+
+    <div class="loading">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        &nbsp; వార్తలు లోడ్ అవుతున్నాయి...
+    </div>
+
+</main>
+
+<!-- OVERLAY -->
+
+<div
+    class="overlay"
+    id="overlay"
+    onclick="closeAll()">
+</div>
+
+<!-- SIDE MENU -->
+
+<div
+    class="side-menu"
+    id="sideMenu">
+
+    <div class="menu-head">
+
+        <div>
+
+            <div class="menu-user">
+                One Minute Reader
+            </div>
+
+            <div
+                class="menu-phone"
+                id="menuPhone">
+            </div>
+
+        </div>
+
+        <button
+            class="close"
+            onclick="closeAll()">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+    <div class="menu-list">
+
+        <button
+            class="menu-item"
+            onclick="openCreateNews()">
+
+            <i class="fa-solid fa-pen-to-square"></i>
+
+            <span>
+                Create News
+            </span>
+
+        </button>
+
+        <button
+            class="menu-item"
+            onclick="openSuggestion()">
+
+            <i class="fa-regular fa-lightbulb"></i>
+
+            <span>
+                Send Suggestion
+            </span>
+
+        </button>
+
+        <button
+            class="menu-item"
+            onclick="openSearch()">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <span>
+                Search News
+            </span>
+
+        </button>
+
+        <button
+            class="menu-item"
+            onclick="openSaved()">
+
+            <i class="fa-regular fa-bookmark"></i>
+
+            <span>
+                Saved News
+            </span>
+
+        </button>
+
+        <button
+            class="menu-item"
+            onclick="loadNews();closeAll()">
+
+            <i class="fa-solid fa-rotate"></i>
+
+            <span>
+                Refresh News
+            </span>
+
+        </button>
+
+        <button
+            class="menu-item"
+            onclick="logout()">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            <span>
+                Change Mobile Number
+            </span>
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- CREATE NEWS -->
+
+<div
+    class="modal"
+    id="createModal">
+
+    <div class="modal-head">
+
+        <span>
+            Create News
+        </span>
+
+        <button
+            class="close"
+            onclick="closeModal('createModal')">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+    <div class="form-group">
+
+        <label>
+            Category
+        </label>
+
+        <select id="createCategory">
+
+            <option>Local</option>
+            <option>Business</option>
+            <option>Sports</option>
+            <option>Cinema</option>
+            <option>Tech</option>
+            <option>Politics</option>
+            <option>News</option>
+
+        </select>
+
+    </div>
+
+    <div class="form-group">
+
+        <label>
+            Headline
+        </label>
+
+        <input
+            id="createTitle"
+            placeholder="వార్త headline">
+
+    </div>
+
+    <div class="form-group">
+
+        <label>
+            News Details
+        </label>
+
+        <textarea
+            id="createBody"
+            placeholder="వార్త పూర్తి వివరాలు రాయండి...">
+        </textarea>
+
+    </div>
+
+    <div class="form-group">
+
+        <label>
+            Photo / Video
+        </label>
+
+        <div class="file-box">
+
+            <input
+                id="newsFile"
+                type="file"
+                accept="image/*,video/*"
+                onchange="previewNewsFile()">
+
+            <img
+                id="newsPreviewImage"
+                class="preview">
+
+            <video
+                id="newsPreviewVideo"
+                class="preview"
+                controls>
+            </video>
+
+        </div>
+
+    </div>
+
+    <div
+        class="status"
+        id="createStatus">
+    </div>
+
+    <button
+        class="primary"
+        onclick="createNews()">
+
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        Publish News
+
+    </button>
+
+</div>
+
+<!-- SUGGESTION -->
+
+<div
+    class="modal"
+    id="suggestionModal">
+
+    <div class="modal-head">
+
+        <span>
+            Send Suggestion
+        </span>
+
+        <button
+            class="close"
+            onclick="closeModal('suggestionModal')">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+    <div class="form-group">
+
+        <label>
+            Suggestion
+        </label>
+
+        <textarea
+            id="suggestionText"
+            placeholder="మీ suggestion లేదా వార్త ఇక్కడ రాయండి...">
+        </textarea>
+
+    </div>
+
+    <div class="form-group">
+
+        <label>
+            Optional Photo / Video
+        </label>
+
+        <div class="file-box">
+
+            <input
+                id="suggestionFile"
+                type="file"
+                accept="image/*,video/*">
+
+        </div>
+
+    </div>
+
+    <div
+        class="status"
+        id="suggestionStatus">
+    </div>
+
+    <button
+        class="primary"
+        onclick="submitSuggestion()">
+
+        <i class="fa-solid fa-paper-plane"></i>
+        Send Suggestion
+
+    </button>
+
+</div>
+
+<!-- COMMENTS -->
+
+<div
+    class="modal"
+    id="commentsModal">
+
+    <div class="modal-head">
+
+        <span>
+            Comments
+            (<span id="modalCommentCount">0</span>)
+        </span>
+
+        <button
+            class="close"
+            onclick="closeModal('commentsModal')">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+    <div
+        class="comments-list"
+        id="commentsList">
+    </div>
+
+    <div class="comment-form">
+
+        <input
+            id="commentInput"
+            placeholder="మీ comment రాయండి...">
+
+        <button onclick="addComment()">
+            పంపు
+        </button>
+
+    </div>
+
+</div>
+
+<!-- SEARCH -->
+
+<div
+    class="modal"
+    id="searchModal">
+
+    <div class="modal-head">
+
+        <span>
+            Search News
+        </span>
+
+        <button
+            class="close"
+            onclick="closeModal('searchModal')">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+    <div class="form-group">
+
+        <input
+            id="searchInput"
+            placeholder="వార్త search చేయండి..."
+            oninput="searchNews(this.value)">
+
+    </div>
+
+    <div id="searchResults">
+    </div>
+
+</div>
+
+</div>
 
 <script>
 
-/* =========================================================
-   SUPABASE CONFIG
-========================================================= */
+/* ===============================
+   SUPABASE
+================================ */
 
 const SUPABASE_URL =
 "https://eaowxilhfzyukzetgqxo.supabase.co";
@@ -828,2265 +1289,1701 @@ const SUPABASE_KEY =
 "sb_publishable_Z3xsADypaOjX8GEQEOLUdg_vbxynHRx";
 
 const supabaseClient =
-window.supabase.createClient(
+supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
 
+const BUCKET =
+"news-media";
 
-/* =========================================================
-   GLOBAL DATA
-========================================================= */
+/* ===============================
+   STATE
+================================ */
 
-let newsData = [];
+let allNews=[];
+let visibleNews=[];
+let currentCategory="All";
+let currentIndex=0;
+let currentNews=null;
 
-let currentIndex = 0;
+/* ===============================
+   LOGIN
+================================ */
 
-let currentNews = null;
+function mobileLogin(){
 
-let isLiked = false;
+    const input =
+        document.getElementById("phoneInput");
 
-let isDisliked = false;
+    const phone =
+        input.value.trim();
 
-let likes = 0;
+    const error =
+        document.getElementById("loginError");
 
-let dislikes = 0;
+    if(!/^[6-9][0-9]{9}$/.test(phone)){
 
+        error.innerText =
+        "సరైన 10-digit mobile number ఇవ్వండి.";
 
-/* =========================================================
-   DOM
-========================================================= */
-
-const feed =
-document.getElementById("newsFeed");
-
-
-/* =========================================================
-   VALUE FINDER
-========================================================= */
-
-function findValue(row,names){
-
-    for(const name of names){
-
-        if(
-            row &&
-            row[name] !== undefined &&
-            row[name] !== null &&
-            row[name] !== ""
-        ){
-
-            return row[name];
-
-        }
-
+        return;
     }
 
-    return "";
+    localStorage.setItem(
+        "oneMinuteMobile",
+        "+91"+phone
+    );
 
+    document.getElementById(
+        "loginScreen"
+    ).style.display="none";
+
+    document.getElementById(
+        "menuPhone"
+    ).innerText="+91 "+phone;
+
+    loadNews();
 }
 
+function checkLogin(){
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
+    const saved =
+        localStorage.getItem(
+            "oneMinuteMobile"
+        );
 
-function escapeHTML(value){
+    if(saved){
 
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+        document.getElementById(
+            "loginScreen"
+        ).style.display="none";
 
+        document.getElementById(
+            "menuPhone"
+        ).innerText=saved;
+
+        return true;
+    }
+
+    return false;
 }
 
+function logout(){
 
-/* =========================================================
-   ESCAPE ATTRIBUTE
-========================================================= */
+    localStorage.removeItem(
+        "oneMinuteMobile"
+    );
 
-function escapeAttribute(value){
-
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/"/g,"&quot;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;");
-
+    location.reload();
 }
 
-
-/* =========================================================
-   NORMALIZE NEWS
-========================================================= */
+/* ===============================
+   NORMALIZE
+================================ */
 
 function normalizeNews(row){
-
-    const title =
-        findValue(
-            row,
-            [
-                "title",
-                "headline",
-                "news_title",
-                "name"
-            ]
-        );
-
-
-    const body =
-        findValue(
-            row,
-            [
-                "body",
-                "content",
-                "description",
-                "text",
-                "news_body",
-                "article"
-            ]
-        );
-
-
-    const image =
-        findValue(
-            row,
-            [
-                "image_url",
-                "image",
-                "image_src",
-                "imageSrc",
-                "thumbnail",
-                "photo_url"
-            ]
-        );
-
-
-    const video =
-        findValue(
-            row,
-            [
-                "video_url",
-                "video",
-                "video_src",
-                "videoSrc"
-            ]
-        );
-
-
-    const mediaURL =
-        findValue(
-            row,
-            [
-                "media_url"
-            ]
-        );
-
-
-    let mediaType =
-        findValue(
-            row,
-            [
-                "media_type",
-                "mediaType",
-                "type"
-            ]
-        );
-
-
-    let finalImage = image;
-
-    let finalVideo = video;
-
-
-    /*
-       If your Admin stores both image/video
-       inside media_url, detect it here.
-    */
-
-    if(!finalImage && !finalVideo && mediaURL){
-
-        if(
-            /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i
-            .test(mediaURL)
-        ){
-
-            finalVideo = mediaURL;
-
-            mediaType = "video";
-
-        }else{
-
-            finalImage = mediaURL;
-
-            mediaType = "image";
-
-        }
-
-    }
-
-
-    if(!mediaType){
-
-        mediaType =
-            finalVideo
-            ? "video"
-            : "image";
-
-    }
-
-
-    mediaType =
-        String(mediaType).toLowerCase();
-
-
-    if(
-        mediaType === "mp4" ||
-        mediaType === "webm" ||
-        mediaType === "video"
-    ){
-
-        mediaType = "video";
-
-    }else{
-
-        mediaType = "image";
-
-    }
-
-
-    const likesValue =
-        Number(
-            findValue(
-                row,
-                [
-                    "likes",
-                    "like_count",
-                    "likes_count"
-                ]
-            ) || 0
-        );
-
-
-    const dislikesValue =
-        Number(
-            findValue(
-                row,
-                [
-                    "dislikes",
-                    "dislike_count",
-                    "dislikes_count"
-                ]
-            ) || 0
-        );
-
-
-    const commentsValue =
-        Number(
-            findValue(
-                row,
-                [
-                    "comments",
-                    "comment_count",
-                    "comments_count"
-                ]
-            ) || 0
-        );
-
-
-    const category =
-        findValue(
-            row,
-            [
-                "category",
-                "section",
-                "type_category"
-            ]
-        ) || "News";
-
-
-    const createdAt =
-        findValue(
-            row,
-            [
-                "created_at",
-                "published_at",
-                "date"
-            ]
-        );
-
-
-    const id =
-        findValue(
-            row,
-            [
-                "id",
-                "news_id",
-                "uuid"
-            ]
-        );
-
 
     return {
 
         id:
-            id ||
-            crypto.randomUUID(),
+        row.id ??
+        row.news_id ??
+        crypto.randomUUID(),
 
         title:
-            title ||
-            "One Minute News",
+        row.title ??
+        row.headline ??
+        row.news_title ??
+        row.name ??
+        "తాజా వార్త",
 
         body:
-            body ||
-            "News details available soon.",
+        row.body ??
+        row.content ??
+        row.description ??
+        row.text ??
+        row.news_body ??
+        row.article ??
+        "",
 
         image:
-            finalImage,
+        row.image_url ??
+        row.image ??
+        row.image_src ??
+        row.imageSrc ??
+        row.thumbnail ??
+        row.photo_url ??
+        "",
 
         video:
-            finalVideo,
+        row.video_url ??
+        row.video ??
+        row.video_src ??
+        row.videoSrc ??
+        "",
+
+        media:
+        row.media_url ??
+        "",
 
         mediaType:
-            mediaType,
-
-        likes:
-            likesValue,
-
-        dislikes:
-            dislikesValue,
-
-        comments:
-            commentsValue,
+        row.media_type ??
+        row.mediaType ??
+        "",
 
         category:
-            category,
+        row.category ??
+        row.section ??
+        row.type_category ??
+        "News",
 
-        createdAt:
-            createdAt,
+        likes:Number(
+            row.likes ??
+            row.like_count ??
+            row.likes_count ??
+            0
+        ),
 
-        original:
-            row
+        dislikes:Number(
+            row.dislikes ??
+            row.dislike_count ??
+            row.dislikes_count ??
+            0
+        ),
 
+        comments:Number(
+            row.comments ??
+            row.comment_count ??
+            row.comments_count ??
+            0
+        ),
+
+        created:
+        row.created_at ??
+        row.published_at ??
+        row.date ??
+        new Date().toISOString()
     };
-
 }
 
+/* ===============================
+   LOAD
+================================ */
 
-/* =========================================================
-   LOAD NEWS
-========================================================= */
+async function loadNews(){
 
-async function loadNews(forceRefresh=false){
+    const feed =
+        document.getElementById("feed");
 
-    feed.innerHTML = `
-
+    feed.innerHTML=`
         <div class="loading">
-
             <i class="fa-solid fa-spinner fa-spin"></i>
-
-            <span>
-                News loading...
-            </span>
-
+            &nbsp; Loading...
         </div>
-
     `;
-
 
     try{
 
-        /*
-           First try published news.
-        */
+        let result =
+        await supabaseClient
+        .from("news")
+        .select("*")
+        .eq("is_published",true)
+        .order(
+            "created_at",
+            {ascending:false}
+        )
+        .limit(100);
 
-        let response =
+        if(result.error){
+
+            result =
             await supabaseClient
             .from("news")
             .select("*")
-            .eq("is_published",true)
             .order(
                 "created_at",
-                {
-                    ascending:false
-                }
+                {ascending:false}
             )
             .limit(100);
-
-
-        /*
-           If is_published doesn't exist,
-           retry without that filter.
-        */
-
-        if(response.error){
-
-            console.warn(
-                "Published query failed. Retrying simple query...",
-                response.error
-            );
-
-
-            response =
-                await supabaseClient
-                .from("news")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending:false
-                    }
-                )
-                .limit(100);
-
         }
 
+        if(result.error)
+            throw result.error;
 
-        if(response.error){
+        allNews =
+        (result.data||[])
+        .map(normalizeNews);
 
-            throw response.error;
+        applyFilter();
+        updateTicker();
 
-        }
+    }catch(error){
 
+        console.error(error);
 
-        const rows =
-            response.data || [];
-
-
-        newsData =
-            rows
-            .map(normalizeNews)
-            .filter(
-                item =>
-                    item.title ||
-                    item.body ||
-                    item.image ||
-                    item.video
-            );
-
-
-        /*
-           If there are no news records.
-        */
-
-        if(!newsData.length){
-
-            feed.innerHTML = `
-
-                <div class="empty">
-
-                    <div>
-
-                        <i
-                            class="fa-regular fa-newspaper"
-                            style="
-                                font-size:40px;
-                                margin-bottom:15px">
-                        </i>
-
-                        <h3>
-                            News available లేదు
-                        </h3>
-
-                        <p style="margin-top:8px">
-
-                            Supabaseలో news add చేయండి.
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-            `;
-
-            currentNews = null;
-
-            updateCounts();
-
-            return;
-
-        }
-
-
-        currentIndex = 0;
-
-        currentNews = null;
-
-
-        renderNews();
-
-
-    }
-    catch(error){
-
-        console.error(
-            "Supabase News Error:",
-            error
-        );
-
-
-        feed.innerHTML = `
-
+        feed.innerHTML=`
             <div class="empty">
-
                 <div>
-
-                    <i
-                        class="fa-solid fa-triangle-exclamation"
-                        style="
-                            font-size:40px;
-                            margin-bottom:15px">
-                    </i>
-
-                    <h3>
-                        News loading failed
-                    </h3>
-
-                    <p style="
-                        margin-top:8px;
-                        line-height:1.5">
-
-                        Supabase connection లేదా
-                        news table settings check చేయండి.
-
-                    </p>
-
+                    <b>వార్తలు లోడ్ కాలేదు</b>
+                    <br><br>
                     <button
-                        class="retry-btn"
-                        onclick="loadNews(true)">
-
-                        Retry
-
+                    class="primary"
+                    style="max-width:170px"
+                    onclick="loadNews()">
+                    Retry
                     </button>
-
                 </div>
-
             </div>
-
         `;
-
     }
-
 }
 
-
-/* =========================================================
-   RENDER NEWS
-========================================================= */
-
-function renderNews(){
-
-    feed.innerHTML = "";
-
-
-    if(!newsData.length){
-
-        feed.innerHTML = `
-
-            <div class="empty">
-
-                No news available
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    newsData.forEach(
-        (news,index)=>{
-
-            const card =
-                createNewsCard(
-                    news,
-                    index
-                );
-
-            feed.appendChild(card);
-
-        }
-    );
-
-
-    /*
-       Reset to first story.
-    */
-
-    currentIndex = 0;
-
-    feed.scrollTop = 0;
-
-    setCurrentNews(0);
-
-}
-
-
-/* =========================================================
-   CREATE NEWS CARD
-========================================================= */
-
-function createNewsCard(news,index){
-
-    const card =
-        document.createElement("div");
-
-
-    card.className =
-        "news-card";
-
-
-    card.dataset.index =
-        index;
-
-
-    let mediaHTML = "";
-
-
-    /*
-       VIDEO
-    */
-
-    if(
-        news.mediaType === "video" &&
-        news.video
-    ){
-
-        mediaHTML = `
-
-            <span class="media-badge">
-
-                <i class="fa-solid fa-play"></i>
-                VIDEO
-
-            </span>
-
-            <video
-                src="${escapeAttribute(news.video)}"
-                controls
-                muted
-                loop
-                playsinline
-                preload="${index === 0 ? "auto" : "metadata"}">
-            </video>
-
-        `;
-
-    }
-
-
-    /*
-       IMAGE
-    */
-
-    else if(news.image){
-
-        mediaHTML = `
-
-            <img
-                src="${escapeAttribute(news.image)}"
-                alt="News Image"
-                loading="${
-                    index === 0
-                    ? "eager"
-                    : "lazy"
-                }"
-                onerror="this.style.display='none';this.parentElement.classList.add('media-error')">
-
-        `;
-
-    }
-
-
-    /*
-       NO MEDIA
-    */
-
-    else{
-
-        mediaHTML = `
-
-            <div
-                style="
-                    color:#fff;
-                    font-size:40px;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    width:100%;
-                    height:100%;
-                ">
-
-                <i
-                    class="fa-regular fa-newspaper">
-                </i>
-
-            </div>
-
-        `;
-
-    }
-
-
-    const formattedTime =
-        formatDate(
-            news.createdAt
-        );
-
-
-    card.innerHTML = `
-
-        <div class="media-container">
-
-            ${mediaHTML}
-
-        </div>
-
-
-        <div class="news-content">
-
-            <div class="news-meta">
-
-                <span class="news-category">
-
-                    ${escapeHTML(
-                        news.category
-                    )}
-
-                </span>
-
-                ${
-                    formattedTime
-                    ?
-                    `
-                    <span class="news-time">
-                        ${escapeHTML(
-                            formattedTime
-                        )}
-                    </span>
-                    `
-                    :
-                    ""
-                }
-
-            </div>
-
-
-            <h2 class="news-title">
-
-                ${escapeHTML(
-                    news.title
-                )}
-
-            </h2>
-
-
-            <p class="news-text">
-
-                ${escapeHTML(
-                    news.body
-                )}
-
-            </p>
-
-        </div>
-
-    `;
-
-
-    return card;
-
-}
-
-
-/* =========================================================
-   FORMAT DATE
-========================================================= */
-
-function formatDate(dateValue){
-
-    if(!dateValue){
-
-        return "";
-
-    }
-
-
-    try{
-
-        const date =
-            new Date(dateValue);
-
-
-        if(isNaN(date.getTime())){
-
-            return "";
-
-        }
-
-
-        return date.toLocaleString(
-            "te-IN",
-            {
-                day:"2-digit",
-                month:"short",
-                hour:"2-digit",
-                minute:"2-digit"
-            }
-        );
-
-    }
-    catch(error){
-
-        return "";
-
-    }
-
-}
-
-
-/* =========================================================
-   SET CURRENT NEWS
-========================================================= */
-
-function setCurrentNews(index){
-
-    if(!newsData[index]){
-
-        return;
-
-    }
-
-
-    currentIndex =
-        index;
-
-
-    currentNews =
-        newsData[index];
-
-
-    /*
-       Database counts
-    */
-
-    likes =
-        Number(
-            currentNews.likes || 0
-        );
-
-
-    dislikes =
-        Number(
-            currentNews.dislikes || 0
-        );
-
-
-    /*
-       Load local user reaction
-    */
-
-    const reaction =
-        getReaction(
-            currentNews.id
-        );
-
-
-    isLiked =
-        reaction === "like";
-
-
-    isDisliked =
-        reaction === "dislike";
-
-
-    updateReactionButtons();
-
-    updateCounts();
-
-
-    loadComments();
-
-
-    /*
-       Pause all videos.
-    */
-
-    document
-    .querySelectorAll(
-        ".news-card video"
-    )
-    .forEach(
-        video=>{
-
-            video.pause();
-
-        }
-    );
-
-
-    /*
-       Play current video.
-    */
-
-    const currentCard =
-        document.querySelector(
-            `.news-card[data-index="${index}"]`
-        );
-
-
-    if(currentCard){
-
-        const video =
-            currentCard.querySelector(
-                "video"
-            );
-
-
-        if(video){
-
-            video.play()
-                .catch(
-                    ()=>{}
-                );
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   SCROLL DETECTION
-========================================================= */
-
-feed.addEventListener(
-    "scroll",
-    ()=>{
-
-        const cards =
-            document.querySelectorAll(
-                ".news-card"
-            );
-
-
-        if(!cards.length){
-
-            return;
-
-        }
-
-
-        const height =
-            feed.clientHeight;
-
-
-        if(height <= 0){
-
-            return;
-
-        }
-
-
-        const index =
-            Math.round(
-                feed.scrollTop / height
-            );
-
-
-        const safeIndex =
-            Math.max(
-                0,
-                Math.min(
-                    index,
-                    cards.length - 1
-                )
-            );
-
-
-        if(
-            safeIndex !== currentIndex
-        ){
-
-            setCurrentNews(
-                safeIndex
-            );
-
-        }
-
-    },
-    {
-        passive:true
-    }
-);
-
-
-/* =========================================================
-   TOUCH SWIPE
-========================================================= */
-
-let touchStartY = 0;
-
-let touchEndY = 0;
-
-
-feed.addEventListener(
-    "touchstart",
-    e=>{
-
-        if(
-            e.changedTouches &&
-            e.changedTouches[0]
-        ){
-
-            touchStartY =
-                e.changedTouches[0].screenY;
-
-        }
-
-    },
-    {
-        passive:true
-    }
-);
-
-
-feed.addEventListener(
-    "touchend",
-    e=>{
-
-        if(
-            !e.changedTouches ||
-            !e.changedTouches[0]
-        ){
-
-            return;
-
-        }
-
-
-        touchEndY =
-            e.changedTouches[0].screenY;
-
-
-        const difference =
-            touchStartY - touchEndY;
-
-
-        /*
-           Strong swipe.
-        */
-
-        if(
-            Math.abs(difference) > 50
-        ){
-
-            if(difference > 0){
-
-                goToNews(
-                    currentIndex + 1
-                );
-
-            }
-            else{
-
-                goToNews(
-                    currentIndex - 1
-                );
-
-            }
-
-        }
-
-    },
-    {
-        passive:true
-    }
-);
-
-
-/* =========================================================
-   GO TO NEWS
-========================================================= */
-
-function goToNews(index){
-
-    if(!newsData.length){
-
-        return;
-
-    }
-
-
-    index =
-        Math.max(
-            0,
-            Math.min(
-                index,
-                newsData.length - 1
-            )
-        );
-
-
-    const card =
-        document.querySelector(
-            `.news-card[data-index="${index}"]`
-        );
-
-
-    if(card){
-
-        card.scrollIntoView({
-            behavior:"smooth",
-            block:"start"
-        });
-
-
-        setCurrentNews(
-            index
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   UPDATE COUNTS
-========================================================= */
-
-function updateCounts(){
-
-    document.getElementById(
-        "likeCount"
-    ).textContent =
-        formatCount(
-            likes
-        );
-
-
-    document.getElementById(
-        "dislikeCount"
-    ).textContent =
-        formatCount(
-            dislikes
-        );
-
-
-    const commentCount =
-        currentNews
-        ? Number(
-            currentNews.comments || 0
-          )
-        : 0;
-
-
-    document.getElementById(
-        "commentCount"
-    ).textContent =
-        formatCount(
-            commentCount
-        );
-
-
-    document.getElementById(
-        "modalCommentCount"
-    ).textContent =
-        formatCount(
-            commentCount
-        );
-
-}
-
-
-/* =========================================================
-   FORMAT COUNT
-========================================================= */
-
-function formatCount(number){
-
-    number =
-        Number(number || 0);
-
-
-    if(number >= 1000000){
-
-        return (
-            (number / 1000000)
-            .toFixed(1)
-            .replace(".0","")
-            + "M"
-        );
-
-    }
-
-
-    if(number >= 1000){
-
-        return (
-            (number / 1000)
-            .toFixed(1)
-            .replace(".0","")
-            + "K"
-        );
-
-    }
-
-
-    return String(number);
-
-}
-
-
-/* =========================================================
-   REACTION BUTTONS
-========================================================= */
-
-function updateReactionButtons(){
-
-    const likeBtn =
-        document.getElementById(
-            "likeBtn"
-        );
-
-
-    const dislikeBtn =
-        document.getElementById(
-            "dislikeBtn"
-        );
-
-
-    likeBtn.classList.toggle(
-        "active-like",
-        isLiked
-    );
-
-
-    dislikeBtn.classList.toggle(
-        "active-dislike",
-        isDisliked
-    );
-
-
-    const likeIcon =
-        likeBtn.querySelector("i");
-
-
-    const dislikeIcon =
-        dislikeBtn.querySelector("i");
-
-
-    if(isLiked){
-
-        likeIcon.className =
-            "fa-solid fa-thumbs-up";
-
-    }
-    else{
-
-        likeIcon.className =
-            "fa-regular fa-thumbs-up";
-
-    }
-
-
-    if(isDisliked){
-
-        dislikeIcon.className =
-            "fa-solid fa-thumbs-down";
-
-    }
-    else{
-
-        dislikeIcon.className =
-            "fa-regular fa-thumbs-down";
-
-    }
-
-}
-
-
-/* =========================================================
-   LOCAL REACTION
-========================================================= */
-
-function getReaction(id){
-
-    try{
-
-        return localStorage.getItem(
-            "oneMinuteReaction_" + id
-        ) || "";
-
-    }
-    catch(error){
-
-        return "";
-
-    }
-
-}
-
-
-function saveReaction(
-    id,
-    reaction
+/* ===============================
+   FILTER
+================================ */
+
+function filterCategory(
+    category,
+    button
 ){
 
-    try{
+    currentCategory=category;
 
-        if(reaction){
+    document
+    .querySelectorAll(".category")
+    .forEach(x=>{
+        x.classList.remove("active");
+    });
 
-            localStorage.setItem(
-                "oneMinuteReaction_" + id,
-                reaction
-            );
+    button.classList.add("active");
 
-        }
-        else{
-
-            localStorage.removeItem(
-                "oneMinuteReaction_" + id
-            );
-
-        }
-
-    }
-    catch(error){}
-
+    applyFilter();
 }
 
+function applyFilter(){
 
-/* =========================================================
-   LIKE
-========================================================= */
+    if(currentCategory==="All"){
 
-async function handleLike(){
+        visibleNews=[
+            ...allNews
+        ];
 
-    if(!currentNews){
+    }else{
+
+        visibleNews=
+        allNews.filter(n=>
+            String(n.category)
+            .toLowerCase()===
+            currentCategory.toLowerCase()
+        );
+    }
+
+    renderFeed();
+}
+
+/* ===============================
+   RENDER
+================================ */
+
+function renderFeed(){
+
+    const feed =
+        document.getElementById("feed");
+
+    if(!visibleNews.length){
+
+        feed.innerHTML=`
+            <div class="empty">
+                ఈ categoryలో వార్తలు లేవు.
+            </div>
+        `;
 
         return;
-
     }
 
+    feed.innerHTML=
+    visibleNews
+    .map((news,index)=>{
 
-    /*
-       Already liked -> remove like
-    */
+        const media =
+            getMediaHtml(news);
 
-    if(isLiked){
-
-        likes =
-            Math.max(
-                0,
-                likes - 1
+        const reaction =
+            localStorage.getItem(
+                "reaction_"+news.id
             );
 
-        isLiked = false;
+        return `
 
-        saveReaction(
-            currentNews.id,
-            ""
-        );
+        <article
+            class="news-card"
+            data-index="${index}">
 
-    }
+            <div class="media">
 
+                ${media}
 
-    /*
-       Not liked -> add like
-    */
+                <div class="media-badge">
+                    ${index===0?"LATEST":"NEWS"}
+                </div>
 
-    else{
+                <div class="category-label">
+                    ${escapeHtml(news.category)}
+                </div>
 
-        likes =
-            likes + 1;
+            </div>
 
-        isLiked = true;
+            <div class="news-content">
 
+                <h2 class="news-title">
+                    ${escapeHtml(news.title)}
+                </h2>
 
-        /*
-           If disliked before,
-           remove dislike.
-        */
+                <p class="news-body">
+                    ${escapeHtml(news.body)}
+                </p>
 
-        if(isDisliked){
+                <div class="news-meta">
 
-            dislikes =
-                Math.max(
-                    0,
-                    dislikes - 1
-                );
+                    <span>
+                        ${timeAgo(news.created)}
+                    </span>
 
-            isDisliked = false;
+                    <span>
+                        One Minute News
+                    </span>
 
-        }
+                </div>
 
+            </div>
 
-        saveReaction(
-            currentNews.id,
-            "like"
-        );
+            <div class="card-actions">
 
-    }
+                <button
+                    class="card-action ${
+                    reaction==="like"
+                    ?"like active":""
+                    }"
+                    data-action="like">
 
+                    <i class="fa-regular fa-thumbs-up"></i>
 
-    currentNews.likes =
-        likes;
+                    <span>
+                        ${news.likes}
+                    </span>
 
-    currentNews.dislikes =
-        dislikes;
+                </button>
 
+                <button
+                    class="card-action ${
+                    reaction==="dislike"
+                    ?"dislike active":""
+                    }"
+                    data-action="dislike">
 
-    updateReactionButtons();
+                    <i class="fa-regular fa-thumbs-down"></i>
 
-    updateCounts();
+                    <span>
+                        ${news.dislikes}
+                    </span>
 
+                </button>
 
-    /*
-       Update database if columns exist.
-    */
+                <button
+                    class="whatsapp-btn"
+                    data-action="share">
 
-    await updateReactionDatabase();
+                    <i class="fa-brands fa-whatsapp"></i>
 
+                </button>
+
+                <button
+                    class="card-action"
+                    data-action="comment">
+
+                    <i class="fa-regular fa-comment"></i>
+
+                    <span>
+                        ${news.comments}
+                    </span>
+
+                </button>
+
+                <button
+                    class="card-action"
+                    data-action="save">
+
+                    <i class="fa-regular fa-bookmark"></i>
+
+                    <span>
+                        Save
+                    </span>
+
+                </button>
+
+            </div>
+
+        </article>
+
+        `;
+
+    }).join("");
+
+    currentIndex=0;
+
+    attachScroll();
 }
 
+/* ===============================
+   MEDIA
+================================ */
 
-/* =========================================================
-   DISLIKE
-========================================================= */
+function getMediaHtml(news){
 
-async function handleDislike(){
+    let url="";
+    let type="";
 
-    if(!currentNews){
+    if(news.video){
 
-        return;
+        url=news.video;
+        type="video";
 
+    }else if(news.image){
+
+        url=news.image;
+        type="image";
+
+    }else if(news.media){
+
+        url=news.media;
+        type=
+        news.mediaType ||
+        detectMediaType(url);
     }
 
+    if(!url){
 
-    /*
-       Already disliked
-    */
-
-    if(isDisliked){
-
-        dislikes =
-            Math.max(
-                0,
-                dislikes - 1
-            );
-
-        isDisliked = false;
-
-
-        saveReaction(
-            currentNews.id,
-            ""
-        );
-
+        return `
+            <div style="
+                width:100%;
+                height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                color:#aaa;
+                font-size:50px">
+                <i class="fa-regular fa-newspaper"></i>
+            </div>
+        `;
     }
 
+    if(
+        type==="video" ||
+        isVideo(url)
+    ){
 
-    else{
-
-        dislikes =
-            dislikes + 1;
-
-        isDisliked = true;
-
-
-        /*
-           Remove like
-        */
-
-        if(isLiked){
-
-            likes =
-                Math.max(
-                    0,
-                    likes - 1
-                );
-
-            isLiked = false;
-
-        }
-
-
-        saveReaction(
-            currentNews.id,
-            "dislike"
-        );
-
+        return `
+            <video
+                src="${escapeAttr(url)}"
+                controls
+                playsinline
+                preload="metadata">
+            </video>
+        `;
     }
 
-
-    currentNews.likes =
-        likes;
-
-    currentNews.dislikes =
-        dislikes;
-
-
-    updateReactionButtons();
-
-    updateCounts();
-
-
-    await updateReactionDatabase();
-
-}
-
-
-/* =========================================================
-   UPDATE REACTION DATABASE
-========================================================= */
-
-async function updateReactionDatabase(){
-
-    if(!currentNews){
-
-        return;
-
-    }
-
-
-    try{
-
-        const id =
-            currentNews.id;
-
-
-        /*
-           Try updating likes/dislikes.
-        */
-
-        const response =
-            await supabaseClient
-            .from("news")
-            .update({
-                likes:likes,
-                dislikes:dislikes
-            })
-            .eq(
-                "id",
-                id
-            );
-
-
-        if(response.error){
-
-            /*
-               Do not break UI if these
-               optional columns don't exist.
-            */
-
-            console.warn(
-                "Reaction database update skipped:",
-                response.error.message
-            );
-
-        }
-
-    }
-    catch(error){
-
-        console.warn(
-            "Reaction update failed:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   COMMENTS
-========================================================= */
-
-function getCommentStorageKey(){
-
-    if(!currentNews){
-
-        return null;
-
-    }
-
-
-    return (
-        "oneMinuteComments_" +
-        currentNews.id
-    );
-
-}
-
-
-/* =========================================================
-   LOAD COMMENTS
-========================================================= */
-
-async function loadComments(){
-
-    const list =
-        document.getElementById(
-            "commentsList"
-        );
-
-
-    list.innerHTML = `
-
-        <div
-            style="
-                text-align:center;
-                color:#999;
-                padding:20px">
-
-            Comments loading...
-
-        </div>
-
+    return `
+        <img
+            src="${escapeAttr(url)}"
+            alt="News"
+            loading="lazy"
+            onerror="
+            this.style.display='none'
+            ">
     `;
+}
 
+function detectMediaType(url){
 
-    /*
-       This first checks if a comments table exists.
-       If not, localStorage comments are used.
-    */
+    return isVideo(url)
+        ?"video"
+        :"image";
+}
 
-    try{
+function isVideo(url){
 
-        const response =
-            await supabaseClient
-            .from("comments")
-            .select("*")
-            .eq(
-                "news_id",
-                currentNews.id
-            )
-            .order(
-                "created_at",
-                {
-                    ascending:true
-                }
-            );
+    return /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i
+    .test(url);
+}
 
+/* ===============================
+   SCROLL
+================================ */
 
-        if(
-            !response.error &&
-            response.data
-        ){
+function attachScroll(){
 
-            renderComments(
-                response.data
-            );
+    const feed =
+        document.getElementById("feed");
 
+    feed.onscroll=()=>{
+
+        const cards =
+        [...document.querySelectorAll(
+            ".news-card"
+        )];
+
+        if(!cards.length)
             return;
 
-        }
+        let best=0;
+        let distance=Infinity;
 
-    }
-    catch(error){
+        cards.forEach((card,i)=>{
 
-        console.warn(
-            "Comments table unavailable."
-        );
+            const d=
+            Math.abs(
+                card.offsetTop-
+                feed.scrollTop
+            );
 
-    }
+            if(d<distance){
 
+                distance=d;
+                best=i;
+            }
+        });
 
-    /*
-       Local comments fallback.
-    */
-
-    const localComments =
-        getLocalComments();
-
-
-    renderComments(
-        localComments
-    );
-
+        currentIndex=best;
+        currentNews=
+            visibleNews[best]||null;
+    };
 }
 
+/* ===============================
+   LIKE
+================================ */
 
-/* =========================================================
-   LOCAL COMMENTS
-========================================================= */
+async function handleLike(index){
 
-function getLocalComments(){
+    const news=
+        visibleNews[index];
 
-    const key =
-        getCommentStorageKey();
+    if(!news) return;
 
+    const key=
+        "reaction_"+news.id;
 
-    if(!key){
+    const old=
+        localStorage.getItem(key);
 
-        return [];
+    if(old==="like"){
 
-    }
+        news.likes--;
 
+        localStorage.removeItem(key);
 
-    try{
+    }else{
 
-        return JSON.parse(
-            localStorage.getItem(key)
-        ) || [];
+        if(old==="dislike")
+            news.dislikes--;
 
-    }
-    catch(error){
-
-        return [];
-
-    }
-
-}
-
-
-/* =========================================================
-   SAVE LOCAL COMMENTS
-========================================================= */
-
-function saveLocalComments(comments){
-
-    const key =
-        getCommentStorageKey();
-
-
-    if(!key){
-
-        return;
-
-    }
-
-
-    try{
+        news.likes++;
 
         localStorage.setItem(
             key,
-            JSON.stringify(comments)
+            "like"
         );
-
-    }
-    catch(error){}
-
-}
-
-
-/* =========================================================
-   RENDER COMMENTS
-========================================================= */
-
-function renderComments(comments){
-
-    const list =
-        document.getElementById(
-            "commentsList"
-        );
-
-
-    if(!comments || !comments.length){
-
-        list.innerHTML = `
-
-            <div
-                style="
-                    text-align:center;
-                    color:#999;
-                    padding:30px 10px">
-
-                <i
-                    class="fa-regular fa-comment"
-                    style="
-                        font-size:30px;
-                        margin-bottom:10px">
-                </i>
-
-                <div>
-                    ఇంకా కామెంట్స్ లేవు
-                </div>
-
-            </div>
-
-        `;
-
-        updateCommentCount(
-            0
-        );
-
-        return;
-
     }
 
-
-    list.innerHTML = "";
-
-
-    comments.forEach(
-        comment=>{
-
-            const text =
-                findValue(
-                    comment,
-                    [
-                        "comment",
-                        "text",
-                        "content",
-                        "message"
-                    ]
-                );
-
-
-            const name =
-                findValue(
-                    comment,
-                    [
-                        "name",
-                        "user_name",
-                        "username"
-                    ]
-                ) ||
-                "Reader";
-
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-
-            item.className =
-                "comment-item";
-
-
-            item.innerHTML = `
-
-                <b>
-                    ${escapeHTML(name)}
-                </b>
-
-                ${escapeHTML(text)}
-
-            `;
-
-
-            list.appendChild(
-                item
-            );
-
-        }
-    );
-
-
-    updateCommentCount(
-        comments.length
-    );
-
-}
-
-
-/* =========================================================
-   UPDATE COMMENT COUNT
-========================================================= */
-
-function updateCommentCount(count){
-
-    if(currentNews){
-
-        currentNews.comments =
-            Number(count || 0);
-
-    }
-
-
-    document.getElementById(
-        "commentCount"
-    ).textContent =
-        formatCount(
-            count
-        );
-
-
-    document.getElementById(
-        "modalCommentCount"
-    ).textContent =
-        formatCount(
-            count
-        );
-
-}
-
-
-/* =========================================================
-   ADD COMMENT
-========================================================= */
-
-async function addComment(){
-
-    if(!currentNews){
-
-        return;
-
-    }
-
-
-    const input =
-        document.getElementById(
-            "commentInput"
-        );
-
-
-    const text =
-        input.value.trim();
-
-
-    if(!text){
-
-        return;
-
-    }
-
-
-    input.disabled = true;
-
-
-    /*
-       Try Supabase comments table.
-    */
-
-    let savedOnline = false;
-
+    renderFeed();
 
     try{
-
-        const response =
-            await supabaseClient
-            .from("comments")
-            .insert({
-
-                news_id:
-                    currentNews.id,
-
-                comment:
-                    text,
-
-                name:
-                    "Reader"
-
-            });
-
-
-        if(!response.error){
-
-            savedOnline = true;
-
-        }
-
-    }
-    catch(error){
-
-        savedOnline = false;
-
-    }
-
-
-    /*
-       Local fallback.
-    */
-
-    if(!savedOnline){
-
-        const comments =
-            getLocalComments();
-
-
-        comments.push({
-
-            id:
-                crypto.randomUUID(),
-
-            news_id:
-                currentNews.id,
-
-            name:
-                "Reader",
-
-            comment:
-                text,
-
-            created_at:
-                new Date().toISOString()
-
-        });
-
-
-        saveLocalComments(
-            comments
-        );
-
-
-        renderComments(
-            comments
-        );
-
-    }
-    else{
-
-        await loadComments();
-
-    }
-
-
-    input.value = "";
-
-    input.disabled = false;
-
-
-    /*
-       Try updating news comment count.
-    */
-
-    try{
-
-        const newCount =
-            Number(
-                currentNews.comments || 0
-            ) + 1;
-
-
-        currentNews.comments =
-            newCount;
-
 
         await supabaseClient
         .from("news")
         .update({
-            comments:newCount
+            likes:Math.max(0,news.likes),
+            dislikes:Math.max(0,news.dislikes)
         })
-        .eq(
-            "id",
-            currentNews.id
-        );
+        .eq("id",news.id);
 
-    }
-    catch(error){}
-
-
-    updateCounts();
-
+    }catch(e){}
 }
 
+/* ===============================
+   DISLIKE
+================================ */
 
-/* =========================================================
-   COMMENTS MODAL
-========================================================= */
+async function handleDislike(index){
 
-function toggleComments(){
+    const news=
+        visibleNews[index];
 
-    const modal =
-        document.getElementById(
-            "commentsModal"
+    if(!news) return;
+
+    const key=
+        "reaction_"+news.id;
+
+    const old=
+        localStorage.getItem(key);
+
+    if(old==="dislike"){
+
+        news.dislikes--;
+
+        localStorage.removeItem(key);
+
+    }else{
+
+        if(old==="like")
+            news.likes--;
+
+        news.dislikes++;
+
+        localStorage.setItem(
+            key,
+            "dislike"
         );
-
-
-    modal.classList.toggle(
-        "open"
-    );
-
-
-    if(
-        modal.classList.contains("open")
-    ){
-
-        loadComments();
-
-
-        setTimeout(
-            ()=>{
-                document
-                .getElementById(
-                    "commentInput"
-                )
-                .focus();
-            },
-            300
-        );
-
     }
 
+    renderFeed();
+
+    try{
+
+        await supabaseClient
+        .from("news")
+        .update({
+            likes:Math.max(0,news.likes),
+            dislikes:Math.max(0,news.dislikes)
+        })
+        .eq("id",news.id);
+
+    }catch(e){}
 }
 
+/* ===============================
+   SHARE
+================================ */
 
-/* =========================================================
-   WHATSAPP SHARE
-========================================================= */
+function shareNews(index){
 
-function handleShare(){
+    const news=
+        visibleNews[index];
 
-    if(!currentNews){
+    if(!news) return;
 
-        return;
-
-    }
-
-
-    const title =
-        currentNews.title ||
-        "One Minute News";
-
-
-    const text =
-        title +
-        "\n\nRead on One Minute News";
-
-
-    const encoded =
-        encodeURIComponent(
-            text
-        );
-
-
-    const whatsappURL =
-        "https://wa.me/?text=" +
-        encoded;
-
+    const text=
+        news.title+
+        "\n\n"+
+        news.body+
+        "\n\nOne Minute News";
 
     window.open(
-        whatsappURL,
+        "https://api.whatsapp.com/send?text="+
+        encodeURIComponent(text),
         "_blank"
     );
-
-
 }
 
+/* ===============================
+   COMMENTS
+================================ */
 
-/* =========================================================
-   INFO MODAL
-========================================================= */
+async function openComments(index){
 
-function showCurrentNewsInfo(){
+    currentNews=
+        visibleNews[index];
 
-    if(!currentNews){
-
+    if(!currentNews)
         return;
 
-    }
+    document
+    .getElementById("commentsModal")
+    .classList.add("open");
 
+    document
+    .getElementById("overlay")
+    .classList.add("show");
 
-    const modal =
-        document.getElementById(
-            "infoModal"
-        );
-
-
-    const title =
-        document.getElementById(
-            "infoTitle"
-        );
-
-
-    const text =
-        document.getElementById(
-            "infoText"
-        );
-
-
-    title.textContent =
-        currentNews.title;
-
-
-    text.innerHTML = `
-
-        <strong>Category:</strong>
-        ${escapeHTML(
-            currentNews.category
-        )}
-
-        <br><br>
-
-        <strong>Likes:</strong>
-        ${formatCount(
-            currentNews.likes
-        )}
-
-        <br>
-
-        <strong>Dislikes:</strong>
-        ${formatCount(
-            currentNews.dislikes
-        )}
-
-        <br>
-
-        <strong>Comments:</strong>
-        ${formatCount(
-            currentNews.comments
-        )}
-
-    `;
-
-
-    modal.classList.add(
-        "open"
-    );
-
+    await loadComments();
 }
 
+async function loadComments(){
 
-function closeInfoModal(){
+    const list=
+        document.getElementById(
+            "commentsList"
+        );
+
+    list.innerHTML=
+        `<div class="loading">
+            Loading...
+        </div>`;
+
+    try{
+
+        const result=
+        await supabaseClient
+        .from("comments")
+        .select("*")
+        .eq(
+            "news_id",
+            currentNews.id
+        )
+        .order(
+            "created_at",
+            {ascending:true}
+        );
+
+        if(result.error)
+            throw result.error;
+
+        const rows=
+            result.data||[];
+
+        document
+        .getElementById(
+            "modalCommentCount"
+        )
+        .innerText=rows.length;
+
+        if(!rows.length){
+
+            list.innerHTML=
+            `<div style="
+                text-align:center;
+                color:#999;
+                padding:30px">
+                ఇంకా comments లేవు.
+            </div>`;
+
+            return;
+        }
+
+        list.innerHTML=
+        rows.map(c=>`
+            <div class="comment">
+                <b>
+                    ${escapeHtml(
+                        c.name||"Reader"
+                    )}
+                </b>
+                ${escapeHtml(
+                    c.comment||""
+                )}
+            </div>
+        `).join("");
+
+    }catch(e){
+
+        list.innerHTML=
+        `<div style="
+            text-align:center;
+            color:#999;
+            padding:30px">
+            Comments unavailable
+        </div>`;
+    }
+}
+
+async function addComment(){
+
+    const input=
+        document.getElementById(
+            "commentInput"
+        );
+
+    const text=
+        input.value.trim();
+
+    if(!text || !currentNews)
+        return;
+
+    try{
+
+        const result=
+        await supabaseClient
+        .from("comments")
+        .insert({
+
+            news_id:currentNews.id,
+
+            name:"Reader",
+
+            comment:text,
+
+            created_at:
+                new Date().toISOString()
+        });
+
+        if(result.error)
+            throw result.error;
+
+        input.value="";
+
+        currentNews.comments++;
+
+        await loadComments();
+
+    }catch(e){
+
+        alert(
+            "Comment save కాలేదు. Supabase comments table check చేయండి."
+        );
+    }
+}
+
+/* ===============================
+   CREATE NEWS
+================================ */
+
+function openCreateNews(){
+
+    closeAll();
+
+    document
+    .getElementById("createModal")
+    .classList.add("open");
+
+    document
+    .getElementById("overlay")
+    .classList.add("show");
+}
+
+function previewNewsFile(){
+
+    const file=
+        document.getElementById(
+            "newsFile"
+        ).files[0];
+
+    const image=
+        document.getElementById(
+            "newsPreviewImage"
+        );
+
+    const video=
+        document.getElementById(
+            "newsPreviewVideo"
+        );
+
+    image.style.display="none";
+    video.style.display="none";
+
+    if(!file)
+        return;
+
+    const url=
+        URL.createObjectURL(file);
+
+    if(
+        file.type.startsWith("video/")
+    ){
+
+        video.src=url;
+        video.style.display="block";
+
+    }else{
+
+        image.src=url;
+        image.style.display="block";
+    }
+}
+
+/* ===============================
+   UPLOAD
+================================ */
+
+async function uploadMedia(file,folder){
+
+    const safe=
+        file.name
+        .replace(
+            /[^a-zA-Z0-9._-]/g,
+            "_"
+        );
+
+    const path=
+        folder+
+        "/"+
+        Date.now()+
+        "_"+
+        safe;
+
+    const result=
+        await supabaseClient
+        .storage
+        .from(BUCKET)
+        .upload(
+            path,
+            file,
+            {
+                upsert:false,
+                contentType:file.type
+            }
+        );
+
+    if(result.error)
+        throw result.error;
+
+    const publicUrl=
+        supabaseClient
+        .storage
+        .from(BUCKET)
+        .getPublicUrl(path);
+
+    return {
+        url:
+            publicUrl.data.publicUrl,
+
+        type:
+            file.type.startsWith("video/")
+            ?"video"
+            :"image"
+    };
+}
+
+/* ===============================
+   CREATE NEWS
+================================ */
+
+async function createNews(){
+
+    const title=
+        document.getElementById(
+            "createTitle"
+        ).value.trim();
+
+    const body=
+        document.getElementById(
+            "createBody"
+        ).value.trim();
+
+    const category=
+        document.getElementById(
+            "createCategory"
+        ).value;
+
+    const file=
+        document.getElementById(
+            "newsFile"
+        ).files[0];
+
+    const status=
+        document.getElementById(
+            "createStatus"
+        );
+
+    if(!title){
+
+        status.innerText=
+            "Headline ఇవ్వండి.";
+
+        return;
+    }
+
+    if(!body){
+
+        status.innerText=
+            "News details ఇవ్వండి.";
+
+        return;
+    }
+
+    status.innerText=
+        "Publishing...";
+
+    try{
+
+        let mediaUrl="";
+        let mediaType="";
+
+        if(file){
+
+            const uploaded=
+                await uploadMedia(
+                    file,
+                    "news"
+                );
+
+            mediaUrl=
+                uploaded.url;
+
+            mediaType=
+                uploaded.type;
+        }
+
+        let payload={
+
+            title:title,
+
+            body:body,
+
+            category:category,
+
+            media_url:mediaUrl,
+
+            media_type:mediaType,
+
+            is_published:true,
+
+            likes:0,
+
+            dislikes:0,
+
+            comments:0,
+
+            created_at:
+                new Date().toISOString()
+        };
+
+        let result=
+            await supabaseClient
+            .from("news")
+            .insert(payload);
+
+        if(result.error){
+
+            result=
+            await supabaseClient
+            .from("news")
+            .insert({
+
+                title:title,
+
+                body:body,
+
+                category:category,
+
+                image_url:
+                    mediaType==="image"
+                    ?mediaUrl:null,
+
+                video_url:
+                    mediaType==="video"
+                    ?mediaUrl:null,
+
+                is_published:true,
+
+                likes:0,
+                dislikes:0,
+                comments:0,
+
+                created_at:
+                    new Date().toISOString()
+            });
+        }
+
+        if(result.error)
+            throw result.error;
+
+        status.innerText=
+            "✓ News published successfully";
+
+        document.getElementById(
+            "createTitle"
+        ).value="";
+
+        document.getElementById(
+            "createBody"
+        ).value="";
+
+        document.getElementById(
+            "newsFile"
+        ).value="";
+
+        setTimeout(()=>{
+
+            closeModal(
+                "createModal"
+            );
+
+            loadNews();
+
+        },700);
+
+    }catch(error){
+
+        console.error(error);
+
+        status.innerText=
+            "Publish failed: "+
+            (error.message||"Check Supabase");
+    }
+}
+
+/* ===============================
+   SUGGESTION
+================================ */
+
+function openSuggestion(){
+
+    closeAll();
 
     document
     .getElementById(
-        "infoModal"
+        "suggestionModal"
     )
-    .classList.remove(
-        "open"
-    );
+    .classList.add("open");
 
+    document
+    .getElementById(
+        "overlay"
+    )
+    .classList.add("show");
 }
 
+async function submitSuggestion(){
 
-/* =========================================================
-   CLOSE MODALS WHEN CLICKING OUTSIDE
-========================================================= */
+    const text=
+        document
+        .getElementById(
+            "suggestionText"
+        )
+        .value.trim();
 
-document.addEventListener(
-    "keydown",
-    e=>{
+    const file=
+        document
+        .getElementById(
+            "suggestionFile"
+        ).files[0];
 
-        if(e.key === "Escape"){
+    const status=
+        document
+        .getElementById(
+            "suggestionStatus"
+        );
 
-            document
-            .getElementById(
-                "commentsModal"
-            )
-            .classList.remove(
-                "open"
-            );
+    if(!text){
 
+        status.innerText=
+            "Suggestion రాయండి.";
 
-            closeInfoModal();
+        return;
+    }
 
+    status.innerText=
+        "Sending...";
+
+    try{
+
+        let mediaUrl="";
+        let mediaType="";
+
+        if(file){
+
+            const uploaded=
+                await uploadMedia(
+                    file,
+                    "suggestions"
+                );
+
+            mediaUrl=
+                uploaded.url;
+
+            mediaType=
+                uploaded.type;
         }
 
+        const phone=
+            localStorage.getItem(
+                "oneMinuteMobile"
+            );
+
+        const result=
+        await supabaseClient
+        .from("suggestions")
+        .insert({
+
+            phone:phone,
+
+            suggestion:text,
+
+            media_url:mediaUrl,
+
+            media_type:mediaType,
+
+            status:"new",
+
+            created_at:
+                new Date().toISOString()
+        });
+
+        if(result.error)
+            throw result.error;
+
+        status.innerText=
+            "✓ Suggestion sent";
+
+        document
+        .getElementById(
+            "suggestionText"
+        ).value="";
+
+        document
+        .getElementById(
+            "suggestionFile"
+        ).value="";
+
+    }catch(error){
+
+        console.error(error);
+
+        status.innerText=
+            "Suggestion save కాలేదు.";
+    }
+}
+
+/* ===============================
+   SEARCH
+================================ */
+
+function openSearch(){
+
+    closeAll();
+
+    document
+    .getElementById(
+        "searchModal"
+    )
+    .classList.add("open");
+
+    document
+    .getElementById(
+        "overlay"
+    )
+    .classList.add("show");
+
+    setTimeout(()=>{
+
+        document
+        .getElementById(
+            "searchInput"
+        )
+        .focus();
+
+    },200);
+}
+
+function searchNews(value){
+
+    const box=
+        document.getElementById(
+            "searchResults"
+        );
+
+    const q=
+        value.trim().toLowerCase();
+
+    if(!q){
+
+        box.innerHTML="";
+        return;
+    }
+
+    const results=
+        allNews.filter(n=>
+            (
+                n.title+
+                " "+
+                n.body+
+                " "+
+                n.category
+            )
+            .toLowerCase()
+            .includes(q)
+        );
+
+    if(!results.length){
+
+        box.innerHTML=
+        `<div style="
+            text-align:center;
+            color:#999;
+            padding:20px">
+            News not found
+        </div>`;
+
+        return;
+    }
+
+    box.innerHTML=
+    results.slice(0,20)
+    .map(n=>`
+
+        <button
+            style="
+                width:100%;
+                text-align:left;
+                border:0;
+                background:#f6f6f6;
+                padding:12px;
+                border-radius:10px;
+                margin-bottom:7px"
+            onclick="jumpToNews('${escapeAttr(n.id)}')">
+
+            <b>
+                ${escapeHtml(n.title)}
+            </b>
+
+            <div style="
+                font-size:10px;
+                color:#888;
+                margin-top:4px">
+                ${escapeHtml(n.category)}
+            </div>
+
+        </button>
+
+    `).join("");
+}
+
+function jumpToNews(id){
+
+    closeAll();
+
+    const index=
+        visibleNews.findIndex(
+            n=>String(n.id)===String(id)
+        );
+
+    if(index<0){
+
+        currentCategory="All";
+
+        visibleNews=[
+            ...allNews
+        ];
+
+        renderFeed();
+
+        setTimeout(
+            ()=>jumpToNews(id),
+            100
+        );
+
+        return;
+    }
+
+    const cards=
+        document.querySelectorAll(
+            ".news-card"
+        );
+
+    if(cards[index]){
+
+        cards[index].scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+    }
+}
+
+/* ===============================
+   SAVED
+================================ */
+
+function saveNews(index){
+
+    const news=
+        visibleNews[index];
+
+    if(!news) return;
+
+    const key=
+        "saved_"+news.id;
+
+    const old=
+        localStorage.getItem(key);
+
+    localStorage.setItem(
+        key,
+        old==="yes"?"no":"yes"
+    );
+}
+
+function openSaved(){
+
+    const saved=
+        allNews.filter(n=>
+            localStorage.getItem(
+                "saved_"+n.id
+            )==="yes"
+        );
+
+    closeAll();
+
+    if(!saved.length){
+
+        alert(
+            "Saved news ఇంకా లేదు."
+        );
+
+        return;
+    }
+
+    visibleNews=saved;
+
+    renderFeed();
+}
+
+/* ===============================
+   MENU
+================================ */
+
+function openMenu(){
+
+    document
+    .getElementById(
+        "sideMenu"
+    )
+    .classList.add("open");
+
+    document
+    .getElementById(
+        "overlay"
+    )
+    .classList.add("show");
+}
+
+function closeAll(){
+
+    document
+    .getElementById(
+        "sideMenu"
+    )
+    .classList.remove("open");
+
+    document
+    .getElementById(
+        "overlay"
+    )
+    .classList.remove("show");
+
+    document
+    .querySelectorAll(".modal")
+    .forEach(m=>
+        m.classList.remove("open")
+    );
+}
+
+function closeModal(id){
+
+    document
+    .getElementById(id)
+    .classList.remove("open");
+
+    document
+    .getElementById(
+        "overlay"
+    )
+    .classList.remove("show");
+}
+
+/* ===============================
+   TICKER
+================================ */
+
+function updateTicker(){
+
+    const text=
+        allNews
+        .slice(0,8)
+        .map(n=>n.title)
+        .join(" • ");
+
+    document
+    .getElementById(
+        "tickerText"
+    )
+    .innerText=
+        text ||
+        "తాజా వార్తలు...";
+}
+
+/* ===============================
+   HELPERS
+================================ */
+
+function timeAgo(date){
+
+    const d=new Date(date);
+
+    if(isNaN(d.getTime()))
+        return "ఇప్పుడు";
+
+    const mins=
+        Math.floor(
+            (Date.now()-d.getTime())
+            /60000
+        );
+
+    if(mins<1)
+        return "ఇప్పుడు";
+
+    if(mins<60)
+        return mins+" నిమిషాల క్రితం";
+
+    const hours=
+        Math.floor(mins/60);
+
+    if(hours<24)
+        return hours+" గంటల క్రితం";
+
+    return (
+        Math.floor(hours/24)+
+        " రోజుల క్రితం"
+    );
+}
+
+function escapeHtml(value){
+
+    return String(value??"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function escapeAttr(value){
+
+    return escapeHtml(value);
+}
+
+/* ===============================
+   CARD ACTIONS
+================================ */
+
+document
+.getElementById("feed")
+.addEventListener(
+    "click",
+    function(e){
+
+        const button=
+            e.target.closest(
+                "[data-action]"
+            );
+
+        if(!button)
+            return;
+
+        const card=
+            button.closest(
+                ".news-card"
+            );
+
+        if(!card)
+            return;
+
+        const index=
+            Number(card.dataset.index);
+
+        const action=
+            button.dataset.action;
+
+        if(action==="like")
+            handleLike(index);
+
+        if(action==="dislike")
+            handleDislike(index);
+
+        if(action==="share")
+            shareNews(index);
+
+        if(action==="comment")
+            openComments(index);
+
+        if(action==="save")
+            saveNews(index);
     }
 );
 
+/* ===============================
+   TOUCH SWIPE
+================================ */
 
-/* =========================================================
-   INITIAL LOAD
-========================================================= */
+let touchStartY=0;
+
+document
+.getElementById("feed")
+.addEventListener(
+    "touchstart",
+    e=>{
+        touchStartY=
+            e.changedTouches[0]
+            .screenY;
+    },
+    {passive:true}
+);
+
+document
+.getElementById("feed")
+.addEventListener(
+    "touchend",
+    e=>{
+
+        const end=
+            e.changedTouches[0]
+            .screenY;
+
+        const diff=
+            touchStartY-end;
+
+        if(Math.abs(diff)<45)
+            return;
+
+        const cards=
+            document.querySelectorAll(
+                ".news-card"
+            );
+
+        if(!cards.length)
+            return;
+
+        if(diff>0){
+
+            currentIndex=
+                Math.min(
+                    currentIndex+1,
+                    cards.length-1
+                );
+
+        }else{
+
+            currentIndex=
+                Math.max(
+                    currentIndex-1,
+                    0
+                );
+        }
+
+        cards[currentIndex]
+        .scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
+    },
+    {passive:true}
+);
+
+/* ===============================
+   START
+================================ */
 
 window.addEventListener(
     "load",
     ()=>{
 
-        loadNews();
+        if(checkLogin()){
+
+            loadNews();
+
+        }
 
     }
 );
