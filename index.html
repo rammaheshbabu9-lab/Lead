@@ -95,8 +95,34 @@ button{
 .login-sub{
     color:#777;
     font-size:14px;
-    margin-bottom:25px;
+    margin-bottom:20px;
 }
+
+/* NAME INPUT */
+
+.name-wrap{
+    height:54px;
+    width:100%;
+    display:flex;
+    align-items:center;
+    background:#f7f7f7;
+    border:1px solid #ddd;
+    border-radius:14px;
+    overflow:hidden;
+    margin-bottom:10px;
+}
+
+.name-wrap input{
+    flex:1;
+    height:100%;
+    border:0;
+    outline:0;
+    background:transparent;
+    padding:0 15px;
+    font-size:16px;
+}
+
+/* PHONE */
 
 .phone-wrap{
     height:54px;
@@ -352,15 +378,16 @@ button{
 
 .news-content{
     flex:1;
+    min-height:0;
     overflow:hidden;
-    padding:10px 16px 4px;
+    padding:14px 16px 4px;
 }
 
 .news-title{
     font-size:21px;
     line-height:1.30;
     font-weight:900;
-    margin:0 0 4px 0;
+    margin:0 0 2px 0;
 }
 
 .news-body{
@@ -721,12 +748,12 @@ button{
     }
 
     .news-content{
-        padding-top:8px;
+        padding-top:11px;
     }
 
     .news-title{
         font-size:18px;
-        margin-bottom:3px;
+        margin-bottom:2px;
     }
 
     .news-body{
@@ -756,8 +783,23 @@ button{
         </div>
 
         <div class="login-sub">
-            మీ మొబైల్ నంబర్ నమోదు చేసి కొనసాగండి
+            మీ పేరు & మొబైల్ నంబర్ నమోదు చేసి కొనసాగండి
         </div>
+
+        <!-- NAME -->
+
+        <div class="name-wrap">
+
+            <input
+                id="nameInput"
+                type="text"
+                maxlength="40"
+                placeholder="మీ పేరు"
+                autocomplete="name">
+
+        </div>
+
+        <!-- PHONE -->
 
         <div class="phone-wrap">
 
@@ -771,8 +813,7 @@ button{
                 inputmode="numeric"
                 maxlength="10"
                 placeholder="10 digit mobile number"
-                oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)"
-            >
+                oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)">
 
         </div>
 
@@ -924,7 +965,9 @@ button{
 
         <div>
 
-            <div class="menu-user">
+            <div
+                class="menu-user"
+                id="menuUser">
                 One Minute Reader
             </div>
 
@@ -1352,7 +1395,12 @@ function isValidMobile(value){
 
 function mobileLogin(){
 
-    const input =
+    const nameInput =
+        document.getElementById(
+            "nameInput"
+        );
+
+    const phoneInput =
         document.getElementById(
             "phoneInput"
         );
@@ -1362,23 +1410,45 @@ function mobileLogin(){
             "loginError"
         );
 
+    const name =
+        String(
+            nameInput.value || ""
+        ).trim();
+
     const phone =
         String(
-            input.value || ""
+            phoneInput.value || ""
         ).replace(
             /\D/g,
             ""
         );
+
+    if(!name){
+
+        error.innerText =
+            "మీ పేరు నమోదు చేయండి.";
+
+        nameInput.focus();
+
+        return;
+    }
 
     if(!isValidMobile(phone)){
 
         error.innerText =
             "సరైన 10-digit mobile number ఇవ్వండి.";
 
+        phoneInput.focus();
+
         return;
     }
 
     error.innerText = "";
+
+    localStorage.setItem(
+        "oneMinuteName",
+        name
+    );
 
     localStorage.setItem(
         "oneMinuteMobile",
@@ -1388,6 +1458,11 @@ function mobileLogin(){
     document.getElementById(
         "loginScreen"
     ).style.display = "none";
+
+    document.getElementById(
+        "menuUser"
+    ).innerText =
+        name;
 
     document.getElementById(
         "menuPhone"
@@ -1409,8 +1484,14 @@ function checkLogin(){
             "oneMinuteMobile"
         );
 
+    const savedName =
+        localStorage.getItem(
+            "oneMinuteName"
+        );
+
     if(
         saved &&
+        savedName &&
         /^\+91[6-9][0-9]{9}$/.test(saved)
     ){
 
@@ -1418,6 +1499,11 @@ function checkLogin(){
             "loginScreen"
         ).style.display =
             "none";
+
+        document.getElementById(
+            "menuUser"
+        ).innerText =
+            savedName;
 
         document.getElementById(
             "menuPhone"
@@ -1442,10 +1528,18 @@ function checkLogin(){
 function logout(){
 
     localStorage.removeItem(
+        "oneMinuteName"
+    );
+
+    localStorage.removeItem(
         "oneMinuteMobile"
     );
 
     closeAll();
+
+    document.getElementById(
+        "nameInput"
+    ).value = "";
 
     document.getElementById(
         "phoneInput"
@@ -1460,9 +1554,16 @@ function logout(){
     ).style.display =
         "flex";
 
-    document.getElementById(
-        "phoneInput"
-    ).focus();
+    setTimeout(
+        function(){
+
+            document.getElementById(
+                "nameInput"
+            ).focus();
+
+        },
+        100
+    );
 
 }
 
@@ -1592,6 +1693,10 @@ async function loadNews(){
 
         renderFeed();
         updateTicker();
+
+        /* OPEN EXACT SHARED NEWS */
+
+        openSharedNewsFromUrl();
 
     }catch(error){
 
@@ -2016,6 +2121,8 @@ function buildNewsCard(
                     </span>
 
                 </button>
+
+                <!-- SAME OLD WHATSAPP BUTTON -->
 
                 <button
                     class="whatsapp-btn"
@@ -2480,7 +2587,8 @@ async function updateReaction(news){
 }
 
 /* =========================================================
-   SHARE
+   WHATSAPP SHARE
+   HEADLINE + DIRECT NEWS LINK ONLY
 ========================================================= */
 
 function shareNews(index){
@@ -2491,20 +2599,109 @@ function shareNews(index){
     if(!news)
         return;
 
-    const text =
-        news.title +
-        "\n\n" +
-        news.body +
-        "\n\nOne Minute News";
+    /*
+      GitHub Pages compatible:
+      current website URL + ?news=UUID
+    */
 
     const url =
-        "https://api.whatsapp.com/send?text=" +
-        encodeURIComponent(text);
+        window.location.origin +
+        window.location.pathname +
+        "?news=" +
+        encodeURIComponent(
+            news.id
+        );
+
+    const text =
+        "📰 " +
+        news.title +
+        "\n\n" +
+        "Read on One Minute News 👇\n" +
+        url;
+
+    const whatsappUrl =
+        "https://wa.me/?text=" +
+        encodeURIComponent(
+            text
+        );
 
     window.open(
-        url,
+        whatsappUrl,
         "_blank"
     );
+
+}
+
+/* =========================================================
+   OPEN SHARED NEWS FROM URL
+========================================================= */
+
+function openSharedNewsFromUrl(){
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const sharedId =
+        params.get("news");
+
+    if(
+        !sharedId ||
+        !allNews.length
+    ){
+
+        return;
+
+    }
+
+    currentCategory =
+        "All";
+
+    document
+    .querySelectorAll(
+        ".category"
+    )
+    .forEach(
+        function(item,index){
+
+            item.classList.toggle(
+                "active",
+                index === 0
+            );
+
+        }
+    );
+
+    visibleNews =
+        [...allNews];
+
+    currentIndex = 0;
+
+    renderFeed();
+
+    const index =
+        visibleNews.findIndex(
+            function(news){
+
+                return String(news.id) ===
+                    String(sharedId);
+
+            }
+        );
+
+    if(index >= 0){
+
+        setTimeout(
+            function(){
+
+                goToNews(index);
+
+            },
+            80
+        );
+
+    }
 
 }
 
@@ -2584,12 +2781,6 @@ async function loadComments(){
         </div>`;
 
     try{
-
-        /*
-          IMPORTANT:
-          comments.news_id MUST be UUID.
-          currentNews.id is passed directly.
-        */
 
         let result =
             await supabaseClient
@@ -2700,7 +2891,7 @@ async function loadComments(){
 }
 
 /* =========================================================
-   ADD COMMENT - UUID SAFE
+   ADD COMMENT - UUID SAFE + LOGIN NAME
 ========================================================= */
 
 async function addComment(){
@@ -2753,9 +2944,13 @@ async function addComment(){
                 "oneMinuteMobile"
             );
 
+        const name =
+            localStorage.getItem(
+                "oneMinuteName"
+            ) || "Reader";
+
         /*
-          news_id is UUID.
-          Do NOT convert it to bigint.
+          news_id = UUID
         */
 
         let result =
@@ -2767,7 +2962,7 @@ async function addComment(){
                     currentNews.id,
 
                 name:
-                    "Reader",
+                    name,
 
                 phone:
                     phone,
@@ -2781,8 +2976,7 @@ async function addComment(){
             });
 
         /*
-          If phone column doesn't exist,
-          retry without phone.
+          If phone column doesn't exist
         */
 
         if(result.error){
@@ -2796,7 +2990,7 @@ async function addComment(){
                         currentNews.id,
 
                     name:
-                        "Reader",
+                        name,
 
                     comment:
                         text,
@@ -2809,8 +3003,7 @@ async function addComment(){
         }
 
         /*
-          If name column also doesn't exist,
-          retry with only UUID + comment.
+          If name column doesn't exist
         */
 
         if(result.error){
@@ -4094,7 +4287,30 @@ document.addEventListener(
 );
 
 /* =========================================================
-   ENTER LOGIN
+   ENTER LOGIN - NAME
+========================================================= */
+
+document.getElementById(
+    "nameInput"
+).addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Enter"
+        ){
+
+            document.getElementById(
+                "phoneInput"
+            ).focus();
+
+        }
+
+    }
+);
+
+/* =========================================================
+   ENTER LOGIN - PHONE
 ========================================================= */
 
 document.getElementById(
@@ -4141,7 +4357,7 @@ function startApp(){
             function(){
 
                 document.getElementById(
-                    "phoneInput"
+                    "nameInput"
                 ).focus();
 
             },
