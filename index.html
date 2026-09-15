@@ -201,7 +201,7 @@ body{background:#ffffff;color:#111827}
         <div class="formField"><label>Contact Person *</label><input id="contactPerson" required placeholder="Ravi Kumar"></div>
         <div class="formField"><label>Mobile Number *</label><input id="mobile" required maxlength="10" inputmode="numeric" placeholder="9876543210"></div>
         <div class="formField"><label>Business Sector *</label><select id="regSector" required></select></div>
-        <div class="formField"><label>Website</label><input id="website" placeholder="https://example.com"></div>
+        <div class="formField"><label>Website <span style="color:#c62828">*</span></label><input id="website" placeholder="https://example.com"></div>
         <div class="formField full"><label>Offer for Customers</label><input id="offer" maxlength="180" placeholder="20% off this month!"></div>
         <div class="formField full"><label>Business Description</label><textarea id="description" rows="3" maxlength="700" placeholder="Tell customers about your business..."></textarea></div>
         <div class="formField full"><label>Business Logo * <span class="req">Required</span></label><input id="logo" type="file" accept="image/png,image/jpeg,image/webp" required><small>PNG, JPG or WEBP</small></div>
@@ -738,6 +738,26 @@ function toggleAdMode(){
   }
 }
 
+const PRICES={Center:599,Premium:699,Edge:799,Corner:999};
+function toast(message){
+  const el=document.getElementById("toast");
+  if(!el){ alert(String(message||"")); return; }
+  el.textContent=String(message||"");
+  el.classList.add("show");
+  clearTimeout(window.__millionPixelToastTimer);
+  window.__millionPixelToastTimer=setTimeout(()=>el.classList.remove("show"),2800);
+}
+function getZone(block){
+  const n=Math.max(1,Math.min(PIXELS_PER_STATE,Number(block)||1));
+  const idx=n-1, row=Math.floor(idx/WALL_COLS), col=idx%WALL_COLS;
+  const lastRow=WALL_ROWS-1,lastCol=WALL_COLS-1;
+  if((row===0||row===lastRow)&&(col===0||col===lastCol)) return "Corner";
+  if(row===0||row===lastRow||col===0||col===lastCol) return "Edge";
+  const centerRowStart=Math.floor(WALL_ROWS*0.35), centerRowEnd=Math.ceil(WALL_ROWS*0.65)-1;
+  const centerColStart=Math.floor(WALL_COLS*0.35), centerColEnd=Math.ceil(WALL_COLS*0.65)-1;
+  if(row>=centerRowStart&&row<=centerRowEnd&&col>=centerColStart&&col<=centerColEnd) return "Center";
+  return "Premium";
+}
 const LOGO_STORAGE=SUPABASE_URL+"/storage/v1/object/business-logos";
 const AD_STORAGE=SUPABASE_URL+"/storage/v1/object/pixel-ad-videos";
 function priceForPixel(block){return PRICES[getZone(block)]}
@@ -785,10 +805,12 @@ function updateRegistrationSummary(list){
 }
 function updateSelectionBar(){
   const bar=document.getElementById("selectionBar");
-  const list=[...selectedPixels].sort((a,b)=>a-b);
-  document.getElementById("selectionCount").textContent=`${list.length.toLocaleString("en-IN")} PIXEL${list.length===1?"":"S"}`;
-  document.getElementById("selectionTotal").textContent="₹"+pixelPriceTotal(list).toLocaleString("en-IN");
-  bar.style.display=list.length?"flex":"none";
+  const list=[...selectedPixels].map(Number).filter(Number.isInteger).sort((a,b)=>a-b);
+  const countEl=document.getElementById("selectionCount");
+  const totalEl=document.getElementById("selectionTotal");
+  if(countEl)countEl.textContent=`${list.length.toLocaleString("en-IN")} PIXEL${list.length===1?"":"S"}`;
+  if(totalEl)totalEl.textContent="₹"+pixelPriceTotal(list).toLocaleString("en-IN");
+  if(bar)bar.style.display=list.length?"flex":"none";
   drawSelectionOverlay();
 }
 function clearPixelSelection(){selectedPixels.clear();lastRegistrationPixels=[];updateSelectionBar()}
@@ -801,25 +823,22 @@ function togglePixelSelection(block){
 }
 function selectPixelForRegistration(block){togglePixelSelection(block)}
 function prepareSelectedRegistration(){
-  const list=[...selectedPixels].map(Number).filter(Number.isInteger).filter(p=>p>=1&&p<=TOTAL_PIXELS).sort((a,b)=>a-b);
-  if(!list.length){toast("Select at least one available pixel first.");return false}
+  const list=[...selectedPixels].map(Number).filter(Number.isInteger).sort((a,b)=>a-b);
+  if(!list.length){toast("Select at least one available pixel.");return}
   const blocked=list.find(isPixelOccupied);
-  if(blocked){toast("Pixel #"+blocked+" is already booked.");return false}
+  if(blocked){toast("Pixel #"+blocked+" is already booked.");return}
   lastRegistrationPixels=list;
   const state=selectedState==="__ALL__"?"Telangana":selectedState;
-  const regState=document.getElementById("regState");
-  const regPixel=document.getElementById("regPixel");
-  const regCount=document.getElementById("regCount");
-  const regPrice=document.getElementById("regPrice");
-  if(regState)regState.value=state;
-  if(regPixel){regPixel.value=list.map(p=>"#"+p).join(", ");regPixel.readOnly=true}
-  if(regCount){regCount.value=list.length;regCount.readOnly=true}
-  if(regPrice)regPrice.value="₹"+pixelPriceTotal(list).toLocaleString("en-IN")+" ("+list.length+" selected)";
-  try{updateRegistrationDistricts()}catch(e){console.warn(e)}
-  try{updateRegistrationSummary(list)}catch(e){console.warn(e)}
+  document.getElementById("regState").value=state;
+  document.getElementById("regPixel").value=list.map(p=>"#"+p).join(", ");
+  document.getElementById("regPixel").readOnly=true;
+  document.getElementById("regCount").value=list.length;
+  document.getElementById("regCount").readOnly=true;
+  document.getElementById("regPrice").value="₹"+pixelPriceTotal(list).toLocaleString("en-IN")+" ("+list.length+" selected)";
+  try{updateRegistrationDistricts()}catch(e){console.warn("district update",e)}
+  try{updateRegistrationSummary(list)}catch(e){console.warn("summary update",e)}
   const modal=document.getElementById("buyModal");
   if(modal){modal.classList.add("show");modal.style.display="flex";modal.setAttribute("aria-hidden","false");}
-  return true;
 }
 function closeModal(id){document.getElementById(id)?.classList.remove("show")}
 function openModal(id){document.getElementById(id)?.classList.add("show")}
@@ -1090,6 +1109,7 @@ document.querySelectorAll("[data-close]").forEach(el=>el.addEventListener("click
 document.querySelectorAll(".buyBox button").forEach(btn=>btn.addEventListener("click",()=>{toast("Select pixels on the wall first.")}));
 document.getElementById("playBtn").onclick=toggleAdMode;
 document.getElementById("topRegisterBtn").onclick=(e)=>{e.preventDefault();e.stopPropagation();prepareSelectedRegistration()};
+document.getElementById("registerSelectedBtn").onclick=(e)=>{e.preventDefault();e.stopPropagation();prepareSelectedRegistration()};
 document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}));
 window.addEventListener("resize",resizeCanvas);
 
@@ -1100,7 +1120,6 @@ document.getElementById("regCount").addEventListener("input",updateRegistrationP
 document.getElementById("regState").addEventListener("change",updateRegistrationDistricts);
 document.getElementById("copyUpiBtn").onclick=copyUPI;document.getElementById("payBtn").onclick=makePayment;document.getElementById("paidBtn").onclick=paidMessage;
 document.getElementById("clearSelectionBtn").onclick=clearPixelSelection;
-document.getElementById("registerSelectedBtn").onclick=(e)=>{e.preventDefault();e.stopPropagation();prepareSelectedRegistration()};
 /* -------------------- init -------------------- */
 (async function init(){
   populateStates();
@@ -1122,6 +1141,11 @@ document.getElementById("registerSelectedBtn").onclick=(e)=>{e.preventDefault();
   let autoIndex=0, autoTimer=null;
   /* Ads stay off until the user presses PIXEL AD. */
 })();
+
+// FINAL MODAL/CANCEL WIRING
+document.querySelectorAll('[data-close]').forEach(function(btn){btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var id=btn.getAttribute('data-close');var el=document.getElementById(id);if(el){el.classList.remove('show');el.style.display='none';el.setAttribute('aria-hidden','true');}});});
+document.querySelectorAll('.modal').forEach(function(modal){modal.addEventListener('click',function(e){if(e.target===modal){modal.classList.remove('show');modal.style.display='none';modal.setAttribute('aria-hidden','true');}});});
+function closeMillionModal(id){var el=document.getElementById(id);if(el){el.classList.remove('show');el.style.display='none';el.setAttribute('aria-hidden','true');}}
 </script>
 </body>
 </html>
