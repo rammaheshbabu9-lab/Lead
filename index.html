@@ -17,7 +17,7 @@ button,input,select{font:inherit}
 button{cursor:pointer}
 .app{width:min(100%,1100px);margin:auto;background:#fff;min-height:100vh;border-left:1px solid #eee;border-right:1px solid #eee}
 .topbar{height:76px;background:#0b1220;border-bottom:1px solid #17233a;display:flex;align-items:center;gap:10px;padding:10px 14px;position:sticky;top:0;z-index:100}
-.brand{display:flex;align-items:center;gap:8px;min-width:177px}
+.brand{display:flex;align-items:center;gap:8px;min-width:0;flex:1;flex-wrap:nowrap}
 .logoMark{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,#5b5cf0,#ff4fa3);display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:6px;box-shadow:0 0 18px rgba(93,92,240,.25)}
 .logoMark i{background:#fff;border-radius:2px;opacity:.95}
 .brandText{font-weight:950;letter-spacing:.3px;font-size:12px;line-height:1}
@@ -64,11 +64,11 @@ video.detailVideo{width:100%;max-height:240px;border-radius:8px;background:#000;
 .toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#101827;border:1px solid #2c3b55;color:#fff;border-radius:8px;padding:9px 12px;font-size:9px;font-weight:800;z-index:1000;transition:.2s}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:900px){
-  .topbar{height:auto;min-height:76px;flex-wrap:wrap}.brand{min-width:150px}.filters{order:3;width:100%;flex-basis:100%}.actions{margin-left:auto}.country,.state,.district,.sector{flex:1;width:auto}
+  .topbar{height:auto;min-height:76px;flex-wrap:wrap;align-items:center}.brand{width:100%;flex-basis:100%;min-width:0}.brandText{flex:0 1 auto}.brandActions{margin-left:auto}.filters{order:3;width:100%;flex-basis:100%}.actions{margin-left:auto}.country,.state,.district,.sector{flex:1;width:auto}
 }
 @media(max-width:620px){
-  .topbar{padding:8px}.brand{min-width:145px}.brandText{font-size:11px}.actions .action{padding:0 10px}.play{display:block}
-  .canvasBox{height:calc(100vh - 175px);min-height:430px}.wallWrap{padding:7px}.buyGrid{grid-template-columns:repeat(2,1fr)}
+  .topbar{padding:8px}.brand{min-width:0}.logoMark{width:27px;height:27px;flex:0 0 27px}.brandText{font-size:10px;min-width:0}.brandText small{font-size:4px}.brandActions{gap:4px}.brandActions .action{height:32px;padding:0 7px;font-size:8px}.play{display:block}.modeBtn{padding:0 7px!important}
+  .canvasBox{height:calc(100vh - 190px);min-height:430px}.wallWrap{padding:7px}.buyGrid{grid-template-columns:repeat(2,1fr)}
 }
 
 .registerCard{width:min(650px,100%)}
@@ -119,7 +119,18 @@ body{background:#ffffff;color:#111827}
 .pixel-cell, .pixel, .wall-pixel { background:#fff !important; border-color:#e8e8e8 !important; }
 .pixel-cell.business, .pixel.business, .wall-pixel.business { background:#fff !important; }
 .ad-overlay video { object-fit:contain; }
-.brandTitleOnly{font-size:20px;font-weight:900;letter-spacing:-.5px;color:#111;white-space:nowrap}.brandText{font-weight:900}.brandText small{font-weight:600} .brandActions{display:flex;align-items:center;gap:6px;margin-left:8px}.brandActions .action{white-space:nowrap}@media(max-width:760px){.brandTitleOnly{font-size:16px}.brandActions{margin-left:6px}.brandActions .action{padding:7px 9px;font-size:10px}.filters{order:3}}
+.modeBtn{background:#fff;border:1px solid #d7dde6;color:#334155}.modeBtn.active{background:#111827;color:#fff;border-color:#111827}.modeBtn:disabled{opacity:.55;cursor:not-allowed}.brandTitleOnly{font-size:20px;font-weight:900;letter-spacing:-.5px;color:#111;white-space:nowrap}.brandText{font-weight:900}.brandText small{font-weight:600} .brandActions{display:flex;align-items:center;gap:6px;margin-left:auto;flex-wrap:nowrap;flex-shrink:0;overflow:visible}.brandActions .action{white-space:nowrap}@media(max-width:760px){.brandTitleOnly{font-size:16px}.brandActions{margin-left:6px}.brandActions .action{padding:7px 9px;font-size:10px}.filters{order:3}}
+
+/* District wall: exactly 20 columns × 50 rows = 1,000 numbered pixels.
+   The wall itself scrolls; the top controls stay visible. */
+.canvasBox{overscroll-behavior:contain;scrollbar-gutter:stable;}
+.topbar{isolation:isolate;}
+.brandActions{display:flex;align-items:center;justify-content:flex-end;gap:3px;flex:0 0 auto;min-width:0;max-width:100%;}
+.brandActions .action{height:24px;padding:0 6px;border-radius:5px;font-size:7px;line-height:1;letter-spacing:0;box-shadow:none;}
+.brandActions .modeBtn{display:inline-flex;align-items:center;justify-content:center;}
+.brandActions .primary{padding:0 6px!important;}
+@media(max-width:760px){.topbar{height:auto;min-height:76px;padding:7px 8px;gap:6px;}.brand{gap:5px;}.logoMark{width:25px;height:25px;padding:4px;gap:2px}.brandText{font-size:10px}.brandText small{font-size:4px}.brandActions{gap:2px}.brandActions .action{height:22px;padding:0 5px;font-size:6.5px;border-radius:4px}.filters{gap:4px}.field select{height:30px;padding:0 20px 0 6px;font-size:8px}.country{width:64px}.state{width:78px}.district{width:88px}.sector{width:96px}}
+@media(max-width:520px){.topbar{display:block;padding:6px 7px}.brand{width:100%;display:flex}.brandActions{margin-left:auto}.brandActions .action{height:21px;padding:0 4px;font-size:6px}.filters{margin-top:6px;width:100%;}.country{width:23%}.state{width:25%}.district{width:27%}.sector{width:25%}}
 </style>
 </head>
 <body>
@@ -127,9 +138,11 @@ body{background:#ffffff;color:#111827}
   <header class="topbar">
     <div class="brand">
       <div class="logoMark"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      <div class="brandText">MILLION PIXEL<small>100,000 PIXELS PER STATE / UT · LIVE BUSINESS WALL</small></div>
+      <div class="brandText">MILLION PIXEL<small>1,000 PIXELS PER DISTRICT · LIVE BUSINESS WALL</small></div>
       <div class="brandActions">
         <button type="button" class="action play" id="playBtn">▶ PIXEL AD</button>
+        <button type="button" class="action modeBtn active" id="viewModeBtn">👁 VIEW</button>
+        <button type="button" class="action modeBtn" id="selectModeBtn">☑ SELECT</button>
         <button type="button" class="action primary" id="topRegisterBtn">＋ PIXEL REGISTRATION</button>
       </div>
     </div>
@@ -156,7 +169,7 @@ body{background:#ffffff;color:#111827}
       <div class="canvasBox" id="stage">
         <div class="canvasSpacer" id="canvasSpacer"></div><canvas id="wallCanvas"></canvas><canvas id="selectionCanvas" aria-label="Pixel selection layer"></canvas><div id="adLayer" aria-hidden="true"></div>
         <div class="wallBadge" id="wallBadge">INDIA · TELANGANA · HYDERABAD</div>
-        <div class="wallHint">25 PIXELS EACH LINE × 4,000 LINES = 100,000 • SQUARE PIXELS • SCROLL • TAP ANY AVAILABLE PIXEL TO SELECT • SELECTED PIXELS TURN BLUE</div>
+        <div class="wallHint">20 PIXELS EACH LINE × 50 ROWS = 1,000 • SQUARE PIXELS • TAP ANY AVAILABLE PIXEL TO SELECT • SELECTED PIXELS TURN BLUE</div>
         <div class="loading hide" id="loading">Loading live pixels…</div>
       </div>
     </div>
@@ -248,10 +261,10 @@ const SUPABASE_KEY="sb_publishable_Z3xsADypaOjX8GEQEOLUdg_vbxynHRx";
 const API_URL=SUPABASE_URL+"/rest/v1/businesses";
 const UPI_ID="9640467264@ibl"; // Replace this with your final UPI ID
 
-const TOTAL_PIXELS=100000;
-const WALL_COLS=25;
-const WALL_ROWS=4000; // 25 pixels per line; 100,000 pixels are mapped across the wall
-const PIXELS_PER_STATE=100000; // every State / UT gets its own independent 100,000-pixel wall
+const TOTAL_PIXELS=1000;
+const WALL_COLS=20;
+const WALL_ROWS=50; // 20 pixels per line × 50 rows = 1,000 pixels per district
+const PIXELS_PER_DISTRICT=1000; // every district gets its own independent 1,000-pixel wall
 /* All India states + union territories */
 const STATES=[
  "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa",
@@ -271,6 +284,7 @@ const SECTORS=[
 let allBusinesses=[];
 let visibleBusinesses=[];
 let currentMode="logos"; // live business logos are drawn across the exact purchased pixel area
+let interactionMode="view"; // VIEW shows business details; SELECT enables free-pixel selection
 let selectedState="__ALL__";
 let selectedDistrict="__ALL__";
 let selectedSector="All Sectors";
@@ -350,8 +364,8 @@ function updateSpacer(){
 function wallMetrics(){
   const w=stage.clientWidth,h=stage.clientHeight;
   const base=w/WALL_COLS;
-  // Keep all 25 columns fitted inside the screen; vertical space is used for
-  // the 4,000 rows. Zoom is capped so boxes never create horizontal overflow.
+  // Keep all 20 columns fitted inside the screen; vertical space is used for
+  // the 50 rows. Zoom is capped so boxes never create horizontal overflow.
   const cell=Math.max(2,Math.min(base,base*view.scale));
   const wallW=cell*WALL_COLS,wallH=cell*WALL_ROWS;
   return {w,h,cell,wallW,wallH,left:Math.max(0,(w-wallW)/2),top:0,scrollTop:stage.scrollTop||0};
@@ -490,7 +504,7 @@ function draw(){
   ctx.fillStyle="#fff";
   ctx.fillRect(0,0,w,h);
 
-  // EXACTLY 25 square boxes on every line.
+  // EXACTLY 20 square boxes on every line.
   for(let row=firstRow;row<=lastRow;row++){
     const y=row*cell-scrollTop;
     for(let col=0;col<WALL_COLS;col++){
@@ -595,6 +609,9 @@ function resetView(){
   view={scale:1,drag:false,lastX:0,lastY:0,downX:0,downY:0};
   stage.scrollTop=0;stage.scrollLeft=0;
   selectedBusiness=null;
+  interactionMode="view";
+  document.getElementById("viewModeBtn")?.classList.add("active");
+  document.getElementById("selectModeBtn")?.classList.remove("active");
   updateSpacer();
   draw();
   drawSelectionOverlay();
@@ -654,7 +671,7 @@ function renderAdsInsidePixels(){
     const firstCol=start%WALL_COLS;
     const lastCol=(end-1)%WALL_COLS;
     // IMPORTANT: size the media to the BUSINESS'S purchased pixel area,
-    // not to the entire 25-column wall. This makes a 20-pixel ad look
+    // not to the entire 20-column wall. This makes a 20-pixel ad look
     // exactly like a 20-pixel screen and prevents stretching/cropping.
     const boxLeft=(r1===r2?firstCol:0)*cell;
     const boxRight=(r1===r2?(lastCol+1):WALL_COLS)*cell;
@@ -748,7 +765,7 @@ function toast(message){
   window.__millionPixelToastTimer=setTimeout(()=>el.classList.remove("show"),2800);
 }
 function getZone(block){
-  const n=Math.max(1,Math.min(PIXELS_PER_STATE,Number(block)||1));
+  const n=Math.max(1,Math.min(PIXELS_PER_DISTRICT,Number(block)||1));
   const idx=n-1, row=Math.floor(idx/WALL_COLS), col=idx%WALL_COLS;
   const lastRow=WALL_ROWS-1,lastCol=WALL_COLS-1;
   if((row===0||row===lastRow)&&(col===0||col===lastCol)) return "Corner";
@@ -777,7 +794,7 @@ function updateRegistrationDistricts(){
 function zoneLabel(block){return getZone(Number(block)||1)}
 function updateRegistrationPrice(){
   const selected=lastRegistrationPixels.length?[...lastRegistrationPixels]:[Number(document.getElementById("regPixel").value)];
-  const valid=selected.filter(Number.isInteger).filter(p=>p>=1&&p<=PIXELS_PER_STATE);
+  const valid=selected.filter(Number.isInteger).filter(p=>p>=1&&p<=PIXELS_PER_DISTRICT);
   const priceEl=document.getElementById("regPrice");
   if(!valid.length){priceEl.value="";updateRegistrationSummary([]);return}
   const total=pixelPriceTotal(valid);
@@ -787,7 +804,9 @@ function updateRegistrationPrice(){
 function pixelPriceTotal(list){return list.reduce((sum,p)=>sum+priceForPixel(Number(p)),0)}
 function isPixelOccupied(block){
   if(!block)return false;
+  if(selectedState==="__ALL__"||selectedDistrict==="__ALL__")return false;
   return allBusinesses.some(b=>{
+    if(!matches(b.state,selectedState)||!matches(b.district,selectedDistrict))return false;
     const start=Math.max(1,Number(b.block_number)||1);
     const count=Math.max(1,Math.min(TOTAL_PIXELS-start+1,Number(b.pixel_count)||1));
     return block>=start && block<start+count;
@@ -814,11 +833,31 @@ function updateSelectionBar(){
   drawSelectionOverlay();
 }
 function clearPixelSelection(){selectedPixels.clear();lastRegistrationPixels=[];updateSelectionBar()}
+function isAdjacentToSelection(block){
+  if(!selectedPixels.size)return true;
+  const idx=Number(block)-1;
+  const row=Math.floor(idx/WALL_COLS), col=idx%WALL_COLS;
+  for(const id of selectedPixels){
+    const n=Number(id)-1;
+    const r=Math.floor(n/WALL_COLS), c=n%WALL_COLS;
+    if((Math.abs(r-row)+Math.abs(c-col))===1)return true;
+  }
+  return false;
+}
+
 function togglePixelSelection(block){
   if(!block)return;
-  if(isPixelOccupied(block)){toast("This pixel is already booked.");return}
-  if(selectedPixels.has(block)) selectedPixels.delete(block);
-  else selectedPixels.add(block);
+  if(interactionMode!=="select"){toast("Tap SELECT first to choose pixels.");return}
+  if(isPixelOccupied(block)){toast("This pixel is already occupied. Please select an available pixel.");return}
+  if(selectedPixels.has(block)){
+    selectedPixels.delete(block);
+  }else{
+    if(!isAdjacentToSelection(block)){
+      toast("Select the next pixel next to your selected pixel. Gaps are not allowed.");
+      return;
+    }
+    selectedPixels.add(block);
+  }
   updateSelectionBar();
 }
 function selectPixelForRegistration(block){togglePixelSelection(block)}
@@ -828,8 +867,8 @@ function prepareSelectedRegistration(){
   const blocked=list.find(isPixelOccupied);
   if(blocked){toast("Pixel #"+blocked+" is already booked.");return}
   lastRegistrationPixels=list;
-  const state=selectedState==="__ALL__"?"Telangana":selectedState;
-  document.getElementById("regState").value=state;
+  const state=selectedState==="__ALL__"?"":selectedState;
+  document.getElementById("regState").value=state||"";
   document.getElementById("regPixel").value=list.map(p=>"#"+p).join(", ");
   document.getElementById("regPixel").readOnly=true;
   document.getElementById("regCount").value=list.length;
@@ -862,11 +901,11 @@ async function submitRegistration(e){
   const block=Math.min(...selected),count=selected.length;
   const logo=document.getElementById("logo").files[0],adImage=document.getElementById("adImage").files[0],adVideo=document.getElementById("adVideo").files[0];
   if(!/^([6-9])\d{9}$/.test(mobile))return showRegStatus("Please enter a valid 10-digit Indian mobile number.");
-  if(!selected.length||selected.some(p=>!Number.isInteger(p)||p<1||p>PIXELS_PER_STATE))return showRegStatus("Please select valid pixels.");
+  if(!selected.length||selected.some(p=>!Number.isInteger(p)||p<1||p>PIXELS_PER_DISTRICT))return showRegStatus("Please select valid pixels.");
   if(!logo)return showRegStatus("Business Logo is required.");
   btn.disabled=true;btn.textContent="REGISTERING...";showRegStatus("Checking pixel availability...","success");
   try{
-    const u=new URL(API_URL);u.searchParams.set("select","id,block_number,pixel_count,approval_status,booking_status,state");u.searchParams.set("state","eq."+state);u.searchParams.set("limit","1000");
+    const u=new URL(API_URL);u.searchParams.set("select","id,block_number,pixel_count,approval_status,booking_status,state,district");u.searchParams.set("state","eq."+state);u.searchParams.set("district","eq."+district);u.searchParams.set("limit","1000");
     const check=await fetch(u,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
     if(!check.ok)throw new Error(await check.text());
     const rows=await check.json();
@@ -899,7 +938,7 @@ async function submitRegistration(e){
     document.getElementById("paymentAmount").textContent="₹"+amount.toLocaleString("en-IN");
     document.getElementById("registerStatus").className="registerStatus";
     document.getElementById("businessForm").reset();
-    document.getElementById("regState").value=state;updateRegistrationDistricts();
+    document.getElementById("regState").value=state||"";updateRegistrationDistricts();
     closeModal("buyModal");openModal("paymentModal");
     toast("Registration submitted successfully."+(mediaNote?" Check media upload.":""));
   }catch(err){console.error(err);showRegStatus("Registration failed: "+(err.message||"Unknown error"));}
@@ -974,14 +1013,14 @@ async function loadDistrictData(){
 function matches(a,b){return normalName(a)===normalName(b);}
 function applyFilters(){
   visibleBusinesses=allBusinesses.filter(b=>{
-    const stateOK=selectedState==="__ALL__"||matches(b.state,selectedState);
-    const districtOK=selectedDistrict==="__ALL__"||matches(b.district,selectedDistrict);
+    const stateOK=selectedState!=="__ALL__"&&matches(b.state,selectedState);
+    const districtOK=selectedDistrict!=="__ALL__"&&matches(b.district,selectedDistrict);
     const sectorOK=selectedSector==="All Sectors"||matches(b.sector,selectedSector);
     return stateOK&&districtOK&&sectorOK;
   });
 
-  // IMPORTANT: the 100,000-pixel India wall NEVER changes size.
-  // Only the live business blocks displayed on those fixed pixel positions change.
+  // IMPORTANT: each selected district always has exactly 1,000 pixels (20 × 50).
+  // Business blocks are scoped to the selected State + District.
   const badge=document.getElementById("wallBadge");
   const place=selectedState==="__ALL__"?"INDIA":selectedState;
   const dist=selectedDistrict==="__ALL__"?"ALL DISTRICTS":selectedDistrict;
@@ -994,9 +1033,11 @@ function applyFilters(){
   if(tc) tc.textContent=selectedState==="__ALL__"?"INDIA LIVE WALL":place;
   if(ts) ts.textContent=selectedSector;
   if(td) td.textContent=dist;
-  if(to) to.textContent=visibleBusinesses.length
-    ? `${visibleBusinesses.length.toLocaleString("en-IN")} businesses matching this filter`
-    : "No approved businesses for this filter yet";
+  if(to) to.textContent=selectedState==="__ALL__"||selectedDistrict==="__ALL__"
+    ? "Select a State and District to view its 1,000-pixel wall"
+    : (visibleBusinesses.length
+      ? `${visibleBusinesses.length.toLocaleString("en-IN")} businesses matching this filter`
+      : "No approved businesses for this district yet");
 
   draw();
 }
@@ -1035,6 +1076,20 @@ async function loadBusinesses(){
   loading?.classList.remove("show");
 }
 
+/* -------------------- VIEW / SELECT modes -------------------- */
+function setInteractionMode(mode){
+  interactionMode=mode==="select"?"select":"view";
+  const v=document.getElementById("viewModeBtn"), q=document.getElementById("selectModeBtn");
+  if(v)v.classList.toggle("active",interactionMode==="view");
+  if(q)q.classList.toggle("active",interactionMode==="select");
+  if(interactionMode==="view"){
+    // Keep the user's selection visible until they explicitly clear/register it.
+    toast("VIEW mode: tap an occupied pixel to view its business.");
+  }else{
+    toast("SELECT mode: choose available pixels. New pixels must touch the selected area.");
+  }
+}
+
 /* -------------------- interactions -------------------- */
 
 
@@ -1046,17 +1101,24 @@ function handlePixelSelectionTap(clientX,clientY){
   if(!block)return;
 
   // Check every approved booking, not only the current filter.
-  const business=allBusinesses.find(x=>pixelRangeContains(x,block))||null;
-  if(business){
-    if(business.ad_video_url||business.ad_image_url) playBusinessAd(business);
-    else openDetails(business);
+  const business=allBusinesses.find(x=>matches(x.state,selectedState)&&matches(x.district,selectedDistrict)&&pixelRangeContains(x,block))||null;
+  if(interactionMode==="view"){
+    if(business){
+      if(business.ad_video_url||business.ad_image_url) playBusinessAd(business);
+      else openDetails(business);
+    }else{
+      toast("Pixel #"+block.toLocaleString("en-IN")+" is available. Tap SELECT to book it.");
+    }
     return;
   }
 
+  if(business){
+    toast("This pixel is already occupied.");
+    return;
+  }
   togglePixelSelection(block);
-  toast(selectedPixels.has(block)
-    ? '✓ Pixel #'+block.toLocaleString('en-IN')+' selected'
-    : 'Pixel #'+block.toLocaleString('en-IN')+' unselected');
+  if(selectedPixels.has(block)) toast('✓ Pixel #'+block.toLocaleString('en-IN')+' selected');
+  else if(!selectedPixels.has(block)) toast('Pixel #'+block.toLocaleString('en-IN')+' unselected');
 }
 
 // Normal browser click — reliable on Android Chrome, desktop and WebViews.
@@ -1095,7 +1157,7 @@ document.getElementById("sectorFilter").addEventListener("change",e=>{
   applyFilters();
 });
 document.getElementById("countryFilter").addEventListener("change",e=>{
-  // India is the current wall scope; keep the fixed 100,000-pixel wall.
+  // India is the current wall scope; keep the fixed 1,000-pixel district wall.
   selectedState="__ALL__";
   selectedDistrict="__ALL__";
   document.getElementById("stateFilter").value="__ALL__";
@@ -1107,6 +1169,8 @@ document.getElementById("countryFilter").addEventListener("change",e=>{
 
 document.querySelectorAll("[data-close]").forEach(el=>el.addEventListener("click",()=>closeModal(el.dataset.close)));
 document.querySelectorAll(".buyBox button").forEach(btn=>btn.addEventListener("click",()=>{toast("Select pixels on the wall first.")}));
+document.getElementById("viewModeBtn").onclick=()=>setInteractionMode("view");
+document.getElementById("selectModeBtn").onclick=()=>setInteractionMode("select");
 document.getElementById("playBtn").onclick=toggleAdMode;
 document.getElementById("topRegisterBtn").onclick=(e)=>{e.preventDefault();e.stopPropagation();prepareSelectedRegistration()};
 document.getElementById("registerSelectedBtn").onclick=(e)=>{e.preventDefault();e.stopPropagation();prepareSelectedRegistration()};
