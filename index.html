@@ -2,1214 +2,674 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MILLION PIXEL — Live Business Wall</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>ONE MINUTE NEWS</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{
-  --bg:#05070c;--panel:#0c1220;--panel2:#111827;--line:#253149;
-  --text:#f8fafc;--muted:#94a3b8;--blue:#2563eb;--cyan:#00c2ff;
-  --yellow:#f5b400;--green:#16c784;--orange:#ff7a00;--red:#ef4444;
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#171717}
+body.dark{background:#0d0f12;color:#fff}
+button,input,textarea,select{font:inherit}
+button{border:0;cursor:pointer}
+
+.app{width:100%;max-width:600px;height:100dvh;margin:auto;position:relative;overflow:hidden;background:#fff}
+.dark .app{background:#101216}
+
+.header{position:absolute;z-index:100;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:center;background:#fff;border-bottom:1px solid #e6e6e6}
+.dark .header{background:#15181d;border-color:#292d33}
+.logo{font-size:20px;font-weight:900;letter-spacing:-.7px}
+.logo b{color:#e31b23}
+.menu-btn{position:absolute;left:7px;width:42px;height:42px;background:transparent;font-size:25px}
+.header-right{position:absolute;right:5px;display:flex}
+.icon-btn{width:40px;height:40px;background:transparent;font-size:21px}
+
+.location-bar{position:absolute;z-index:90;top:56px;left:0;right:0;height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#fafafa;border-bottom:1px solid #e8e8e8}
+.dark .location-bar{background:#181b20;border-color:#292d33}
+.location-btn{background:transparent;color:#e31b23;font-size:12px;font-weight:800}
+
+.news-feed{position:absolute;z-index:1;top:90px;bottom:56px;left:0;right:0;overflow-y:auto;overflow-x:hidden;scroll-snap-type:y mandatory;scroll-snap-stop:always;scrollbar-width:none}
+.news-feed::-webkit-scrollbar{display:none}
+.news-screen{width:100%;height:100%;min-height:100%;max-height:100%;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;overflow:hidden;background:#fff}
+.dark .news-screen{background:#101216}
+
+.news-photo-wrap{width:100%;height:clamp(120px,28dvh,225px);flex:0 0 clamp(120px,28dvh,225px);position:relative;overflow:hidden;background:#ddd}
+.news-photo{width:100%;height:100%;object-fit:cover;display:block}
+.photo-count{position:absolute;right:9px;top:9px;background:rgba(0,0,0,.65);color:white;padding:5px 9px;border-radius:20px;font-size:11px}
+
+.news-content{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;padding:8px 12px 0}
+.category{width:max-content;max-width:100%;flex-shrink:0;background:#e31b23;color:#fff;padding:4px 9px;border-radius:4px;font-size:10px;font-weight:900;text-transform:uppercase;margin-bottom:5px}
+.news-title{flex-shrink:0;margin:0 0 5px;font-size:clamp(17px,5vw,23px);line-height:1.12;font-weight:900;overflow:hidden}
+.news-matter{flex:1;min-height:0;overflow:hidden;font-size:15px;line-height:1.27;color:#333;word-break:break-word}
+.dark .news-matter{color:#ddd}
+.news-meta{flex-shrink:0;min-height:24px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 0 5px;color:#777;font-size:10px}
+
+.news-actions{height:48px;min-height:48px;flex:0 0 48px;display:flex;align-items:center;justify-content:space-around;background:#fff;border-top:1px solid #e7e7e7}
+.dark .news-actions{background:#15181d;border-color:#292d33}
+.action{width:25%;height:46px;background:transparent;color:#444;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.dark .action{color:#eee}
+.action span{font-size:18px}.action small{font-size:9px;font-weight:800}.action.active{color:#e31b23}
+
+.bottom-nav{position:absolute;z-index:100;left:0;right:0;bottom:0;height:56px;display:flex;background:#fff;border-top:1px solid #ddd}
+.dark .bottom-nav{background:#15181d;border-color:#292d33}
+.nav-item{width:20%;height:55px;background:transparent;color:#555;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.dark .nav-item{color:#ccc}
+.nav-item span{font-size:19px}.nav-item small{font-size:9px}.nav-item.active{color:#e31b23}
+
+.overlay{position:fixed;z-index:190;inset:0;background:rgba(0,0,0,.5);display:none}.overlay.show{display:block}
+.drawer{position:fixed;z-index:200;left:0;top:0;bottom:0;width:min(310px,86vw);background:#fff;transform:translateX(-105%);transition:.25s;box-shadow:5px 0 25px rgba(0,0,0,.25);padding-top:15px}
+.dark .drawer{background:#171a1f}.drawer.open{transform:translateX(0)}
+.drawer-title{padding:14px 20px;font-size:20px;font-weight:900}
+.drawer-user{margin:0 14px 12px;padding:13px;background:#f1f1f1;border-radius:10px;font-size:13px}
+.dark .drawer-user{background:#252930}
+.drawer-item{width:100%;height:48px;padding:0 20px;display:flex;align-items:center;gap:13px;background:transparent;color:inherit;text-align:left;font-weight:700}
+.drawer-item:hover{background:#f2f2f2}
+
+.modal{position:fixed;z-index:300;left:50%;top:50%;width:min(94vw,560px);max-height:90dvh;overflow-y:auto;transform:translate(-50%,-50%) scale(.96);background:#fff;border-radius:16px;padding:18px;display:none;box-shadow:0 15px 50px rgba(0,0,0,.3)}
+.dark .modal{background:#191c21;color:#fff}.modal.show{display:block;animation:pop .18s forwards}
+@keyframes pop{to{transform:translate(-50%,-50%) scale(1)}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.modal-head h2{margin:0;font-size:20px}.close{width:35px;height:35px;border-radius:50%;background:#eee}
+.dark .close{background:#292d33;color:#fff}
+
+.form-group{margin-bottom:11px}.form-group label{display:block;margin-bottom:5px;font-size:12px;font-weight:800}
+.form-group input,.form-group textarea,.form-group select{width:100%;border:1px solid #ddd;border-radius:9px;padding:10px;outline:none;background:#fff}
+.dark .form-group input,.dark .form-group textarea,.dark .form-group select{background:#101216;color:#fff;border-color:#363a42}
+.form-group textarea{min-height:105px;resize:none}
+.word-count{text-align:right;font-size:10px;color:#777;margin-top:3px}
+.primary{width:100%;height:44px;border-radius:9px;background:#e31b23;color:#fff;font-weight:900}
+.secondary{width:100%;height:42px;border-radius:9px;background:#eee;font-weight:800}
+
+.auth-tabs{display:flex;gap:5px;margin-bottom:15px}.auth-tab{flex:1;height:38px;border-radius:8px;background:#eee;font-weight:800}
+.auth-tab.active{background:#e31b23;color:#fff}
+
+.search-box{display:flex;gap:6px}.search-box input{flex:1;padding:11px;border:1px solid #ddd;border-radius:9px}
+.search-results{max-height:55dvh;overflow:auto;margin-top:12px}
+.search-result{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #ddd}
+.search-result img{width:70px;height:50px;border-radius:6px;object-fit:cover}.search-result b{font-size:13px}
+
+.comments-list{max-height:42dvh;overflow:auto}.comment{padding:9px 0;border-bottom:1px solid #ddd}
+.comment-name{font-size:12px;font-weight:900}.comment-text{font-size:13px;margin-top:3px}
+.comment-input-row{display:flex;gap:6px;margin-top:10px}.comment-input-row input{flex:1;min-width:0;border:1px solid #ddd;border-radius:8px;padding:10px}
+
+.reels-modal{position:fixed;z-index:500;inset:0;display:none;background:#000}.reels-modal.show{display:block}
+.reels-feed{width:100%;height:100%;overflow-y:auto;scroll-snap-type:y mandatory}
+.reel{position:relative;width:100%;height:100%;min-height:100%;scroll-snap-align:start;background:#000}
+.reel img,.reel video{width:100%;height:100%;object-fit:cover}
+.reel-info{position:absolute;left:15px;right:15px;bottom:30px;color:#fff;text-shadow:0 1px 6px #000}
+.reel-info h3{margin:0 0 5px}.reels-close{position:absolute;z-index:510;right:12px;top:12px;width:40px;height:40px;border-radius:50%;color:#fff;background:rgba(0,0,0,.6);font-size:22px}
+
+.info-card{border:1px solid #e5e5e5;border-radius:12px;padding:12px;margin-bottom:10px}
+.dark .info-card{border-color:#363a42}
+.info-title{font-weight:900}.info-body{margin-top:10px;font-size:13px;line-height:1.6}
+
+.toast{position:fixed;z-index:1000;left:50%;bottom:70px;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;padding:10px 16px;border-radius:22px;font-size:12px;opacity:0;pointer-events:none;transition:.25s;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-height:650px){
+.news-photo-wrap{height:22dvh;flex-basis:22dvh}.news-content{padding-top:5px}.news-title{font-size:17px;margin-bottom:3px}
+.news-actions{height:45px;min-height:45px;flex-basis:45px}.action{height:43px}
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#fff;color:var(--text);min-height:100vh}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.app{width:min(100%,1100px);margin:auto;background:#fff;min-height:100vh;border-left:1px solid #eee;border-right:1px solid #eee}
-.topbar{height:76px;background:#0b1220;border-bottom:1px solid #17233a;display:flex;align-items:center;gap:10px;padding:10px 14px;position:sticky;top:0;z-index:100}
-.brand{display:flex;align-items:center;gap:8px;min-width:0;flex:1;flex-wrap:nowrap}
-.logoMark{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,#5b5cf0,#ff4fa3);display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:6px;box-shadow:0 0 18px rgba(93,92,240,.25)}
-.logoMark i{background:#fff;border-radius:2px;opacity:.95}
-.brandText{font-weight:950;letter-spacing:.3px;font-size:12px;line-height:1}
-.brandText small{display:block;font-size:5px;color:#58c9ff;letter-spacing:.8px;margin-top:3px}
-.filters{display:flex;gap:7px;align-items:center;flex:1}
-.field{position:relative}
-.field select{appearance:none;width:100%;height:36px;background:#080f1d;border:1px solid #263552;color:#e5edf8;border-radius:7px;padding:0 28px 0 10px;font-size:9px;font-weight:800;outline:none}
-.field:after{content:"⌄";position:absolute;right:9px;top:8px;color:#8090a8;font-size:11px;pointer-events:none}
-.field label{position:absolute;left:8px;top:-5px;background:#080f1d;padding:0 3px;color:#6f829f;font-size:6px;font-weight:900;letter-spacing:.5px}
-.country{width:82px}.state{width:98px}.district{width:112px}.sector{width:130px}
-.actions{display:flex;gap:8px;margin-left:auto}
-.action{height:36px;border:0;border-radius:8px;padding:0 15px;color:#fff;font-size:9px;font-weight:950;white-space:nowrap}
-.play{background:linear-gradient(180deg,#ff5b3a,#f13b22);box-shadow:0 4px 14px rgba(255,74,40,.18)}
-.buy{background:linear-gradient(180deg,#ffb321,#f27800);box-shadow:0 4px 14px rgba(255,137,0,.18)}
-.ticker{height:28px;background:#080e19;border-bottom:1px solid #1a2538;display:flex;align-items:center;gap:8px;padding:0 14px;overflow:hidden;white-space:nowrap;font-size:8px;font-weight:800;color:#cbd5e1}
-.live{background:#0dd47f;color:#00180d;border-radius:20px;padding:4px 9px;font-size:7px}
-.ticker b{color:#ffb31b}.ticker span{color:#6d7d95}.ticker .red{color:#ff5c52}
-.wallWrap{padding:9px 14px 0}
-.wallFrame{border:1px solid #24314a;background:#0a0f18;box-shadow:0 0 0 1px #070a10 inset}
-.canvasBox{height:calc(100vh - 155px);min-height:430px;position:relative;background:#fff;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;scroll-behavior:auto;padding-bottom:28px}
-canvas{display:block;width:100%;height:100%;position:absolute;left:0;top:0;z-index:2;pointer-events:none}.canvasBox #selectionCanvas{z-index:3;pointer-events:none;touch-action:none}.adPixelMedia{position:absolute;z-index:4;overflow:hidden;pointer-events:none;background:#fff}.adPixelMedia video,.adPixelMedia img{width:100%;height:100%;display:block;object-fit:cover;background:#fff}.adPixelCanvas{position:absolute;z-index:4;pointer-events:none;background:transparent;display:block}.canvasSpacer{display:block;width:1px;height:5000px;pointer-events:none}
-.wallBadge{position:absolute;left:12px;top:10px;background:rgba(5,9,16,.8);border:1px solid #2b3850;color:#c9d4e4;border-radius:6px;padding:6px 8px;font-size:8px;font-weight:900;pointer-events:none}
-.wallHint{position:absolute;right:12px;bottom:10px;background:rgba(5,9,16,.82);border:1px solid #2b3850;color:#8291a8;border-radius:6px;padding:6px 8px;font-size:7px;pointer-events:none}
-.loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(5,9,16,.76);font-size:10px;color:#9fb0c7;font-weight:900;pointer-events:none}
-.loading.hide{display:none}
-.loading.show{display:flex}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.76);z-index:500;align-items:center;justify-content:center;padding:15px}
-.modal.show{display:flex}
-.modalCard{width:min(500px,100%);max-height:90vh;overflow:auto;background:#0c1320;border:1px solid #2a3850;border-radius:12px;padding:18px;box-shadow:0 30px 80px rgba(0,0,0,.55);position:relative}
-.close{position:absolute;right:10px;top:10px;width:30px;height:30px;border:0;border-radius:50%;background:#1b2536;color:#fff;font-size:18px}
-.modalCard h3{font-size:18px;margin-bottom:5px}.muted{color:#8492a7;font-size:10px}
-.detailLogo{width:82px;height:82px;object-fit:contain;background:#fff;border-radius:10px;margin-bottom:10px}
-.detailRow{padding:9px 0;border-bottom:1px solid #1b2638;font-size:11px}.detailRow b{display:block;color:#6e8099;font-size:7px;text-transform:uppercase;margin-bottom:3px}
-.detailButtons{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
-.detailButtons a,.detailButtons button{border:0;border-radius:7px;padding:9px 12px;text-decoration:none;font-size:9px;font-weight:900}
-.primary{background:#2563eb;color:#fff}.secondary{background:#1b2536;color:#fff}
-video.detailVideo{width:100%;max-height:240px;border-radius:8px;background:#000;margin:10px 0}
-.adCard{width:min(1100px,98vw);padding:14px;background:#05080d;border-color:#39465b}.adTitle{font-size:11px;font-weight:900;letter-spacing:1.5px;color:#9aa7ba;margin:2px 0 10px}.adVideo{display:block;width:100%;height:min(78vh,calc(100vh - 150px));max-height:78vh;aspect-ratio:16/9;object-fit:cover;background:#fff;border-radius:10px}
-.adImageWrap{width:100%;height:min(78vh,calc(100vh - 150px));display:flex;align-items:center;justify-content:center;background:#000;border-radius:10px;overflow:hidden}
-.adImage{display:block;width:100%;height:100%;object-fit:contain;background:#000}.adMeta{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 2px 2px;color:#dfe6ef;font-size:12px}.adMeta small{color:#8794a7}
-.buyGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:14px}
-.buyBox{border:1px solid #27354d;background:#101a2a;border-radius:8px;padding:12px;text-align:center}.buyBox strong{font-size:15px}.buyBox span{display:block;color:#8b99ad;font-size:7px;margin:4px 0 9px}
-.buyBox button{border:0;background:#ff8a00;color:#fff;border-radius:6px;padding:7px 9px;font-size:8px;font-weight:900}
-.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#101827;border:1px solid #2c3b55;color:#fff;border-radius:8px;padding:9px 12px;font-size:9px;font-weight:800;z-index:1000;transition:.2s}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:900px){
-  .topbar{height:auto;min-height:76px;flex-wrap:wrap;align-items:center}.brand{width:100%;flex-basis:100%;min-width:0}.brandText{flex:0 1 auto}.brandActions{margin-left:auto}.filters{order:3;width:100%;flex-basis:100%}.actions{margin-left:auto}.country,.state,.district,.sector{flex:1;width:auto}
-}
-@media(max-width:620px){
-  .topbar{padding:8px}.brand{min-width:0}.logoMark{width:27px;height:27px;flex:0 0 27px}.brandText{font-size:10px;min-width:0}.brandText small{font-size:4px}.brandActions{gap:4px}.brandActions .action{height:32px;padding:0 7px;font-size:8px}.play{display:block}.modeBtn{padding:0 7px!important}
-  .canvasBox{height:calc(100vh - 190px);min-height:430px}.wallWrap{padding:7px}.buyGrid{grid-template-columns:repeat(2,1fr)}
-}
-
-.registerCard{width:min(650px,100%)}
-.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.formField{display:flex;flex-direction:column;gap:5px}.formField.full{grid-column:1/-1}
-.formField label{font-size:9px;color:#b8c5d8;font-weight:900;letter-spacing:.3px}.formField input,.formField select,.formField textarea{width:100%;background:#080f1d;color:#eef5ff;border:1px solid #2a3952;border-radius:8px;padding:10px;font-size:10px;outline:none}.formField textarea{resize:vertical}.formField small{font-size:7px;color:#72839b}.req{color:#ff6158}.opt{color:#58c9ff}.registerStatus{display:none;margin-top:12px;padding:10px;border-radius:8px;font-size:9px;font-weight:800}.registerStatus.show{display:block}.registerStatus.error{background:#3a1518;color:#ffb4ae;border:1px solid #673036}.registerStatus.success{background:#0b2c20;color:#8ff0c1;border:1px solid #1e684d}.formActions{display:flex;justify-content:flex-end;gap:7px;margin-top:13px}.formActions button{border:0;border-radius:7px;padding:9px 13px;font-size:9px;font-weight:900}.upiBox{margin:14px 0;background:#111a29;border:1px solid #2c3c57;border-radius:8px;padding:12px;font-weight:950;word-break:break-all}.detailRow{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #1b2638;font-size:10px}.detailRow b{color:#71829b;font-size:7px;text-transform:uppercase}.detailRow span{font-weight:900}.detailButtons{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}.detailButtons button{border:0;border-radius:7px;padding:9px 12px;font-size:9px;font-weight:900}
-@media(max-width:620px){.formGrid{grid-template-columns:1fr}.formField.full{grid-column:auto}.registerCard{padding:14px}.formActions{position:sticky;bottom:0;background:#0c1320;padding-top:8px}}
-
-/* PREMIUM REGISTRATION SUMMARY */
-.regHero{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:2px 0 14px;border-bottom:1px solid #e5e7eb}.regEyebrow{font-size:7px;letter-spacing:1.5px;font-weight:950;color:#2563eb}.regHero h3{margin-top:5px}.regTotal{min-width:100px;text-align:right;padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px}.regTotal small{display:block;font-size:7px;color:#64748b;font-weight:900;letter-spacing:.8px}.regTotal strong{display:block;font-size:20px;line-height:1.1;margin-top:3px;color:#111827}.regTotal span{display:block;font-size:7px;color:#64748b;font-weight:900;margin-top:3px}.selectedSummary{margin-top:12px;padding:12px;border:1px solid #dbe4ee;background:linear-gradient(180deg,#f8fbff,#fff);border-radius:14px}.summaryTitle{font-size:8px;font-weight:950;letter-spacing:.9px;color:#475569;margin-bottom:8px}.selectedPills{display:flex;gap:6px;flex-wrap:wrap;max-height:78px;overflow:auto}.pixelPill{display:inline-flex;align-items:center;gap:5px;padding:6px 8px;border-radius:8px;background:#fff;border:1px solid #dbe2ea;font-size:8px;font-weight:900;color:#1e293b}.pixelPill b{color:#2563eb}.zoneSummary{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.zoneChip{padding:7px 9px;border-radius:9px;background:#fff;border:1px solid #e2e8f0;font-size:7px;font-weight:900;color:#475569}.zoneChip b{font-size:9px;color:#111827;margin-left:3px}.selectionHelp{font-size:8px;color:#64748b;margin-top:7px}
-/* WHITE PROFESSIONAL UI */
-:root{--bg:#ffffff;--panel:#ffffff;--panel2:#f8fafc;--line:#e5e7eb;--text:#111827;--muted:#64748b;--blue:#2563eb;--cyan:#0891b2;--yellow:#f59e0b;--green:#16a34a;--orange:#f97316;--red:#dc2626}
-body{background:#ffffff;color:#111827}
-.app{background:#ffffff;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb}
-.topbar{background:#ffffff;border-bottom:1px solid #e5e7eb;box-shadow:0 2px 12px rgba(15,23,42,.05)}
-.field select{background:#ffffff;color:#111827;border-color:#d7dde6}
-.field label{background:#ffffff;color:#64748b}
-.ticker{background:#ffffff;border-bottom:1px solid #e5e7eb;color:#475569}
-.ticker span{color:#64748b}
-.wallFrame{border-color:#dbe2ea;background:#ffffff;box-shadow:0 0 0 1px #f1f5f9 inset}
-.canvasBox{background:#ffffff}
-.wallBadge{background:rgba(255,255,255,.94);border-color:#dbe2ea;color:#334155;box-shadow:0 4px 14px rgba(15,23,42,.06)}
-.wallHint{background:rgba(255,255,255,.94);border-color:#dbe2ea;color:#64748b;box-shadow:0 4px 14px rgba(15,23,42,.06)}
-.loading{background:rgba(255,255,255,.86);color:#475569}
-.modal{background:rgba(15,23,42,.45)}
-.modalCard{background:#ffffff;border-color:#e2e8f0;box-shadow:0 30px 80px rgba(15,23,42,.18)}
-.close{background:#f1f5f9;color:#334155}
-.muted{color:#64748b}
-.detailRow{border-bottom-color:#e5e7eb}
-.detailRow b{color:#64748b}
-.secondary{background:#eef2f7;color:#1e293b}
-.adCard{background:#ffffff;border-color:#e2e8f0}
-.adTitle{color:#64748b}
-.adMeta{color:#334155}.adMeta small{color:#64748b}
-.buyBox{border-color:#e2e8f0;background:#f8fafc}
-.buyBox span{color:#64748b}
-.toast{background:#111827;color:#fff}
-.formField label{color:#475569}
-.formField input,.formField select,.formField textarea{background:#ffffff;color:#111827;border-color:#d7dde6}
-.formField small{color:#64748b}
-.formActions{background:#ffffff}
-.upiBox{background:#f8fafc;border-color:#dbe2ea;color:#111827}
-.registerStatus.error{background:#fff1f2;color:#be123c;border-color:#fecdd3}
-.registerStatus.success{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-@media(max-width:620px){.formActions{background:#ffffff}}
-
-/* WHITE PIXELS + AUTOMATIC AD PLAY */
-.pixel-cell, .pixel, .wall-pixel { background:#fff !important; border-color:#e8e8e8 !important; }
-.pixel-cell.business, .pixel.business, .wall-pixel.business { background:#fff !important; }
-.ad-overlay video { object-fit:contain; }
-.modeBtn{background:#fff;border:1px solid #d7dde6;color:#334155}.modeBtn.active{background:#111827;color:#fff;border-color:#111827}.modeBtn:disabled{opacity:.55;cursor:not-allowed}.brandTitleOnly{font-size:20px;font-weight:900;letter-spacing:-.5px;color:#111;white-space:nowrap}.brandText{font-weight:900}.brandText small{font-weight:600} .brandActions{display:flex;align-items:center;gap:6px;margin-left:auto;flex-wrap:nowrap;flex-shrink:0;overflow:visible}.brandActions .action{white-space:nowrap}@media(max-width:760px){.brandTitleOnly{font-size:16px}.brandActions{margin-left:6px}.brandActions .action{padding:7px 9px;font-size:10px}.filters{order:3}}
-
-/* District wall: exactly 20 columns × 50 rows = 1,000 numbered pixels.
-   The wall itself scrolls; the top controls stay visible. */
-.canvasBox{overscroll-behavior:contain;scrollbar-gutter:stable;}
-.topbar{isolation:isolate;}
-.brandActions{display:flex;align-items:center;justify-content:flex-end;gap:3px;flex:0 0 auto;min-width:0;max-width:100%;}
-.brandActions .action{height:24px;padding:0 6px;border-radius:5px;font-size:7px;line-height:1;letter-spacing:0;box-shadow:none;}
-.brandActions .modeBtn{display:inline-flex;align-items:center;justify-content:center;}
-.brandActions .primary{padding:0 6px!important;}
-@media(max-width:760px){.topbar{height:auto;min-height:76px;padding:7px 8px;gap:6px;}.brand{gap:5px;}.logoMark{width:25px;height:25px;padding:4px;gap:2px}.brandText{font-size:10px}.brandText small{font-size:4px}.brandActions{gap:2px}.brandActions .action{height:22px;padding:0 5px;font-size:6.5px;border-radius:4px}.filters{gap:4px}.field select{height:30px;padding:0 20px 0 6px;font-size:8px}.country{width:64px}.state{width:78px}.district{width:88px}.sector{width:96px}}
-@media(max-width:520px){.topbar{display:block;padding:6px 7px}.brand{width:100%;display:flex}.brandActions{margin-left:auto}.brandActions .action{height:21px;padding:0 4px;font-size:6px}.filters{margin-top:6px;width:100%;}.country{width:23%}.state{width:25%}.district{width:27%}.sector{width:25%}}
 </style>
 </head>
+
 <body>
+
 <div class="app">
-  <header class="topbar">
-    <div class="brand">
-      <div class="logoMark"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      <div class="brandText">MILLION PIXEL<small>1,000 PIXELS PER DISTRICT · LIVE BUSINESS WALL</small></div>
-      <div class="brandActions">
-        <button type="button" class="action play" id="playBtn">▶ PIXEL AD</button>
-        <button type="button" class="action modeBtn active" id="viewModeBtn">👁 VIEW</button>
-        <button type="button" class="action modeBtn" id="selectModeBtn">☑ SELECT</button>
-        <button type="button" class="action primary" id="topRegisterBtn">＋ PIXEL REGISTRATION</button>
-      </div>
-    </div>
 
-    <div class="filters">
-      <div class="field country"><label>COUNTRY</label><select id="countryFilter"><option value="India">India</option></select></div>
-      <div class="field state"><label>STATE / UT</label><select id="stateFilter"></select></div>
-      <div class="field district"><label>DISTRICT</label><select id="districtFilter"></select></div>
-      <div class="field sector"><label>SECTOR</label><select id="sectorFilter"></select></div>
-    </div>
+<header class="header">
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
+<div class="logo">ONE <b>MINUTE</b> NEWS</div>
+<div class="header-right">
+<button class="icon-btn" onclick="openSearch()">⌕</button>
+<button class="icon-btn" onclick="openLogin()">◯</button>
+</div>
+</header>
 
-  </header>
-
-  <div class="ticker">
-    <span class="live">● LIVE NOW</span>
-    <b id="tickerCompany">MILLION PIXEL</b>
-    <span>| Sector: <b id="tickerSector">Business</b></span>
-    <span>| 📍 <b id="tickerDistrict">Hyderabad</b></span>
-    <span>| 🔥 <span class="red" id="tickerOffer">Discover businesses on the live wall</span></span>
-  </div>
-
-  <main class="wallWrap">
-    <div class="wallFrame">
-      <div class="canvasBox" id="stage">
-        <div class="canvasSpacer" id="canvasSpacer"></div><canvas id="wallCanvas"></canvas><canvas id="selectionCanvas" aria-label="Pixel selection layer"></canvas><div id="adLayer" aria-hidden="true"></div>
-        <div class="wallBadge" id="wallBadge">INDIA · TELANGANA · HYDERABAD</div>
-        <div class="wallHint">20 PIXELS EACH LINE × 50 ROWS = 1,000 • SQUARE PIXELS • TAP ANY AVAILABLE PIXEL TO SELECT • SELECTED PIXELS TURN BLUE</div>
-        <div class="loading hide" id="loading">Loading live pixels…</div>
-      </div>
-    </div>
-  </main>
-
-
-<div class="modal" id="detailModal">
-  <div class="modalCard">
-    <button class="close" data-close="detailModal">×</button>
-    <div id="detailContent"></div>
-  </div>
+<div class="location-bar">
+<button class="location-btn" onclick="openLocation()">📍 <span id="locationText">All India</span></button>
+<span id="dateText"></span>
 </div>
 
-<div class="modal" id="adModal">
-  <div class="modalCard adCard">
-    <button class="close" data-close="adModal">×</button>
-    <div class="adTitle">ADVERTISEMENT</div>
-    <div id="adContent"></div>
-  </div>
+<main class="news-feed" id="newsFeed"></main>
+
+<nav class="bottom-nav">
+<button class="nav-item active" onclick="goHome()"><span>⌂</span><small>Home</small></button>
+<button class="nav-item" onclick="openSearch()"><span>⌕</span><small>Search</small></button>
+<button class="nav-item" onclick="openReels()"><span>▶</span><small>Reels</small></button>
+<button class="nav-item" onclick="openSaved()"><span>🔖</span><small>Saved</small></button>
+<button class="nav-item" onclick="openLogin()"><span>◯</span><small>Profile</small></button>
+</nav>
 </div>
 
-<div class="modal" id="buyModal">
-  <div class="modalCard registerCard">
-    <button class="close" data-close="buyModal">×</button>
-    <div class="regHero">
-      <div><span class="regEyebrow">MILLION PIXEL</span><h3>REGISTER YOUR BUSINESS</h3><p class="muted">Your selected pixels are reserved for this registration. Fill in your business details and submit.</p></div>
-      <div class="regTotal"><small>TOTAL</small><strong id="regHeroTotal">₹0</strong><span id="regHeroCount">0 PIXELS</span></div>
-    </div>
-    <div class="selectedSummary" id="selectedSummary">
-      <div class="summaryTitle">SELECTED PIXELS</div>
-      <div class="selectedPills" id="selectedPills"></div>
-      <div class="zoneSummary" id="zoneSummary"></div>
-    </div>
-    <form id="businessForm">
-      <div class="formGrid">
-        <div class="formField"><label>State / UT *</label><select id="regState" required></select></div>
-        <div class="formField"><label>District</label><select id="regDistrict"><option value="">Select District</option></select></div>
-        <div class="formField full"><label>Selected Pixels *</label><input id="regPixel" type="text" placeholder="Selected pixels will appear here" readonly required><small>You can select/unselect pixels directly on the wall before registering.</small></div>
-        <div class="formField"><label>Pixel Count *</label><input id="regCount" type="number" min="1" max="100000" value="1" readonly required></div>
-        <div class="formField"><label>Position Price</label><input id="regPrice" readonly></div>
-        <div class="formField"><label>Business Name *</label><input id="companyName" required placeholder="Sunrise Motors"></div>
-        <div class="formField"><label>Contact Person *</label><input id="contactPerson" required placeholder="Ravi Kumar"></div>
-        <div class="formField"><label>Mobile Number *</label><input id="mobile" required maxlength="10" inputmode="numeric" placeholder="9876543210"></div>
-        <div class="formField"><label>Business Sector *</label><select id="regSector" required></select></div>
-        <div class="formField"><label>Website <span style="color:#c62828">*</span></label><input id="website" placeholder="https://example.com"></div>
-        <div class="formField full"><label>Offer for Customers</label><input id="offer" maxlength="180" placeholder="20% off this month!"></div>
-        <div class="formField full"><label>Business Description</label><textarea id="description" rows="3" maxlength="700" placeholder="Tell customers about your business..."></textarea></div>
-        <div class="formField full"><label>Business Logo * <span class="req">Required</span></label><input id="logo" type="file" accept="image/png,image/jpeg,image/webp" required><small>PNG, JPG or WEBP</small></div>
-        <div class="formField full"><label>Advertisement Image <span class="opt">Optional</span></label><input id="adImage" type="file" accept="image/png,image/jpeg,image/webp"><small>Optional promotional poster/image</small></div>
-        <div class="formField full"><label>Advertisement Video <span class="opt">Optional</span></label><input id="adVideo" type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov"><small>Optional video advertisement</small></div>
-      </div>
-      <div id="registerStatus" class="registerStatus"></div>
-      <div class="formActions"><button type="button" class="secondary" data-close="buyModal">CANCEL</button><button id="submitBtn" class="primary" type="submit">REGISTER NOW</button></div>
-    </form>
-  </div>
+<div class="overlay" id="drawerOverlay" onclick="closeMenu()"></div>
+
+<aside class="drawer" id="drawer">
+<div class="drawer-title">ONE MINUTE NEWS</div>
+<div class="drawer-user" id="drawerUser">Create your account</div>
+
+<button class="drawer-item" onclick="openLogin();closeMenu()">🔐 Login / Sign Up</button>
+<button class="drawer-item" onclick="openUpload();closeMenu()">⬆️ Upload News</button>
+<button class="drawer-item" onclick="openReelUpload();closeMenu()">🎬 Upload Reels</button>
+<button class="drawer-item" onclick="openReels();closeMenu()">▶️ Reels</button>
+<button class="drawer-item" onclick="openLiveInfo();closeMenu()">🏏 Live Scores & Weather</button>
+<button class="drawer-item" onclick="openSaved();closeMenu()">🔖 Saved News</button>
+<button class="drawer-item" onclick="openLocation();closeMenu()">📍 Change Location</button>
+<button class="drawer-item" onclick="openLanguage();closeMenu()">🌐 Language</button>
+<button class="drawer-item" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+<button class="drawer-item" onclick="openNotifications();closeMenu()">🔔 Notifications</button>
+<button class="drawer-item" onclick="openAbout();closeMenu()">ℹ️ About</button>
+<button class="drawer-item" id="logoutBtn" style="display:none" onclick="logoutUser()">🚪 Logout</button>
+</aside>
+
+<!-- ACCOUNT -->
+<div class="modal" id="authModal">
+<div class="modal-head"><h2>Account</h2><button class="close" onclick="closeModal('authModal')">✕</button></div>
+<div class="auth-tabs">
+<button class="auth-tab active" id="loginTab" onclick="switchAuth('login')">Login</button>
+<button class="auth-tab" id="signupTab" onclick="switchAuth('signup')">Create Account</button>
+</div>
+<div class="form-group" id="nameGroup" style="display:none"><label>Name</label><input id="authName" placeholder="Enter your name"></div>
+<div class="form-group"><label>Email</label><input id="authEmail" type="email" placeholder="Enter email"></div>
+<div class="form-group"><label>Password</label><input id="authPassword" type="password" placeholder="Enter password"></div>
+<button class="primary" id="authSubmit" onclick="submitAuth()">Login</button>
+<div style="text-align:center;color:#888;font-size:10px;margin-top:10px">Simple demo account</div>
 </div>
 
-<div class="modal" id="paymentModal">
-  <div class="modalCard">
-    <button class="close" data-close="paymentModal">×</button>
-    <div style="text-align:center">
-      <div style="font-size:11px;color:#7f8da3;font-weight:900;letter-spacing:1px">REGISTRATION RECEIVED</div>
-      <h3 style="margin-top:7px">Complete Payment</h3>
-      <p class="muted" style="margin-top:6px">Your registration is pending approval. Complete payment using the UPI ID below.</p>
-      <div class="upiBox" id="upiText">9640467264@ibl</div>
-      <div class="detailRow"><b>Pixel</b><span id="paymentPixel">—</span></div>
-      <div class="detailRow"><b>Amount</b><span id="paymentAmount">₹0</span></div><div id="paymentStatus" style="display:none;margin-top:12px;padding:10px;border-radius:10px;background:#eefaf2;font-weight:800;font-size:13px"></div>
-      <div class="detailButtons" style="justify-content:center">
-        <button class="secondary" id="copyUpiBtn">COPY UPI</button>
-        <button class="primary" id="payBtn">MAKE PAYMENT</button>
-        <button class="secondary" id="paidBtn">I HAVE PAID</button>
-      </div>
-    </div>
-  </div>
+<!-- NEWS UPLOAD -->
+<div class="modal" id="uploadModal">
+<div class="modal-head"><h2>Upload News</h2><button class="close" onclick="closeModal('uploadModal')">✕</button></div>
+
+<div class="form-group"><label>Headline</label><input id="uploadHeadline" maxlength="180" placeholder="News headline"></div>
+<div class="form-group"><label>News Matter — Maximum 60 Words</label>
+<textarea id="uploadMatter" placeholder="Write news in maximum 60 words" oninput="updateWordCount()"></textarea>
+<div class="word-count"><span id="wordCount">0</span>/60</div></div>
+
+<div class="form-group"><label>Category</label>
+<select id="uploadCategory">
+<option>India</option><option>Telangana</option><option>Andhra Pradesh</option><option>Politics</option><option>Business</option><option>Technology</option><option>Sports</option><option>Education</option><option>Entertainment</option><option>Crime</option><option>World</option><option>Jobs</option>
+</select></div>
+
+<div class="form-group"><label>Language</label>
+<select id="uploadLanguage">
+<option>English</option><option>Telugu</option><option>Hindi</option><option>Tamil</option><option>Kannada</option><option>Malayalam</option><option>Marathi</option><option>Bengali</option><option>Gujarati</option><option>Punjabi</option><option>Odia</option><option>Assamese</option><option>Urdu</option>
+</select></div>
+
+<div class="form-group"><label>Location</label><input id="uploadLocation" placeholder="City / District / State"></div>
+
+<div class="form-group"><label>Media Type</label>
+<select id="mediaType" onchange="changeMediaType()">
+<option value="single">Single Picture</option><option value="multiple">Multiple Pictures</option><option value="video">Video</option>
+</select></div>
+
+<div class="form-group"><input id="mediaFile" type="file" accept="image/*"></div>
+<div id="mediaPreview"></div>
+<button class="primary" onclick="publishNews()">Publish News</button>
 </div>
 
-<div id="selectionBar" style="display:none;position:sticky;bottom:14px;z-index:50;margin:12px auto 0;max-width:760px;padding:12px 14px;background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.10);align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap"><div><strong id="selectionCount">0 PIXELS</strong><span style="margin-left:10px;color:#555">TOTAL <b id="selectionTotal">₹0</b></span></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="secondary" id="clearSelectionBtn">CLEAR</button><button type="button" class="primary" id="registerSelectedBtn">REGISTER SELECTED PIXELS</button></div></div>
+<!-- REEL UPLOAD -->
+<div class="modal" id="reelUploadModal">
+<div class="modal-head"><h2>Upload Reels</h2><button class="close" onclick="closeModal('reelUploadModal')">✕</button></div>
+<div class="form-group"><label>Reel Title</label><input id="reelTitle" maxlength="120" placeholder="Reel title"></div>
+<div class="form-group"><label>Reel Matter</label><textarea id="reelMatter" maxlength="300" placeholder="Short reel description"></textarea></div>
+<div class="form-group"><label>Category</label>
+<select id="reelCategory"><option>India</option><option>Telangana</option><option>Andhra Pradesh</option><option>Politics</option><option>Business</option><option>Technology</option><option>Sports</option><option>Education</option><option>Entertainment</option><option>World</option></select>
+</div>
+<div class="form-group"><label>Location</label><input id="reelLocation" placeholder="City / District / State"></div>
+<div class="form-group"><label>Reel Video</label><input id="reelFile" type="file" accept="video/*"></div>
+<div id="reelPreview"></div>
+<button class="primary" onclick="publishReel()">Publish Reel</button>
+</div>
+
+<!-- SEARCH -->
+<div class="modal" id="searchModal">
+<div class="modal-head"><h2>Search News</h2><button class="close" onclick="closeModal('searchModal')">✕</button></div>
+<div class="search-box"><input id="searchInput" placeholder="Search news..." oninput="searchNews()"></div>
+<div class="search-results" id="searchResults"></div>
+</div>
+
+<!-- LOCATION -->
+<div class="modal" id="locationModal">
+<div class="modal-head"><h2>Select Location</h2><button class="close" onclick="closeModal('locationModal')">✕</button></div>
+<div class="form-group"><label>State</label><select id="stateSelect" onchange="loadDistricts()"></select></div>
+<div class="form-group"><label>District</label><select id="districtSelect"></select></div>
+<button class="primary" onclick="saveLocation()">Save Location</button>
+</div>
+
+<!-- LANGUAGE -->
+<div class="modal" id="languageModal">
+<div class="modal-head"><h2>Language</h2><button class="close" onclick="closeModal('languageModal')">✕</button></div>
+<div class="form-group"><select id="languageSelect"><option>English</option><option>Telugu</option><option>Hindi</option><option>Tamil</option><option>Kannada</option><option>Malayalam</option><option>Marathi</option><option>Bengali</option><option>Gujarati</option><option>Punjabi</option><option>Odia</option><option>Assamese</option><option>Urdu</option></select></div>
+<button class="primary" onclick="saveLanguage()">Save Language</button>
+</div>
+
+<!-- COMMENTS -->
+<div class="modal" id="commentModal">
+<div class="modal-head"><h2>Comments</h2><button class="close" onclick="closeModal('commentModal')">✕</button></div>
+<div class="comments-list" id="commentsList"></div>
+<div class="comment-input-row"><input id="commentInput" placeholder="Write a comment"><button class="primary" style="width:80px" onclick="sendComment()">Send</button></div>
+</div>
+
+<!-- SAVED -->
+<div class="modal" id="savedModal">
+<div class="modal-head"><h2>Saved News</h2><button class="close" onclick="closeModal('savedModal')">✕</button></div>
+<div id="savedList"></div>
+</div>
+
+<!-- LIVE SCORE + WEATHER -->
+<div class="modal" id="liveInfoModal">
+<div class="modal-head"><h2>Live Updates</h2><button class="close" onclick="closeModal('liveInfoModal')">✕</button></div>
+
+<div class="info-card">
+<div class="info-title">🏏 Live Scores</div>
+<div class="info-body" id="liveScores">Loading live scores...</div>
+</div>
+
+<div class="info-card">
+<div class="info-title">🌤 Weather</div>
+<div class="info-body" id="weatherBox">Loading weather...</div>
+</div>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div class="modal" id="notificationModal">
+<div class="modal-head"><h2>Notifications</h2><button class="close" onclick="closeModal('notificationModal')">✕</button></div>
+<p style="font-size:14px;line-height:1.5">🔔 Important news notifications will appear here.</p>
+</div>
+
+<!-- ABOUT -->
+<div class="modal" id="aboutModal">
+<div class="modal-head"><h2>ONE MINUTE NEWS</h2><button class="close" onclick="closeModal('aboutModal')">✕</button></div>
+<p style="font-size:14px;line-height:1.6">ONE MINUTE NEWS is a short-news platform designed for quick mobile reading. Every news story is shown in a simple one-screen format.</p>
+</div>
+
+<!-- REELS -->
+<div class="reels-modal" id="reelsModal">
+<button class="reels-close" onclick="closeReels()">✕</button>
+<div class="reels-feed" id="reelsFeed">
+<div class="reel">
+<img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1200&q=80">
+<div class="reel-info"><h3>ONE MINUTE NEWS</h3><div>Short news. Fast updates.</div></div>
+</div>
+<div class="reel">
+<img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80">
+<div class="reel-info"><h3>India Updates</h3><div>Stay updated with important developments.</div></div>
+</div>
+</div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-/* =========================================================
-   MILLION PIXEL — FINAL CANVAS WALL
-   Supabase is the live data source.
-   Canvas draws the wall; it does NOT create 100,000 HTML elements.
-   ========================================================= */
-
 const SUPABASE_URL="https://eaowxilhfzyukzetgqxo.supabase.co";
-const SUPABASE_KEY="sb_publishable_Z3xsADypaOjX8GEQEOLUdg_vbxynHRx";
-const API_URL=SUPABASE_URL+"/rest/v1/businesses";
-const UPI_ID="9640467264@ibl"; // Replace this with your final UPI ID
+const SUPABASE_ANON_KEY="sb_publishable_Z3xsADypaOjX8GEQEOLUdg_vbxynHRx";
+let sb=null;
 
-const TOTAL_PIXELS=1000;
-const WALL_COLS=20;
-const WALL_ROWS=50; // 20 pixels per line × 50 rows = 1,000 pixels per district
-const PIXELS_PER_DISTRICT=1000; // every district gets its own independent 1,000-pixel wall
-/* All India states + union territories */
-const STATES=[
- "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa",
- "Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala",
- "Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland",
- "Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura",
- "Uttar Pradesh","Uttarakhand","West Bengal",
- "Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli and Daman and Diu",
- "Delhi","Jammu and Kashmir","Ladakh","Lakshadweep","Puducherry"
+try{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY)}catch(e){console.log(e)}
+
+const sampleNews=[
+{id:"sample1",headline:"India sees important developments across major cities",matter:"Important developments are being reported across India today. Government departments, businesses, education institutions and local administrations are releasing updates. Follow ONE MINUTE NEWS for short and easy-to-read news updates from your selected location.",category:"India",language:"English",location:"All India",image_url:"https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80",created_at:new Date().toISOString()},
+{id:"sample2",headline:"Technology sector continues to expand with new opportunities",matter:"Technology companies are continuing to announce new products, services and employment opportunities. The sector remains an important part of India's growing digital economy, with startups and established companies expanding their presence across different cities.",category:"Technology",language:"English",location:"Hyderabad",image_url:"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",created_at:new Date().toISOString()},
+{id:"sample3",headline:"Local administrations announce new public initiatives",matter:"Local administrations are announcing new initiatives focused on public services, infrastructure and citizen convenience. Residents are advised to follow official announcements for schedules, eligibility details and other information related to the latest programmes.",category:"Local",language:"English",location:"Telangana",image_url:"https://images.unsplash.com/photo-1577412647305-991150c7d163?auto=format&fit=crop&w=1200&q=80",created_at:new Date().toISOString()},
+{id:"sample4",headline:"Education institutions prepare students for new opportunities",matter:"Schools, colleges and training institutions are focusing on new learning opportunities and skill development programmes. Students are encouraged to check official announcements from their institutions for application dates, examination schedules and programme information.",category:"Education",language:"English",location:"All India",image_url:"https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80",created_at:new Date().toISOString()}
 ];
 
-/* India-wide sectors, including Politics and Movies/Cinema */
-const SECTORS=[
- "All Sectors","Agriculture & Farming","Animal Husbandry","Aquaculture & Fisheries","Automobile","Auto Parts & Service","Aviation","Banking","Beauty & Salon","Beauty & Wellness","Biotechnology","Book Store & Stationery","Building Materials","Chemicals","Coaching & Training","Construction","Consulting","Consumer Electronics","Courier & Delivery","Cyber Security","Dairy","Defence","Digital Marketing","Education","Electrical & Electronics","Energy & Power","Engineering","Entertainment","Event Management","FMCG","Fashion & Apparel","Finance","Finance & Insurance","Food & Restaurant","Furniture & Interiors","Government Services","Healthcare & Medical","Hotels & Hospitality","Import & Export","Insurance","IT & Software","Jewellery","Legal Services","Logistics & Transportation","Manufacturing","Media & Entertainment","Medical Equipment","Mining","Movies / Cinema","Music","News & Journalism","NGO / Non-Profit","Online Services","OTT / Streaming","Pharmaceuticals","Photography","Politics","Political Party","Printing & Publishing","Professional Services","Real Estate","Retail & E-commerce","Security Services","Sports","Telecommunications","Textiles","Tourism & Travel","Transport","Utilities","Wholesale & Distribution","Other"
-];
+let news=[...sampleNews];
+let likes=JSON.parse(localStorage.getItem("omn_likes")||"{}");
+let saved=JSON.parse(localStorage.getItem("omn_saved")||"[]");
+let comments=JSON.parse(localStorage.getItem("omn_comments")||"{}");
+let locationName=localStorage.getItem("omn_location")||"All India";
+let languageName=localStorage.getItem("omn_language")||"English";
+let currentNewsId=null,authMode="login";
 
-let allBusinesses=[];
-let visibleBusinesses=[];
-let currentMode="logos"; // live business logos are drawn across the exact purchased pixel area
-let interactionMode="view"; // VIEW shows business details; SELECT enables free-pixel selection
-let selectedState="__ALL__";
-let selectedDistrict="__ALL__";
-let selectedSector="All Sectors";
+const states={
+"All India":["All India"],
+"Telangana":["All Districts","Hyderabad","Rangareddy","Medchal-Malkajgiri","Warangal","Hanamkonda","Karimnagar","Khammam","Nalgonda","Nizamabad","Sangareddy","Siddipet","Adilabad","Mahabubnagar"],
+"Andhra Pradesh":["All Districts","Visakhapatnam","Vijayawada","Guntur","Tirupati","Nellore","Kurnool","Kadapa","Anantapur","Kakinada","Rajahmundry"],
+"Karnataka":["All Districts","Bengaluru Urban","Mysuru","Mangaluru","Hubballi","Belagavi"],
+"Tamil Nadu":["All Districts","Chennai","Coimbatore","Madurai","Salem"],
+"Kerala":["All Districts","Thiruvananthapuram","Kochi","Kozhikode","Thrissur"],
+"Maharashtra":["All Districts","Mumbai City","Pune","Nagpur","Nashik","Thane"],
+"Delhi":["All Districts","New Delhi","Central Delhi","East Delhi","South Delhi"],
+"Gujarat":["All Districts","Ahmedabad","Surat","Vadodara","Rajkot"],
+"West Bengal":["All Districts","Kolkata","Howrah","Darjeeling"],
+"Uttar Pradesh":["All Districts","Lucknow","Noida","Ghaziabad","Agra","Varanasi"],
+"Rajasthan":["All Districts","Jaipur","Jodhpur","Udaipur"],
+"Madhya Pradesh":["All Districts","Bhopal","Indore","Gwalior"],
+"Bihar":["All Districts","Patna","Gaya"],
+"Odisha":["All Districts","Bhubaneswar","Cuttack","Puri"],
+"Punjab":["All Districts","Amritsar","Ludhiana","Jalandhar"],
+"Haryana":["All Districts","Gurugram","Faridabad"],
+"Jharkhand":["All Districts","Ranchi","Jamshedpur"],
+"Assam":["All Districts","Guwahati","Dibrugarh"],
+"Goa":["All Districts","North Goa","South Goa"]
+};
 
-const stage=document.getElementById("stage");
-const canvas=document.getElementById("wallCanvas");
-const ctx=canvas.getContext("2d");
-const selectionCanvas=document.getElementById("selectionCanvas");
-const selectionCtx=selectionCanvas.getContext("2d");
-const loading=document.getElementById("loading");
+document.addEventListener("DOMContentLoaded",async()=>{
+document.getElementById("dateText").textContent=new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short"});
+document.getElementById("locationText").textContent=locationName;
+loadStates();renderNews(news);updateUserUI();
 
-let view={scale:1,drag:false,lastX:0,lastY:0,downX:0,downY:0};
-let selectedBusiness=null;
-const logoCache=new Map();
-const selectedPixels=new Set();
-let lastRegistrationPixels=[];
-let lastPaymentRowId=null;
-
-/* -------------------- helpers -------------------- */
-function esc(v){
-  return String(v??"").replace(/[&<>'"]/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;",'"':"&quot;"
-  }[c]));
+if(sb){
+try{
+const {data:{session}}=await sb.auth.getSession();
+if(session)updateUserUI(session.user);
+}catch(e){}
+await loadNews();
+await loadReels();
 }
-function safeUrl(url){
-  const u=String(url||"").trim();
-  if(!u)return "#";
-  return /^https?:\/\//i.test(u)?u:"https://"+u;
-}
-function field(b,...keys){
-  for(const k of keys){
-    if(b?.[k]!==undefined && b[k]!==null && String(b[k]).trim()!=="") return b[k];
-  }
-  return "";
-}
-function norm(b){
-  return {
-    ...b,
-    company_name:field(b,"company_name","companyName","business_name","businessName","name","title"),
-    logo_url:field(b,"logo_url","logoUrl","logo","image_url","imageUrl"),
-    ad_video_url:field(b,"video_url","ad_video_url","videoUrl","adVideoUrl","ad_video","adVideo","video"),
-    ad_image_url:field(b,"ad_image_url","adImageUrl","advertisement_image","advertisementImage","ad_image","adImage","banner_url","bannerUrl"),
-    state:field(b,"state","state_name","stateName","region"),
-    district:field(b,"district","district_name","districtName","city","city_name"),
-    sector:field(b,"sector","category","business_category"),
-    offer:field(b,"offer","offer_text","offerText","current_offer"),
-    description:field(b,"description","details","about"),
-    mobile:field(b,"mobile","phone","phone_number","contact_mobile"),
-    website:field(b,"website","website_url","url","web_url")
-  };
-}
-
-/* -------------------- canvas wall -------------------- */
-function resizeCanvas(){
-  const r=stage.getBoundingClientRect();
-  const dpr=Math.min(window.devicePixelRatio||1,3);
-  const cw=Math.max(1,Math.round(r.width*dpr));
-  const ch=Math.max(1,Math.round(r.height*dpr));
-  canvas.width=cw; canvas.height=ch;
-  selectionCanvas.width=cw; selectionCanvas.height=ch;
-  canvas.style.imageRendering='auto';
-  selectionCanvas.style.imageRendering='auto';
-  ctx.imageSmoothingEnabled=true;
-  ctx.imageSmoothingQuality="high";
-  selectionCtx.imageSmoothingEnabled=true;
-  selectionCtx.imageSmoothingQuality="high";
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  selectionCtx.setTransform(dpr,0,0,dpr,0,0);
-  updateSpacer();
-  draw();
-  drawSelectionOverlay();
-}
-function updateSpacer(){
-  const sp=document.getElementById("canvasSpacer");
-  if(sp){ const w=stage.clientWidth; const cell=Math.max(2,w/WALL_COLS); sp.style.display="block"; sp.style.height=(WALL_ROWS*cell+28)+"px"; sp.style.width="1px"; }
-}
-function wallMetrics(){
-  const w=stage.clientWidth,h=stage.clientHeight;
-  const base=w/WALL_COLS;
-  // Keep all 20 columns fitted inside the screen; vertical space is used for
-  // the 50 rows. Zoom is capped so boxes never create horizontal overflow.
-  const cell=Math.max(2,Math.min(base,base*view.scale));
-  const wallW=cell*WALL_COLS,wallH=cell*WALL_ROWS;
-  return {w,h,cell,wallW,wallH,left:Math.max(0,(w-wallW)/2),top:0,scrollTop:stage.scrollTop||0};
-}
-function baseColor(i){
-  const colors=["#1f62dc","#d82331","#f05a12","#12a64a","#8a2be2","#0e8fc8","#bf1c28","#087a6b","#d21a64","#ffb20c","#5135cc","#0d7f73"];
-  return colors[i%colors.length];
-}
-function getLogoImage(url){
-  if(!url) return null;
-  const key=String(url);
-  const cached=logoCache.get(key);
-  if(cached?.state==="loaded") return cached.img;
-  if(cached?.state==="loading") return null;
-  const img=new Image();
-  img.crossOrigin="anonymous";
-  logoCache.set(key,{state:"loading",img});
-  img.onload=()=>{ logoCache.set(key,{state:"loaded",img}); draw(); };
-  img.onerror=()=>{ logoCache.set(key,{state:"error",img}); };
-  img.src=key;
-  return null;
-}
-
-function businessShape(count, cell){
-  // Choose a near-square rectangle, while the clipping below guarantees
-  // that ONLY the purchased number of pixels is actually occupied.
-  let cols=Math.ceil(Math.sqrt(count));
-  let rows=Math.ceil(count/cols);
-  // For common exact rectangles, use the factor pair closest to square.
-  for(let c=Math.floor(Math.sqrt(count));c>=1;c--){
-    if(count%c===0){ cols=count/c; rows=c; break; }
-  }
-  return {cols,rows,w:cols*cell,h:rows*cell};
-}
-
-function drawLogoInPixels(b,cell,count,left,scrollTop,startIndex){
-  const img=getLogoImage(b.logo_url);
-  if(!img || !img.complete || !img.naturalWidth)return;
-
-  const endIndex=startIndex+count;
-  const firstRow=Math.floor(startIndex/WALL_COLS);
-  const lastRow=Math.floor((endIndex-1)/WALL_COLS);
-  const viewTop=Math.max(0,Math.floor(scrollTop/cell)-2);
-  const viewBottom=Math.min(WALL_ROWS-1,Math.ceil((scrollTop+stage.clientHeight)/cell)+2);
-  const topRow=Math.max(firstRow,viewTop);
-  const bottomRow=Math.min(lastRow,viewBottom);
-  if(bottomRow<topRow)return;
-
-  // One logo for the WHOLE purchased area.
-  // The canvas clip contains only the exact purchased pixels, so the logo
-  // never appears in another company's pixels even when the block wraps.
-  const firstCol=startIndex%WALL_COLS;
-  const lastCol=(endIndex-1)%WALL_COLS;
-  const rows=lastRow-firstRow+1;
-
-  let bx, bw;
-  if(firstRow===lastRow){
-    bx=left+firstCol*cell;
-    bw=(lastCol-firstCol+1)*cell;
-  }else{
-    bx=left;
-    bw=WALL_COLS*cell;
-  }
-  const by=firstRow*cell;
-  const bh=rows*cell;
-
-  // Clip to exact owned cells, including wrapped first/last rows.
-  ctx.save();
-  ctx.beginPath();
-  for(let row=topRow;row<=bottomRow;row++){
-    const rowStart=row*WALL_COLS;
-    const a=Math.max(startIndex,rowStart);
-    const z=Math.min(endIndex,rowStart+WALL_COLS);
-    if(z<=a)continue;
-    const c1=a%WALL_COLS;
-    const c2=(z-1)%WALL_COLS;
-    const x=left+c1*cell;
-    const y=row*cell-scrollTop;
-    const rw=(c2-c1+1)*cell;
-    const rh=cell;
-    ctx.rect(x,y,rw,rh);
-  }
-  ctx.clip();
-
-  // White background belongs to the purchased company area.
-  ctx.fillStyle='#fff';
-  ctx.fillRect(bx,by-scrollTop,bw,bh);
-
-  // Contain = complete logo, no cropping.
-  const iw=img.naturalWidth||1;
-  const ih=img.naturalHeight||1;
-  const scale=Math.min(bw/iw,bh/ih);
-  const dw=iw*scale;
-  const dh=ih*scale;
-  const dx=bx+(bw-dw)/2;
-  const dy=by+(bh-dh)/2-scrollTop;
-  ctx.drawImage(img,dx,dy,dw,dh);
-  ctx.restore();
-}
-
-function drawSelectionOverlay(){
-  if(!selectionCanvas.width)return;
-  const m=wallMetrics(),{w,h,cell,left}=m;
-  const scrollTop=stage.scrollTop||0;
-  const gap=Math.min(1,Math.max(.35,cell*.08));
-  const box=Math.max(.8,cell-gap);
-  const firstRow=Math.max(0,Math.floor(scrollTop/cell)-2);
-  const lastRow=Math.min(WALL_ROWS-1,Math.ceil((scrollTop+h)/cell)+2);
-  selectionCtx.clearRect(0,0,w,h);
-  selectionCtx.fillStyle="rgba(37,99,235,.18)";
-  selectionCtx.strokeStyle="#2563eb";
-  selectionCtx.lineWidth=Math.max(1,Math.min(2,cell*.25));
-  for(const id of selectedPixels){
-    const idx=Number(id)-1;
-    if(idx<0||idx>=TOTAL_PIXELS)continue;
-    const row=Math.floor(idx/WALL_COLS);
-    if(row<firstRow||row>lastRow)continue;
-    const col=idx%WALL_COLS;
-    const x=left+col*cell;
-    const y=row*cell-scrollTop;
-    selectionCtx.fillRect(x,y,box,box);
-    selectionCtx.strokeRect(x+.5,y+.5,Math.max(0,box-1),Math.max(0,box-1));
-  }
-}
-
-function draw(){
-  if(!canvas.width)return;
-  const m=wallMetrics(),{w,h,cell,left}=m;
-  const scrollTop=stage.scrollTop||0;
-  const gap=Math.min(1,Math.max(.35,cell*.08));
-  const box=Math.max(.8,cell-gap);
-  const firstRow=Math.max(0,Math.floor(scrollTop/cell)-2);
-  const lastRow=Math.min(WALL_ROWS-1,Math.ceil((scrollTop+h)/cell)+2);
-
-  ctx.clearRect(0,0,w,h);
-  ctx.fillStyle="#fff";
-  ctx.fillRect(0,0,w,h);
-
-  // EXACTLY 20 square boxes on every line.
-  for(let row=firstRow;row<=lastRow;row++){
-    const y=row*cell-scrollTop;
-    for(let col=0;col<WALL_COLS;col++){
-      const x=left+col*cell;
-      ctx.fillStyle="#fff";
-      ctx.fillRect(x,y,box,box);
-      ctx.strokeStyle="rgba(0,0,0,.10)";
-      ctx.lineWidth=1;
-      ctx.strokeRect(x+.5,y+.5,Math.max(0,box-1),Math.max(0,box-1));
-    }
-  }
-
-  // Business pixels: every purchased pixel stays an individual visible box.
-  for(const b of visibleBusinesses){
-    const start=Math.max(1,Math.min(TOTAL_PIXELS,Number(b.block_number)||1))-1;
-    const count=Math.max(1,Math.min(TOTAL_PIXELS-start,Number(b.pixel_count)||1));
-    const end=start+count;
-    const firstBusinessRow=Math.floor(start/WALL_COLS);
-    const lastBusinessRow=Math.floor((end-1)/WALL_COLS);
-    if(lastBusinessRow<firstRow||firstBusinessRow>lastRow)continue;
-
-    const purchasedColor=baseColor(Math.abs((start*7)%12));
-    for(let i=start;i<end;i++){
-      const row=Math.floor(i/WALL_COLS);
-      if(row<firstRow||row>lastRow)continue;
-      const col=i%WALL_COLS;
-      const x=left+col*cell;
-      const y=row*cell-scrollTop;
-      ctx.fillStyle="#fff";
-      ctx.fillRect(x,y,box,box);
-      ctx.strokeStyle="rgba(0,0,0,.10)";
-      ctx.strokeRect(x+.5,y+.5,Math.max(0,box-1),Math.max(0,box-1));
-    }
-
-    // FULL LOGO INSIDE THE PURCHASED BOX AREA.
-    // The logo is clipped to the exact purchased pixels, so it can never spill
-    // into another business or outside the wall.
-    if(b.logo_url){
-      drawLogoInPixels(b,cell,count,left,scrollTop,start);
-    }else if(b.company_name){
-      // Only show the name when the purchased area is large enough.
-      const minRow=firstBusinessRow,maxRow=lastBusinessRow;
-      const top=minRow*cell-scrollTop;
-      const bottom=(maxRow+1)*cell-scrollTop;
-      const firstCol=start%WALL_COLS;
-      const lastCol=(end-1)%WALL_COLS;
-      const minX=left+firstCol*cell;
-      const maxX=left+((maxRow===minRow?lastCol+1:WALL_COLS))*cell;
-      const bw=maxX-minX, bh=bottom-top;
-      if(bw>=65&&bh>=28&&bottom>=0&&top<=h){
-        ctx.save();
-        ctx.fillStyle="#fff";
-        ctx.font="900 "+Math.max(7,Math.min(14,Math.min(bw/8,bh*.28)))+"px Inter,Arial,sans-serif";
-        ctx.textAlign="center";ctx.textBaseline="middle";
-        let label=String(b.company_name).toUpperCase(),maxTextW=bw-8;
-        while(label.length>1&&ctx.measureText(label).width>maxTextW)label=label.slice(0,-1);
-        if(label!==String(b.company_name).toUpperCase())label+="…";
-        ctx.fillText(label,minX+bw/2,top+bh/2);
-        ctx.restore();
-      }
-    }
-
-    if(selectedBusiness===b){
-      ctx.save();
-      ctx.strokeStyle="#fff";
-      ctx.lineWidth=Math.max(1,Math.min(3,cell*.8));
-      const firstCol=start%WALL_COLS;
-      const lastCol=(end-1)%WALL_COLS;
-      const px=left+firstCol*cell;
-      const py=firstBusinessRow*cell-scrollTop;
-      const pw=(lastBusinessRow===firstBusinessRow?(lastCol-firstCol+1):WALL_COLS-firstCol)*cell;
-      ctx.strokeRect(px,py,Math.max(cell,pw-gap),Math.max(cell,cell-gap));
-      ctx.restore();
-    }
-  }
-  if(currentMode==="ads") renderAdsInsidePixels();
-}
-function pixelRangeContains(b,block){
-  if(!b)return false;
-  const start=Math.max(1,Number(b.block_number)||1);
-  const count=Math.max(1,Math.min(TOTAL_PIXELS-start+1,Number(b.pixel_count)||1));
-  return block>=start && block<start+count;
-}
-function blockAt(clientX,clientY){
-  // FINAL HIT TEST: calculate from the scroll container itself.
-  // stage.getBoundingClientRect() stays fixed while the content scrolls,
-  // so scrollTop is added exactly once. This works reliably on Android/iOS,
-  // mouse, touch and after any amount of vertical scrolling.
-  const rr=stage.getBoundingClientRect(),m=wallMetrics();
-  const x=Math.floor((clientX-rr.left-m.left)/m.cell);
-  const y=Math.floor((clientY-rr.top+m.scrollTop)/m.cell);
-  if(x<0||y<0||x>=WALL_COLS||y>=WALL_ROWS)return null;
-  return y*WALL_COLS+x+1;
-}
-function zoomAt(factor,cx,cy){
-  view.scale=1;
-  stage.scrollLeft=0;
-  updateSpacer();
-  draw();
-}
-function resetView(){
-  view={scale:1,drag:false,lastX:0,lastY:0,downX:0,downY:0};
-  stage.scrollTop=0;stage.scrollLeft=0;
-  selectedBusiness=null;
-  interactionMode="view";
-  document.getElementById("viewModeBtn")?.classList.add("active");
-  document.getElementById("selectModeBtn")?.classList.remove("active");
-  updateSpacer();
-  draw();
-  drawSelectionOverlay();
-}
-
-function openDetails(b){
-  selectedBusiness=b;
-  const mobile=String(b.mobile||"").replace(/\D/g,"");
-  const html=`
-    <div style="text-align:center">
-      ${b.logo_url?`<img class="detailLogo" src="${esc(b.logo_url)}" alt="">`:""}
-      <h3>${esc(b.company_name||"Business")}</h3>
-      <p class="muted">✓ Live pixel position · #${Number(b.block_number).toLocaleString("en-IN")}</p>
-    </div>
-    ${b.ad_video_url?`<video class="detailVideo" controls muted playsinline src="${esc(b.ad_video_url)}"></video>`:""}
-    <div class="detailRow"><b>Pixel Data</b>${Number(b.pixel_count||1).toLocaleString("en-IN")} pixel${Number(b.pixel_count||1)>1?"s":""}</div>
-    <div class="detailRow"><b>Location</b>${esc(b.state||"India")} · ${esc(b.district||"District not provided")}</div>
-    <div class="detailRow"><b>Sector</b>${esc(b.sector||"Not provided")}</div>
-    <div class="detailRow"><b>Offer</b>${esc(b.offer||"No active offer")}</div>
-    <div class="detailRow"><b>Description</b>${esc(b.description||"No description provided")}</div>
-    <div class="detailButtons">
-      ${mobile?`<a class="primary" href="tel:${esc(mobile)}">CALL</a><a class="secondary" target="_blank" href="https://wa.me/91${encodeURIComponent(mobile)}">WHATSAPP</a>`:""}
-      ${b.website?`<a class="secondary" target="_blank" href="${esc(safeUrl(b.website))}">WEBSITE</a>`:""}
-      <button class="secondary" id="shareBtn">SHARE</button>
-    </div>`;
-  document.getElementById("detailContent").innerHTML=html;
-  document.getElementById("shareBtn").onclick=()=>shareBusiness(b);
-  openModal("detailModal");draw();
-}
-async function shareBusiness(b){
-  const text=`${b.company_name||"Business"} · Pixel #${b.block_number} · MILLION PIXEL`;
-  if(navigator.share){
-    try{await navigator.share({title:"MILLION PIXEL",text,url:location.href+"#pixel-"+b.block_number})}catch(e){}
-  }else{
-    try{await navigator.clipboard.writeText(text);toast("Business details copied")}catch(e){toast(text)}
-  }
-}
-function mediaUrl(b){return b?.video_url||b?.ad_video_url||b?.ad_image_url||"";}
-function clearAdLayer(){const el=document.getElementById("adLayer");if(el)el.innerHTML="";}
-function renderAdsInsidePixels(){
-  const layer=document.getElementById("adLayer"); if(!layer)return;
-  layer.innerHTML="";
-  if(currentMode!=="ads")return;
-  const m=wallMetrics(), {cell,left}=m, scrollTop=stage.scrollTop||0;
-  const firstRow=Math.max(0,Math.floor(scrollTop/cell)-2);
-  const lastRow=Math.min(WALL_ROWS-1,Math.ceil((scrollTop+stage.clientHeight)/cell)+2);
-
-  for(const b of visibleBusinesses){
-    const url=mediaUrl(b); if(!url)continue;
-    const start=Math.max(1,Math.min(TOTAL_PIXELS,Number(b.block_number)||1))-1;
-    const count=Math.max(1,Math.min(TOTAL_PIXELS-start,Number(b.pixel_count)||1));
-    const end=start+count;
-    const r1=Math.floor(start/WALL_COLS), r2=Math.floor((end-1)/WALL_COLS);
-    if(r2<firstRow||r1>lastRow)continue;
-
-    const topRow=Math.max(r1,firstRow), bottomRow=Math.min(r2,lastRow);
-    const firstCol=start%WALL_COLS;
-    const lastCol=(end-1)%WALL_COLS;
-    // IMPORTANT: size the media to the BUSINESS'S purchased pixel area,
-    // not to the entire 20-column wall. This makes a 20-pixel ad look
-    // exactly like a 20-pixel screen and prevents stretching/cropping.
-    const boxLeft=(r1===r2?firstCol:0)*cell;
-    const boxRight=(r1===r2?(lastCol+1):WALL_COLS)*cell;
-    const boxWidth=Math.max(cell,boxRight-boxLeft);
-    const boxHeight=Math.max(cell,(bottomRow-topRow+1)*cell);
-
-    const canvas=document.createElement("canvas");
-    canvas.className="adPixelCanvas";
-    const dpr=Math.min(4,Math.max(1,window.devicePixelRatio||1));
-    canvas.width=Math.max(1,Math.ceil(boxWidth*dpr));
-    canvas.height=Math.max(1,Math.ceil(boxHeight*dpr));
-    canvas.style.left=(left+boxLeft)+"px";
-    canvas.style.top=(topRow*cell-scrollTop)+"px";
-    canvas.style.width=boxWidth+"px";
-    canvas.style.height=boxHeight+"px";
-    layer.appendChild(canvas);
-    const c=canvas.getContext("2d");
-    c.imageSmoothingEnabled=true; c.imageSmoothingQuality="high";
-    c.setTransform(dpr,0,0,dpr,0,0);
-
-    const drawMedia=(source)=>{
-      if(!source)return;
-      const iw=source.videoWidth||source.naturalWidth||1;
-      const ih=source.videoHeight||source.naturalHeight||1;
-      // The video/image is scaled against the PURCHASED AREA dimensions.
-      const scale=Math.max(boxWidth/iw,boxHeight/ih);
-      const dw=iw*scale, dh=ih*scale;
-      const dx=(boxWidth-dw)/2, dy=(boxHeight-dh)/2;
-      c.drawImage(source,dx,dy,dw,dh);
-    };
-
-    const clipPurchased=()=>{
-      c.beginPath();
-      for(let row=topRow;row<=bottomRow;row++){
-        const a=Math.max(start,row*WALL_COLS), z=Math.min(end,(row+1)*WALL_COLS);
-        if(z<=a)continue;
-        const c1=a%WALL_COLS,c2=(z-1)%WALL_COLS;
-        c.rect(c1*cell-boxLeft,(row-topRow)*cell,(c2-c1+1)*cell,cell);
-      }
-      c.clip();
-    };
-
-    const isVideo=!!(b.video_url||b.ad_video_url)||/\.(mp4|webm|mov)(\?|$)/i.test(url);
-    if(isVideo){
-      const v=document.createElement("video");
-      v.src=url; v.autoplay=true; v.muted=true; v.loop=true; v.playsInline=true;
-      v.preload="auto"; v.style.display="none";
-      layer.appendChild(v);
-      const frame=()=>{
-        if(!document.body.contains(canvas))return;
-        c.clearRect(0,0,boxWidth,boxHeight);
-        c.save(); clipPurchased(); drawMedia(v); c.restore();
-        requestAnimationFrame(frame);
-      };
-      v.addEventListener("loadeddata",()=>{v.play().catch(()=>{});frame();},{once:true});
-      v.addEventListener("error",()=>{c.save();clipPurchased();c.fillStyle="#fff";c.fillRect(0,0,boxWidth,boxHeight);c.restore();},{once:true});
-      setTimeout(()=>v.play().catch(()=>{}),30);
-    }else{
-      const img=new Image(); img.crossOrigin="anonymous";
-      img.onload=()=>{c.clearRect(0,0,boxWidth,boxHeight);c.save();clipPurchased();drawMedia(img);c.restore();};
-      img.src=url;
-    }
-  }
-}
-function playAd(){
-  const ads=visibleBusinesses.filter(x=>mediaUrl(x));
-  if(!ads.length){toast("No advertisement found in this filter.");return;}
-  currentMode="ads";
-  document.getElementById("playBtn").textContent="▣ SHOW PIXELS";
-  closeModal("adModal");
-  draw();
-  renderAdsInsidePixels();
-}
-function toggleAdMode(){
-  if(currentMode==="logos") playAd();
-  else {
-    currentMode="logos";
-    document.getElementById("playBtn").textContent="▶ PIXEL AD";
-    clearAdLayer();
-    draw();
-  }
-}
-
-const PRICES={Center:599,Premium:699,Edge:799,Corner:999};
-function toast(message){
-  const el=document.getElementById("toast");
-  if(!el){ alert(String(message||"")); return; }
-  el.textContent=String(message||"");
-  el.classList.add("show");
-  clearTimeout(window.__millionPixelToastTimer);
-  window.__millionPixelToastTimer=setTimeout(()=>el.classList.remove("show"),2800);
-}
-function getZone(block){
-  const n=Math.max(1,Math.min(PIXELS_PER_DISTRICT,Number(block)||1));
-  const idx=n-1, row=Math.floor(idx/WALL_COLS), col=idx%WALL_COLS;
-  const lastRow=WALL_ROWS-1,lastCol=WALL_COLS-1;
-  if((row===0||row===lastRow)&&(col===0||col===lastCol)) return "Corner";
-  if(row===0||row===lastRow||col===0||col===lastCol) return "Edge";
-  const centerRowStart=Math.floor(WALL_ROWS*0.35), centerRowEnd=Math.ceil(WALL_ROWS*0.65)-1;
-  const centerColStart=Math.floor(WALL_COLS*0.35), centerColEnd=Math.ceil(WALL_COLS*0.65)-1;
-  if(row>=centerRowStart&&row<=centerRowEnd&&col>=centerColStart&&col<=centerColEnd) return "Center";
-  return "Premium";
-}
-const LOGO_STORAGE=SUPABASE_URL+"/storage/v1/object/business-logos";
-const AD_STORAGE=SUPABASE_URL+"/storage/v1/object/pixel-ad-videos";
-function priceForPixel(block){return PRICES[getZone(block)]}
-function populateRegistration(){
-  const st=document.getElementById("regState"),sec=document.getElementById("regSector");
-  st.innerHTML=STATES.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join("");
-  sec.innerHTML='<option value="">Select Business Sector</option>'+SECTORS.filter(x=>x!=="All Sectors").map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join("");
-  st.value=selectedState==="__ALL__"?"Telangana":selectedState;
-  updateRegistrationDistricts(); updateRegistrationPrice();
-}
-function updateRegistrationDistricts(){
-  const state=document.getElementById("regState").value,el=document.getElementById("regDistrict");
-  const key=Object.keys(districtData).find(k=>normalName(k)===normalName(state));
-  const list=key?[...new Set(districtData[key])].sort((a,b)=>a.localeCompare(b)):[];
-  el.innerHTML='<option value="">Select District</option>'+list.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join("");
-}
-function zoneLabel(block){return getZone(Number(block)||1)}
-function updateRegistrationPrice(){
-  const selected=lastRegistrationPixels.length?[...lastRegistrationPixels]:[Number(document.getElementById("regPixel").value)];
-  const valid=selected.filter(Number.isInteger).filter(p=>p>=1&&p<=PIXELS_PER_DISTRICT);
-  const priceEl=document.getElementById("regPrice");
-  if(!valid.length){priceEl.value="";updateRegistrationSummary([]);return}
-  const total=pixelPriceTotal(valid);
-  priceEl.value=`₹${total.toLocaleString("en-IN")} (${valid.length} selected)`;
-  updateRegistrationSummary(valid);
-}
-function pixelPriceTotal(list){return list.reduce((sum,p)=>sum+priceForPixel(Number(p)),0)}
-function isPixelOccupied(block){
-  if(!block)return false;
-  if(selectedState==="__ALL__"||selectedDistrict==="__ALL__")return false;
-  return allBusinesses.some(b=>{
-    if(!matches(b.state,selectedState)||!matches(b.district,selectedDistrict))return false;
-    const start=Math.max(1,Number(b.block_number)||1);
-    const count=Math.max(1,Math.min(TOTAL_PIXELS-start+1,Number(b.pixel_count)||1));
-    return block>=start && block<start+count;
-  });
-}
-function updateRegistrationSummary(list){
-  const total=list.length?pixelPriceTotal(list):0;
-  const heroTotal=document.getElementById("regHeroTotal"),heroCount=document.getElementById("regHeroCount"),pills=document.getElementById("selectedPills"),zones=document.getElementById("zoneSummary");
-  if(heroTotal)heroTotal.textContent="₹"+total.toLocaleString("en-IN");
-  if(heroCount)heroCount.textContent=`${list.length.toLocaleString("en-IN")} PIXEL${list.length===1?"":"S"}`;
-  if(pills)pills.innerHTML=list.length?list.map(p=>`<span class="pixelPill">#${Number(p).toLocaleString("en-IN")} <b>${esc(zoneLabel(p))}</b></span>`).join(""):'<span class="muted">No pixels selected</span>';
-  const groups={};
-  list.forEach(p=>{const z=zoneLabel(p);groups[z]=(groups[z]||0)+1});
-  if(zones)zones.innerHTML=Object.entries(groups).map(([z,c])=>`<span class="zoneChip">${esc(z)} × ${c} <b>₹${(PRICES[z]*c).toLocaleString("en-IN")}</b></span>`).join("");
-}
-function updateSelectionBar(){
-  const bar=document.getElementById("selectionBar");
-  const list=[...selectedPixels].map(Number).filter(Number.isInteger).sort((a,b)=>a-b);
-  const countEl=document.getElementById("selectionCount");
-  const totalEl=document.getElementById("selectionTotal");
-  if(countEl)countEl.textContent=`${list.length.toLocaleString("en-IN")} PIXEL${list.length===1?"":"S"}`;
-  if(totalEl)totalEl.textContent="₹"+pixelPriceTotal(list).toLocaleString("en-IN");
-  if(bar)bar.style.display=list.length?"flex":"none";
-  drawSelectionOverlay();
-}
-function clearPixelSelection(){selectedPixels.clear();lastRegistrationPixels=[];updateSelectionBar()}
-function isAdjacentToSelection(block){
-  if(!selectedPixels.size)return true;
-  const idx=Number(block)-1;
-  const row=Math.floor(idx/WALL_COLS), col=idx%WALL_COLS;
-  for(const id of selectedPixels){
-    const n=Number(id)-1;
-    const r=Math.floor(n/WALL_COLS), c=n%WALL_COLS;
-    if((Math.abs(r-row)+Math.abs(c-col))===1)return true;
-  }
-  return false;
-}
-
-function togglePixelSelection(block){
-  if(!block)return;
-  if(interactionMode!=="select"){toast("Tap SELECT first to choose pixels.");return}
-  if(isPixelOccupied(block)){toast("This pixel is already occupied. Please select an available pixel.");return}
-  if(selectedPixels.has(block)){
-    selectedPixels.delete(block);
-  }else{
-    if(!isAdjacentToSelection(block)){
-      toast("Select the next pixel next to your selected pixel. Gaps are not allowed.");
-      return;
-    }
-    selectedPixels.add(block);
-  }
-  updateSelectionBar();
-}
-function selectPixelForRegistration(block){togglePixelSelection(block)}
-function prepareSelectedRegistration(){
-  const list=[...selectedPixels].map(Number).filter(Number.isInteger).sort((a,b)=>a-b);
-  if(!list.length){toast("Select at least one available pixel.");return}
-  const blocked=list.find(isPixelOccupied);
-  if(blocked){toast("Pixel #"+blocked+" is already booked.");return}
-  lastRegistrationPixels=list;
-  const state=selectedState==="__ALL__"?"":selectedState;
-  document.getElementById("regState").value=state||"";
-  document.getElementById("regPixel").value=list.map(p=>"#"+p).join(", ");
-  document.getElementById("regPixel").readOnly=true;
-  document.getElementById("regCount").value=list.length;
-  document.getElementById("regCount").readOnly=true;
-  document.getElementById("regPrice").value="₹"+pixelPriceTotal(list).toLocaleString("en-IN")+" ("+list.length+" selected)";
-  try{updateRegistrationDistricts()}catch(e){console.warn("district update",e)}
-  try{updateRegistrationSummary(list)}catch(e){console.warn("summary update",e)}
-  const modal=document.getElementById("buyModal");
-  if(modal){modal.classList.add("show");modal.style.display="flex";modal.setAttribute("aria-hidden","false");}
-}
-function closeModal(id){document.getElementById(id)?.classList.remove("show")}
-function openModal(id){document.getElementById(id)?.classList.add("show")}
-async function uploadRegistrationFile(base,file){
-  if(!file)return "";
-  const ext=(file.name.split(".").pop()||"bin").toLowerCase();
-  const name=Date.now()+"_"+Math.random().toString(36).slice(2,10)+"."+ext;
-  const r=await fetch(base+"/"+encodeURIComponent(name),{method:"POST",headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`,"Content-Type":file.type||"application/octet-stream","x-upsert":"false"},body:file});
-  if(!r.ok)throw new Error(await r.text());
-  return base.replace("/storage/v1/object/","/storage/v1/object/public/")+"/"+encodeURIComponent(name);
-}
-function showRegStatus(msg,type="error"){const el=document.getElementById("registerStatus");el.className="registerStatus show "+type;el.textContent=msg}
-async function submitRegistration(e){
-  e.preventDefault(); const btn=document.getElementById("submitBtn");
-  const state=document.getElementById("regState").value,district=document.getElementById("regDistrict").value;
-  const company=document.getElementById("companyName").value.trim(),contact=document.getElementById("contactPerson").value.trim();
-  const mobile=document.getElementById("mobile").value.replace(/\D/g,"");
-  const sector=document.getElementById("regSector").value,website=document.getElementById("website").value.trim();
-  const offer=document.getElementById("offer").value.trim(),description=document.getElementById("description").value.trim();
-  const selected=lastRegistrationPixels.length?[...lastRegistrationPixels].sort((a,b)=>a-b):[Number(document.getElementById("regPixel").value)];
-  const block=Math.min(...selected),count=selected.length;
-  const logo=document.getElementById("logo").files[0],adImage=document.getElementById("adImage").files[0],adVideo=document.getElementById("adVideo").files[0];
-  if(!/^([6-9])\d{9}$/.test(mobile))return showRegStatus("Please enter a valid 10-digit Indian mobile number.");
-  if(!selected.length||selected.some(p=>!Number.isInteger(p)||p<1||p>PIXELS_PER_DISTRICT))return showRegStatus("Please select valid pixels.");
-  if(!logo)return showRegStatus("Business Logo is required.");
-  btn.disabled=true;btn.textContent="REGISTERING...";showRegStatus("Checking pixel availability...","success");
-  try{
-    const u=new URL(API_URL);u.searchParams.set("select","id,block_number,pixel_count,approval_status,booking_status,state,district");u.searchParams.set("state","eq."+state);u.searchParams.set("district","eq."+district);u.searchParams.set("limit","1000");
-    const check=await fetch(u,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
-    if(!check.ok)throw new Error(await check.text());
-    const rows=await check.json();
-    const occupied=selected.some(p=>rows.some(x=>{const a=Number(x.block_number)||0,b=a+Math.max(1,Number(x.pixel_count)||1)-1;const active=["approved","pending"].includes(String(x.approval_status||"").toLowerCase())||String(x.booking_status||"").toLowerCase()!=="available";return active&&p>=a&&p<=b;}));
-    if(occupied)throw new Error("One or more selected pixels are already reserved. Please choose another pixel.");
-    showRegStatus("Uploading your media...","success");
-    const logoUrl=await uploadRegistrationFile(LOGO_STORAGE,logo);
-    let imageUrl="",videoUrl="",mediaNote="";
-    if(adImage){try{imageUrl=await uploadRegistrationFile(AD_STORAGE,adImage)}catch(x){console.warn("Optional ad image upload failed",x);mediaNote=" Advertisement image could not be uploaded; registration continued."}}
-    if(adVideo){try{videoUrl=await uploadRegistrationFile(AD_STORAGE,adVideo)}catch(x){console.warn("Optional ad video upload failed",x);mediaNote+=(mediaNote?" ":"")+"Advertisement video could not be uploaded; registration continued."}}
-    const pixelMarker=`\nPIXELS_SELECTED:${JSON.stringify(selected)}`;
-    const payload={state,company_name:company,contact_person:contact,mobile,website,sector,description:description+pixelMarker,logo_url:logoUrl,block_number:block,pixel_count:count,price:pixelPriceTotal(selected),booking_status:"available",approval_status:"pending",payment_status:"pending",pixel_selection:JSON.stringify(selected)};
-    // Optional fields are included for tables that contain them.
-    payload.district=district; payload.offer=offer; payload.ad_image_url=imageUrl; payload.video_url=videoUrl;
-    let r=await fetch(API_URL,{method:"POST",headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(payload)});
-    if(!r.ok){
-      const txt=await r.text();
-      if(/district|offer|ad_image_url|pixel_selection/i.test(txt)){
-        delete payload.district;delete payload.offer;delete payload.ad_image_url;delete payload.pixel_selection;
-        // Preserve optional ad-image/offer in description if those columns are not present.
-        const extra=[offer?`Offer: ${offer}`:"",district?`District: ${district}`:"",imageUrl?`Ad Image: ${imageUrl}`:""].filter(Boolean).join("\n");
-        if(extra)payload.description=[description,extra].filter(Boolean).join("\n");
-        r=await fetch(API_URL,{method:"POST",headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`,"Content-Type":"application/json",Prefer:"return=representation"},body:JSON.stringify(payload)});
-      }
-      if(!r.ok)throw new Error(await r.text());
-    }
-    try{const saved=await r.json(); const row=Array.isArray(saved)?saved[0]:saved; lastPaymentRowId=row?.id||null;}catch(_){lastPaymentRowId=null}
-    const amount=pixelPriceTotal(selected);currentPaymentAmount=amount;
-    document.getElementById("paymentPixel").textContent=`${state} · ${count.toLocaleString("en-IN")} selected pixel${count>1?"s":""}`;
-    document.getElementById("paymentAmount").textContent="₹"+amount.toLocaleString("en-IN");
-    document.getElementById("registerStatus").className="registerStatus";
-    document.getElementById("businessForm").reset();
-    document.getElementById("regState").value=state||"";updateRegistrationDistricts();
-    closeModal("buyModal");openModal("paymentModal");
-    toast("Registration submitted successfully."+(mediaNote?" Check media upload.":""));
-  }catch(err){console.error(err);showRegStatus("Registration failed: "+(err.message||"Unknown error"));}
-  finally{btn.disabled=false;btn.textContent="REGISTER NOW"}
-}
-function copyUPI(){navigator.clipboard?.writeText(UPI_ID).then(()=>toast("UPI ID copied")).catch(()=>{prompt("Copy UPI ID",UPI_ID)})}
-function makePayment(){location.href="upi://pay?pa="+encodeURIComponent(UPI_ID)+"&pn="+encodeURIComponent("One Million Pixels")+"&am="+Number(currentPaymentAmount).toFixed(2)+"&cu=INR&tn="+encodeURIComponent("MillionPixel Business Pixel Booking")}
-async function paidMessage(){
-  const status=document.getElementById("paymentStatus");
-  status.style.display="block";status.textContent="✓ DONE — PAYMENT MARKED AS PAID · Waiting for verification";
-  status.style.color="#0a7a3b";
-  document.getElementById("paidBtn").disabled=true;
-  document.getElementById("paidBtn").textContent="✓ DONE";
-  if(lastPaymentRowId){try{await fetch(API_URL+"?id=eq."+encodeURIComponent(lastPaymentRowId),{method:"PATCH",headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify({payment_status:"paid"})})}catch(e){console.warn("Payment status update unavailable",e)}}
-  toast("Payment confirmation received. Our team will verify it.");
-}
-
-function choosePrice(price){ closeModal("buyModal"); openModal("buyModal"); updateRegistrationPrice(); }
-
-
-/* -------------------- India location + live data -------------------- */
-const DISTRICT_DATA_URL="https://raw.githubusercontent.com/iaseth/data-for-india/master/data/readable/districts.json";
-let districtData={};
-let districtDataLoaded=false;
-
-function populateStates(){
-  const el=document.getElementById("stateFilter");
-  el.innerHTML="<option value=\"__ALL__\">All India</option>"+STATES.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join("");
-}
-function populateSectors(){
-  const el=document.getElementById("sectorFilter");
-  el.innerHTML=SECTORS.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join("");
-  el.value=selectedSector;
-}
-function normalName(v){return String(v||"").trim().toLowerCase().replace(/&/g,"and").replace(/[^a-z0-9]+/g," ").replace(/\s+/g," ");}
-function updateDistricts(){
-  const el=document.getElementById("districtFilter");
-  let list=[];
-  if(selectedState==="__ALL__"){
-    Object.values(districtData).forEach(a=>list.push(...a));
-  }else{
-    const key=Object.keys(districtData).find(k=>normalName(k)===normalName(selectedState));
-    list=key?districtData[key]:[];
-  }
-  list=[...new Set(list)].sort((a,b)=>a.localeCompare(b));
-  el.innerHTML='<option value="__ALL__">All Districts</option>'+list.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join("");
-  if(list.includes(selectedDistrict)) el.value=selectedDistrict;
-  else {selectedDistrict="__ALL__";el.value="__ALL__";}
-}
-async function loadDistrictData(){
-  try{
-    const r=await fetch(DISTRICT_DATA_URL,{cache:"no-store"});
-    if(!r.ok) throw new Error("district source failed");
-    const data=await r.json();
-    const arr=Array.isArray(data)?data:(data.districts||[]);
-    districtData={};
-    if(Array.isArray(arr)){
-      for(const item of arr){
-        if(item?.state && Array.isArray(item.districts)) districtData[item.state]=item.districts.map(x=>typeof x==="string"?x:(x.district||x.name||"")).filter(Boolean);
-        else if(item?.state && item?.district) (districtData[item.state]??=[]).push(item.district);
-      }
-    }
-    districtDataLoaded=true;
-  }catch(e){
-    console.warn("District master load failed",e);
-    districtDataLoaded=false;
-    // Safe fallback for every state; selected state still works even if external source is unavailable.
-    districtData={"Telangana":["Adilabad","Bhadradri Kothagudem","Hanumakonda","Hyderabad","Jagitial","Jangaon","Jayashankar Bhupalapally","Jogulamba Gadwal","Kamareddy","Karimnagar","Khammam","Kumuram Bheem Asifabad","Mahabubabad","Mahabubnagar","Mancherial","Medak","Medchal Malkajgiri","Mulugu","Nagarkurnool","Nalgonda","Narayanpet","Nirmal","Nizamabad","Peddapalli","Rajanna Sircilla","Rangareddy","Sangareddy","Siddipet","Suryapet","Vikarabad","Wanaparthy","Warangal","Yadadri Bhuvanagiri"]};
-  }
-  updateDistricts();
-}
-function matches(a,b){return normalName(a)===normalName(b);}
-function applyFilters(){
-  visibleBusinesses=allBusinesses.filter(b=>{
-    const stateOK=selectedState!=="__ALL__"&&matches(b.state,selectedState);
-    const districtOK=selectedDistrict!=="__ALL__"&&matches(b.district,selectedDistrict);
-    const sectorOK=selectedSector==="All Sectors"||matches(b.sector,selectedSector);
-    return stateOK&&districtOK&&sectorOK;
-  });
-
-  // IMPORTANT: each selected district always has exactly 1,000 pixels (20 × 50).
-  // Business blocks are scoped to the selected State + District.
-  const badge=document.getElementById("wallBadge");
-  const place=selectedState==="__ALL__"?"INDIA":selectedState;
-  const dist=selectedDistrict==="__ALL__"?"ALL DISTRICTS":selectedDistrict;
-  if(badge) badge.textContent=`${place} · ${dist} · ${selectedSector} · ${visibleBusinesses.length.toLocaleString("en-IN")} LIVE`;
-
-  const tc=document.getElementById("tickerCompany");
-  const ts=document.getElementById("tickerSector");
-  const td=document.getElementById("tickerDistrict");
-  const to=document.getElementById("tickerOffer");
-  if(tc) tc.textContent=selectedState==="__ALL__"?"INDIA LIVE WALL":place;
-  if(ts) ts.textContent=selectedSector;
-  if(td) td.textContent=dist;
-  if(to) to.textContent=selectedState==="__ALL__"||selectedDistrict==="__ALL__"
-    ? "Select a State and District to view its 1,000-pixel wall"
-    : (visibleBusinesses.length
-      ? `${visibleBusinesses.length.toLocaleString("en-IN")} businesses matching this filter`
-      : "No approved businesses for this district yet");
-
-  draw();
-}
-function businessAt(block){
-  if(!block)return null;
-  return visibleBusinesses.find(b=>{
-    const start=Math.max(1,Number(b.block_number)||1);
-    const count=Math.max(1,Math.min(TOTAL_PIXELS-start+1,Number(b.pixel_count)||1));
-    return block>=start && block<start+count;
-  })||null;
-}
-async function loadBusinesses(){
-  loading?.classList.add("show");
-  allBusinesses=[];
-  try{
-    let offset=0;
-    const page=1000;
-    while(true){
-      const u=new URL(API_URL);
-      u.searchParams.set("select","*");
-      u.searchParams.set("approval_status","eq.approved");
-      u.searchParams.set("limit",page);
-      u.searchParams.set("offset",offset);
-      const r=await fetch(u,{headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`}});
-      if(!r.ok) throw new Error("Supabase "+r.status);
-      const rows=await r.json();
-      allBusinesses.push(...rows.map(norm));
-      if(rows.length<page)break;
-      offset+=page;
-    }
-  }catch(e){
-    console.error(e);
-    toast("Business data could not be loaded. Check Supabase table/RLS.");
-  }
-  applyFilters();
-  loading?.classList.remove("show");
-}
-
-/* -------------------- VIEW / SELECT modes -------------------- */
-function setInteractionMode(mode){
-  interactionMode=mode==="select"?"select":"view";
-  const v=document.getElementById("viewModeBtn"), q=document.getElementById("selectModeBtn");
-  if(v)v.classList.toggle("active",interactionMode==="view");
-  if(q)q.classList.toggle("active",interactionMode==="select");
-  if(interactionMode==="view"){
-    // Keep the user's selection visible until they explicitly clear/register it.
-    toast("VIEW mode: tap an occupied pixel to view its business.");
-  }else{
-    toast("SELECT mode: choose available pixels. New pixels must touch the selected area.");
-  }
-}
-
-/* -------------------- interactions -------------------- */
-
-
-// PIXEL SELECTION — SIMPLE DOM CLICK/TAP HIT TEST
-// The wall itself is the hit area. No moving canvas is used for input.
-let lastTouchHandled=0;
-function handlePixelSelectionTap(clientX,clientY){
-  const block=blockAt(clientX,clientY);
-  if(!block)return;
-
-  // Check every approved booking, not only the current filter.
-  const business=allBusinesses.find(x=>matches(x.state,selectedState)&&matches(x.district,selectedDistrict)&&pixelRangeContains(x,block))||null;
-  if(interactionMode==="view"){
-    if(business){
-      if(business.ad_video_url||business.ad_image_url) playBusinessAd(business);
-      else openDetails(business);
-    }else{
-      toast("Pixel #"+block.toLocaleString("en-IN")+" is available. Tap SELECT to book it.");
-    }
-    return;
-  }
-
-  if(business){
-    toast("This pixel is already occupied.");
-    return;
-  }
-  togglePixelSelection(block);
-  if(selectedPixels.has(block)) toast('✓ Pixel #'+block.toLocaleString('en-IN')+' selected');
-  else if(!selectedPixels.has(block)) toast('Pixel #'+block.toLocaleString('en-IN')+' unselected');
-}
-
-// Normal browser click — reliable on Android Chrome, desktop and WebViews.
-stage.addEventListener('click',e=>{
-  // Ignore clicks coming from UI overlays/controls.
-  if(e.target.closest('button,a,input,select,textarea,.wallBadge,.wallHint,.loading'))return;
-  if(performance.now()-lastTouchHandled<700)return;
-  handlePixelSelectionTap(e.clientX,e.clientY);
+setInterval(removeExpiredNews,60000);
 });
 
-// Explicit touch fallback for Android WebViews/browsers where click is delayed.
-stage.addEventListener('touchend',e=>{
-  if(!e.changedTouches || !e.changedTouches.length)return;
-  const t=e.changedTouches[0];
-  lastTouchHandled=performance.now();
-  handlePixelSelectionTap(t.clientX,t.clientY);
-},{passive:true});
+function isExpired(item){
+return item.created_at&&(Date.now()-new Date(item.created_at).getTime()>=86400000);
+}
 
-stage.addEventListener("scroll",()=>{draw();drawSelectionOverlay();if(currentMode==="ads")renderAdsInsidePixels()},{passive:true});
+function removeExpiredNews(){
+news=news.filter(x=>!isExpired(x));
+renderNews(news);
+}
 
-document.getElementById("stateFilter").addEventListener("change",async e=>{
-  selectedState=e.target.value;
-  selectedDistrict="__ALL__";
-  updateDistricts();
-  resetView();
-  applyFilters();
+async function loadNews(){
+if(!sb)return;
+try{
+const {data,error}=await sb.from("news").select("*").order("created_at",{ascending:false});
+if(error){console.log(error);return}
+news=(data||[]).filter(x=>!isExpired(x)).map(x=>({...x,image_url:x.image_url||sampleNews[0].image_url}));
+renderNews(news);
+}catch(e){console.log(e)}
+}
+
+function limit60(t){return String(t||"").trim().split(/\s+/).filter(Boolean).slice(0,60).join(" ")}
+function countWords(t){return String(t||"").trim().split(/\s+/).filter(Boolean).length}
+
+function renderNews(rows){
+const feed=document.getElementById("newsFeed");
+if(!rows.length){
+feed.innerHTML='<div class="news-screen"><div style="flex:1;display:flex;align-items:center;justify-content:center;text-align:center"><div><div style="font-size:42px">📰</div><h2>No news available</h2><p>Select another location.</p></div></div></div>';
+return;
+}
+feed.innerHTML=rows.map(item=>{
+const id=String(item.id),liked=!!likes[id],isSaved=saved.includes(id);
+return `<article class="news-screen">
+<div class="news-photo-wrap"><img class="news-photo" src="${esc(item.image_url||sampleNews[0].image_url)}"></div>
+<div class="news-content">
+<div class="category">${esc(item.category||"News")}</div>
+<h1 class="news-title">${esc(item.headline||"Latest News")}</h1>
+<div class="news-matter">${esc(limit60(item.matter||item.content||item.description))}</div>
+<div class="news-meta"><span>📍 ${esc(item.location||"India")}</span><span>${formatDate(item.created_at)}</span></div>
+</div>
+<div class="news-actions">
+<button class="action ${liked?"active":""}" onclick="likeNews('${esc(id)}')"><span>♥</span><small>${likes[id]||0} Like</small></button>
+<button class="action" onclick="openComments('${esc(id)}')"><span>💬</span><small>Comment</small></button>
+<button class="action ${isSaved?"active":""}" onclick="saveNews('${esc(id)}')"><span>🔖</span><small>${isSaved?"Saved":"Save"}</small></button>
+<button class="action" onclick="shareNews('${esc(id)}')"><span>↗</span><small>Share</small></button>
+</div>
+</article>`;
+}).join("");
+setTimeout(fitAllNewsText,30);
+}
+
+function fitAllNewsText(){
+document.querySelectorAll(".news-screen").forEach(s=>{
+const t=s.querySelector(".news-matter");if(!t)return;
+let z=15;t.style.fontSize=z+"px";
+while(t.scrollHeight>t.clientHeight&&z>9.5){z-=.5;t.style.fontSize=z+"px"}
 });
-document.getElementById("districtFilter").addEventListener("change",e=>{
-  selectedDistrict=e.target.value;
-  resetView();
-  applyFilters();
-});
-document.getElementById("sectorFilter").addEventListener("change",e=>{
-  selectedSector=e.target.value;
-  resetView();
-  applyFilters();
-});
-document.getElementById("countryFilter").addEventListener("change",e=>{
-  // India is the current wall scope; keep the fixed 1,000-pixel district wall.
-  selectedState="__ALL__";
-  selectedDistrict="__ALL__";
-  document.getElementById("stateFilter").value="__ALL__";
-  updateDistricts();
-  resetView();
-  applyFilters();
-});
-// Registration is opened only after the user selects pixels and presses REGISTER SELECTED PIXELS.
+}
 
-document.querySelectorAll("[data-close]").forEach(el=>el.addEventListener("click",()=>closeModal(el.dataset.close)));
-document.querySelectorAll(".buyBox button").forEach(btn=>btn.addEventListener("click",()=>{toast("Select pixels on the wall first.")}));
-document.getElementById("viewModeBtn").onclick=()=>setInteractionMode("view");
-document.getElementById("selectModeBtn").onclick=()=>setInteractionMode("select");
-document.getElementById("playBtn").onclick=toggleAdMode;
-document.getElementById("topRegisterBtn").onclick=(e)=>{e.preventDefault();e.stopPropagation();prepareSelectedRegistration()};
-document.getElementById("registerSelectedBtn").onclick=(e)=>{e.preventDefault();e.stopPropagation();prepareSelectedRegistration()};
-document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}));
-window.addEventListener("resize",resizeCanvas);
+async function likeNews(id){
+likes[id]=(likes[id]||0)+1;
+localStorage.setItem("omn_likes",JSON.stringify(likes));
+renderNews(news);
+if(sb)try{await sb.from("news_likes").insert({news_id:String(id)})}catch(e){}
+toast("Liked ❤️");
+}
 
+function saveNews(id){
+id=String(id);
+if(saved.includes(id)){saved=saved.filter(x=>x!==id);toast("Removed from saved")}
+else{saved.push(id);toast("News saved 🔖")}
+localStorage.setItem("omn_saved",JSON.stringify(saved));renderNews(news);
+}
 
-document.getElementById("businessForm").addEventListener("submit",submitRegistration);
-document.getElementById("regPixel").addEventListener("input",updateRegistrationPrice);
-document.getElementById("regCount").addEventListener("input",updateRegistrationPrice);
-document.getElementById("regState").addEventListener("change",updateRegistrationDistricts);
-document.getElementById("copyUpiBtn").onclick=copyUPI;document.getElementById("payBtn").onclick=makePayment;document.getElementById("paidBtn").onclick=paidMessage;
-document.getElementById("clearSelectionBtn").onclick=clearPixelSelection;
-/* -------------------- init -------------------- */
-(async function init(){
-  populateStates();
-  populateSectors();
-  populateRegistration();
-  await loadDistrictData();
-  document.getElementById("stateFilter").value="__ALL__";
-  selectedState="__ALL__";
-  selectedDistrict="__ALL__";
-  updateDistricts();
-  document.getElementById("districtFilter").value="__ALL__";
-  resizeCanvas();
-  await loadBusinesses();
-})();
+async function openComments(id){
+currentNewsId=String(id);
+await renderComments();
+document.getElementById("commentModal").classList.add("show");
+}
+
+async function renderComments(){
+let list=comments[currentNewsId]||[];
+if(sb)try{
+const {data,error}=await sb.from("news_comments").select("*").eq("news_id",currentNewsId).order("created_at");
+if(!error&&data)list=data.map(x=>({name:x.name||"User",text:x.comment}));
+}catch(e){}
+const box=document.getElementById("commentsList");
+box.innerHTML=list.length?list.map(c=>`<div class="comment"><div class="comment-name">${esc(c.name)}</div><div class="comment-text">${esc(c.text)}</div></div>`).join(""):'<div style="padding:25px;text-align:center;color:#888">No comments yet.</div>';
+}
+
+async function sendComment(){
+const input=document.getElementById("commentInput"),text=input.value.trim();
+if(!text)return toast("Write a comment");
+const name=localStorage.getItem("omn_name")||"User";
+(comments[currentNewsId]||(comments[currentNewsId]=[])).push({name,text});
+localStorage.setItem("omn_comments",JSON.stringify(comments));
+if(sb)try{await sb.from("news_comments").insert({news_id:currentNewsId,comment:text,name})}catch(e){}
+input.value="";await renderComments();toast("Comment added");
+}
+
+async function shareNews(id){
+const x=news.find(n=>String(n.id)===String(id));if(!x)return;
+try{
+if(navigator.share)await navigator.share({title:x.headline,text:limit60(x.matter),url:location.href});
+else{await navigator.clipboard.writeText(x.headline+"\n"+limit60(x.matter)+"\n"+location.href);toast("News link copied")}
+}catch(e){}
+}
+
+/* ACCOUNT */
+function getAccounts(){return JSON.parse(localStorage.getItem("omn_accounts")||"[]")}
+function openLogin(){document.getElementById("authModal").classList.add("show");switchAuth("login")}
+function switchAuth(m){
+authMode=m;
+loginTab.classList.toggle("active",m==="login");signupTab.classList.toggle("active",m==="signup");
+nameGroup.style.display=m==="signup"?"block":"none";authSubmit.textContent=m==="login"?"Login":"Create Account";
+}
+function submitAuth(){
+const name=authName.value.trim(),email=authEmail.value.trim().toLowerCase(),password=authPassword.value;
+if(!email)return toast("Enter email");if(!password)return toast("Enter password");
+let a=getAccounts();
+if(authMode==="signup"){
+if(!name)return toast("Enter name");
+if(a.some(x=>x.email===email))return toast("Account already exists");
+const u={id:"user_"+Date.now(),name,email,password};a.push(u);localStorage.setItem("omn_accounts",JSON.stringify(a));localStorage.setItem("omn_current_user",JSON.stringify(u));localStorage.setItem("omn_name",name);closeModal("authModal");updateUserUI();toast("Account created successfully");return;
+}
+const u=a.find(x=>x.email===email&&x.password===password);
+if(!u)return toast("Invalid email or password");
+localStorage.setItem("omn_current_user",JSON.stringify(u));localStorage.setItem("omn_name",u.name);closeModal("authModal");updateUserUI();toast("Login successful");
+}
+function logoutUser(){localStorage.removeItem("omn_current_user");localStorage.removeItem("omn_name");updateUserUI();closeMenu();toast("Logged out")}
+function updateUserUI(){
+const u=JSON.parse(localStorage.getItem("omn_current_user")||"null");
+drawerUser.textContent=u?"👤 "+u.name:"Create your account";logoutBtn.style.display=u?"flex":"none";
+}
+
+/* NEWS UPLOAD */
+function openUpload(){document.getElementById("uploadModal").classList.add("show")}
+function updateWordCount(){
+let a=uploadMatter.value.trim().split(/\s+/).filter(Boolean);
+if(a.length>60){a=a.slice(0,60);uploadMatter.value=a.join(" ")}
+wordCount.textContent=a.length;
+}
+function changeMediaType(){
+const t=mediaType.value;
+mediaFile.accept=t==="video"?"video/*":"image/*";
+mediaFile.multiple=t==="multiple";
+mediaPreview.innerHTML="";
+}
+mediaFile.addEventListener("change",()=>{
+mediaPreview.innerHTML="";
+[...mediaFile.files].forEach(f=>{
+const u=URL.createObjectURL(f);
+const el=f.type.startsWith("video/")?document.createElement("video"):document.createElement("img");
+el.src=u;el.controls=f.type.startsWith("video/");el.style.width="100%";el.style.maxHeight="180px";el.style.objectFit="cover";el.style.borderRadius="8px";mediaPreview.appendChild(el);
+});
+});
+
+async function publishNews(){
+const headline=uploadHeadline.value.trim(),matter=uploadMatter.value.trim(),file=mediaFile.files[0];
+if(!headline)return toast("Enter headline");
+if(!matter)return toast("Enter news matter");
+if(countWords(matter)>60)return toast("Maximum 60 words");
+if(!file)return toast("Select media");
+let imageUrl=sampleNews[0].image_url;
+try{
+if(sb){
+toast("Uploading...");
+const path="news/"+Date.now()+"_"+file.name.replace(/\s+/g,"_");
+const {error}=await sb.storage.from("news-media").upload(path,file);
+if(error)throw error;
+imageUrl=sb.storage.from("news-media").getPublicUrl(path).data.publicUrl;
+const {error:e}=await sb.from("news").insert({
+headline,matter:limit60(matter),category:uploadCategory.value,
+language:uploadLanguage.value,location:uploadLocation.value.trim()||"India",
+image_url:imageUrl,created_at:new Date().toISOString()
+});
+if(e)throw e;
+closeModal("uploadModal");toast("News published successfully");await loadNews();return;
+}
+}catch(e){console.log(e);toast("Supabase upload failed")}
+news.unshift({id:"local_"+Date.now(),headline,matter:limit60(matter),category:uploadCategory.value,language:uploadLanguage.value,location:uploadLocation.value||"India",image_url:imageUrl,created_at:new Date().toISOString()});
+renderNews(news);closeModal("uploadModal");toast("News added");
+}
+
+/* REEL UPLOAD */
+function openReelUpload(){document.getElementById("reelUploadModal").classList.add("show")}
+reelFile.addEventListener("change",()=>{
+reelPreview.innerHTML="";
+const f=reelFile.files[0];if(!f)return;
+const v=document.createElement("video");v.src=URL.createObjectURL(f);v.controls=true;v.style.width="100%";v.style.maxHeight="220px";v.style.borderRadius="10px";reelPreview.appendChild(v);
+});
+
+async function publishReel(){
+const title=reelTitle.value.trim(),file=reelFile.files[0];
+if(!title)return toast("Enter reel title");
+if(!file)return toast("Select reel video");
+if(!sb)return toast("Connect Supabase first");
+try{
+toast("Uploading reel...");
+const path="reels/"+Date.now()+"_"+file.name.replace(/\s+/g,"_");
+const {error}=await sb.storage.from("news-media").upload(path,file);
+if(error)throw error;
+const url=sb.storage.from("news-media").getPublicUrl(path).data.publicUrl;
+const {error:e}=await sb.from("reels").insert({
+title,matter:reelMatter.value.trim(),category:reelCategory.value,
+location:reelLocation.value.trim()||"India",video_url:url,created_at:new Date().toISOString()
+});
+if(e)throw e;
+closeModal("reelUploadModal");toast("Reel published successfully");await loadReels();
+}catch(e){console.log(e);toast("Reel upload failed")}
+}
+
+async function loadReels(){
+if(!sb)return;
+try{
+const {data,error}=await sb.from("reels").select("*").order("created_at",{ascending:false});
+if(error)return;
+if(data&&data.length){
+reelsFeed.innerHTML=data.map(r=>`<div class="reel"><video src="${esc(r.video_url)}" controls playsinline loop></video><div class="reel-info"><h3>${esc(r.title||"ONE MINUTE NEWS")}</h3><div>${esc(r.matter||"")}</div></div></div>`).join("");
+}
+}catch(e){console.log(e)}
+}
+function openReels(){reelsModal.classList.add("show");loadReels()}
+function closeReels(){reelsModal.classList.remove("show")}
+
+/* SEARCH */
+function openSearch(){searchModal.classList.add("show");searchInput.focus();searchNews()}
+function searchNews(){
+const q=searchInput.value.trim().toLowerCase();
+if(!q){searchResults.innerHTML="<p style='color:#777'>Search news...</p>";return}
+const r=news.filter(x=>(x.headline+" "+x.matter+" "+x.category+" "+x.location).toLowerCase().includes(q));
+searchResults.innerHTML=r.length?r.map(x=>`<div class="search-result" onclick="openSearchNews('${esc(x.id)}')"><img src="${esc(x.image_url)}"><div><b>${esc(x.headline)}</b><div style="font-size:10px;color:#777;margin-top:4px">${esc(x.category)}</div></div></div>`).join(""):"<p style='color:#777'>No news found.</p>";
+}
+function openSearchNews(id){closeModal("searchModal");const i=news.findIndex(x=>String(x.id)===String(id));if(i>=0)document.querySelectorAll(".news-screen")[i]?.scrollIntoView({behavior:"smooth"})}
+
+/* SAVED */
+function openSaved(){
+savedModal.classList.add("show");
+const r=news.filter(x=>saved.includes(String(x.id)));
+savedList.innerHTML=r.length?r.map(x=>`<div class="search-result" onclick="openSavedNews('${esc(x.id)}')"><img src="${esc(x.image_url)}"><div><b>${esc(x.headline)}</b><div style="font-size:10px;color:#777">${esc(x.location)}</div></div></div>`).join(""):'<div style="padding:25px;text-align:center;color:#777">No saved news.</div>';
+}
+function openSavedNews(id){closeModal("savedModal");const i=news.findIndex(x=>String(x.id)===String(id));if(i>=0)document.querySelectorAll(".news-screen")[i]?.scrollIntoView({behavior:"smooth"})}
+
+/* LOCATION */
+function loadStates(){stateSelect.innerHTML=Object.keys(states).map(x=>`<option>${esc(x)}</option>`).join("");if(states[locationName])stateSelect.value=locationName;loadDistricts()}
+function loadDistricts(){districtSelect.innerHTML=(states[stateSelect.value]||["All Districts"]).map(x=>`<option>${esc(x)}</option>`).join("")}
+function openLocation(){loadStates();locationModal.classList.add("show")}
+function saveLocation(){
+const s=stateSelect.value,d=districtSelect.value;
+locationName=s==="All India"?"All India":d!=="All Districts"?d+", "+s:s;
+localStorage.setItem("omn_location",locationName);locationText.textContent=locationName;closeModal("locationModal");filterLocation();toast("Location updated")
+}
+function filterLocation(){
+if(locationName==="All India")return renderNews(news);
+const s=locationName.split(",")[0].trim().toLowerCase();
+const r=news.filter(x=>String(x.location||"").toLowerCase().includes(s)||String(x.location||"").toLowerCase().includes("all india"));
+renderNews(r.length?r:news)
+}
+
+/* LANGUAGE */
+function openLanguage(){languageModal.classList.add("show");languageSelect.value=languageName}
+function saveLanguage(){languageName=languageSelect.value;localStorage.setItem("omn_language",languageName);closeModal("languageModal");toast("Language updated")}
+
+/* LIVE SCORE + WEATHER */
+function openLiveInfo(){liveInfoModal.classList.add("show");loadWeather();loadLiveScores()}
+async function loadWeather(){
+weatherBox.textContent="Loading weather...";
+try{
+const r=await fetch("https://api.open-meteo.com/v1/forecast?latitude=17.3850&longitude=78.4867&current=temperature_2m,relative_humidity_2m,weather_code&timezone=Asia%2FKolkata");
+const d=await r.json(),c=d.current;
+weatherBox.innerHTML=`🌡️ Temperature: <b>${c.temperature_2m}°C</b><br>💧 Humidity: <b>${c.relative_humidity_2m}%</b><br>📍 Hyderabad`;
+}catch(e){weatherBox.textContent="Weather unavailable"}
+}
+async function loadLiveScores(){
+liveScores.innerHTML="Loading live matches...";
+/*
+For real live scores connect a licensed/current cricket or sports
+API here. No fake scores are displayed.
+*/
+liveScores.innerHTML='<span style="color:#777">Live match data will appear here when a live-score API is connected.</span>';
+}
+
+/* MENU */
+function toggleMenu(){drawer.classList.toggle("open");drawerOverlay.classList.toggle("show")}
+function closeMenu(){drawer.classList.remove("open");drawerOverlay.classList.remove("show")}
+
+/* DARK */
+function toggleDarkMode(){document.body.classList.toggle("dark");localStorage.setItem("omn_dark",document.body.classList.contains("dark")?"1":"0")}
+if(localStorage.getItem("omn_dark")==="1")document.body.classList.add("dark");
+
+/* OTHER */
+function openNotifications(){notificationModal.classList.add("show")}
+function openAbout(){aboutModal.classList.add("show")}
+function goHome(){newsFeed.scrollTo({top:0,behavior:"smooth"})}
+function closeModal(id){document.getElementById(id).classList.remove("show")}
+function toast(m){const x=document.getElementById("toast");x.textContent=m;x.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>x.classList.remove("show"),2200)}
+function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+function formatDate(d){if(!d)return "";try{return new Date(d).toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"})}catch(e){return ""}}
+
+document.addEventListener("keydown",e=>{
+if(e.key==="Escape"){
+closeMenu();
+document.querySelectorAll(".modal.show").forEach(x=>x.classList.remove("show"));
+closeReels();
+}
+});
+
+window.addEventListener("resize",fitAllNewsText);
+setTimeout(fitAllNewsText,500);
 </script>
 
-<script>
-(function(){
-  let autoIndex=0, autoTimer=null;
-  /* Ads stay off until the user presses PIXEL AD. */
-})();
-
-// FINAL MODAL/CANCEL WIRING
-document.querySelectorAll('[data-close]').forEach(function(btn){btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var id=btn.getAttribute('data-close');var el=document.getElementById(id);if(el){el.classList.remove('show');el.style.display='none';el.setAttribute('aria-hidden','true');}});});
-document.querySelectorAll('.modal').forEach(function(modal){modal.addEventListener('click',function(e){if(e.target===modal){modal.classList.remove('show');modal.style.display='none';modal.setAttribute('aria-hidden','true');}});});
-function closeMillionModal(id){var el=document.getElementById(id);if(el){el.classList.remove('show');el.style.display='none';el.setAttribute('aria-hidden','true');}}
-</script>
 </body>
 </html>
