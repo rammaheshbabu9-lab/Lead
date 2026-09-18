@@ -2,673 +2,2958 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
 <title>ONE MINUTE NEWS</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;margin:0;overflow:hidden;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#171717}
-body.dark{background:#0d0f12;color:#fff}
-button,input,textarea,select{font:inherit}
-button{border:0;cursor:pointer}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-.app{width:100%;max-width:600px;height:100dvh;margin:auto;position:relative;overflow:hidden;background:#fff}
-.dark .app{background:#101216}
+html,body{
+  width:100%;
+  min-height:100%;
+  overflow-x:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f6f8;
+  color:#111;
+}
 
-.header{position:absolute;z-index:100;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:center;background:#fff;border-bottom:1px solid #e6e6e6}
-.dark .header{background:#15181d;border-color:#292d33}
-.logo{font-size:20px;font-weight:900;letter-spacing:-.7px}
-.logo b{color:#e31b23}
-.menu-btn{position:absolute;left:7px;width:42px;height:42px;background:transparent;font-size:25px}
-.header-right{position:absolute;right:5px;display:flex}
-.icon-btn{width:40px;height:40px;background:transparent;font-size:21px}
+button,
+input,
+textarea,
+select{
+  font-family:inherit;
+}
 
-.location-bar{position:absolute;z-index:90;top:56px;left:0;right:0;height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#fafafa;border-bottom:1px solid #e8e8e8}
-.dark .location-bar{background:#181b20;border-color:#292d33}
-.location-btn{background:transparent;color:#e31b23;font-size:12px;font-weight:800}
+button{
+  cursor:pointer;
+}
 
-.news-feed{position:absolute;z-index:1;top:90px;bottom:56px;left:0;right:0;overflow-y:auto;overflow-x:hidden;scroll-snap-type:y mandatory;scroll-snap-stop:always;scrollbar-width:none}
-.news-feed::-webkit-scrollbar{display:none}
-.news-screen{width:100%;height:100%;min-height:100%;max-height:100%;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;overflow:hidden;background:#fff}
-.dark .news-screen{background:#101216}
+/* HEADER */
 
-.news-photo-wrap{width:100%;height:clamp(120px,28dvh,225px);flex:0 0 clamp(120px,28dvh,225px);position:relative;overflow:hidden;background:#ddd}
-.news-photo{width:100%;height:100%;object-fit:cover;display:block}
-.photo-count{position:absolute;right:9px;top:9px;background:rgba(0,0,0,.65);color:white;padding:5px 9px;border-radius:20px;font-size:11px}
+.header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  width:100%;
+  height:58px;
+  background:#fff;
+  border-bottom:1px solid #e5e5e5;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 12px;
+}
 
-.news-content{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;padding:8px 12px 0}
-.category{width:max-content;max-width:100%;flex-shrink:0;background:#e31b23;color:#fff;padding:4px 9px;border-radius:4px;font-size:10px;font-weight:900;text-transform:uppercase;margin-bottom:5px}
-.news-title{flex-shrink:0;margin:0 0 5px;font-size:clamp(17px,5vw,23px);line-height:1.12;font-weight:900;overflow:hidden}
-.news-matter{flex:1;min-height:0;overflow:hidden;font-size:15px;line-height:1.27;color:#333;word-break:break-word}
-.dark .news-matter{color:#ddd}
-.news-meta{flex-shrink:0;min-height:24px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 0 5px;color:#777;font-size:10px}
+.menu-btn,
+.profile-btn{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:50%;
+  background:#f2f3f5;
+  font-size:20px;
+}
 
-.news-actions{height:48px;min-height:48px;flex:0 0 48px;display:flex;align-items:center;justify-content:space-around;background:#fff;border-top:1px solid #e7e7e7}
-.dark .news-actions{background:#15181d;border-color:#292d33}
-.action{width:25%;height:46px;background:transparent;color:#444;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
-.dark .action{color:#eee}
-.action span{font-size:18px}.action small{font-size:9px;font-weight:800}.action.active{color:#e31b23}
+.logo{
+  text-align:center;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:-.5px;
+}
 
-.bottom-nav{position:absolute;z-index:100;left:0;right:0;bottom:0;height:56px;display:flex;background:#fff;border-top:1px solid #ddd}
-.dark .bottom-nav{background:#15181d;border-color:#292d33}
-.nav-item{width:20%;height:55px;background:transparent;color:#555;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
-.dark .nav-item{color:#ccc}
-.nav-item span{font-size:19px}.nav-item small{font-size:9px}.nav-item.active{color:#e31b23}
+.logo span{
+  display:block;
+  color:#777;
+  font-size:9px;
+  letter-spacing:1px;
+  margin-top:2px;
+}
 
-.overlay{position:fixed;z-index:190;inset:0;background:rgba(0,0,0,.5);display:none}.overlay.show{display:block}
-.drawer{position:fixed;z-index:200;left:0;top:0;bottom:0;width:min(310px,86vw);background:#fff;transform:translateX(-105%);transition:.25s;box-shadow:5px 0 25px rgba(0,0,0,.25);padding-top:15px}
-.dark .drawer{background:#171a1f}.drawer.open{transform:translateX(0)}
-.drawer-title{padding:14px 20px;font-size:20px;font-weight:900}
-.drawer-user{margin:0 14px 12px;padding:13px;background:#f1f1f1;border-radius:10px;font-size:13px}
-.dark .drawer-user{background:#252930}
-.drawer-item{width:100%;height:48px;padding:0 20px;display:flex;align-items:center;gap:13px;background:transparent;color:inherit;text-align:left;font-weight:700}
-.drawer-item:hover{background:#f2f2f2}
+/* LOCATION LANGUAGE */
 
-.modal{position:fixed;z-index:300;left:50%;top:50%;width:min(94vw,560px);max-height:90dvh;overflow-y:auto;transform:translate(-50%,-50%) scale(.96);background:#fff;border-radius:16px;padding:18px;display:none;box-shadow:0 15px 50px rgba(0,0,0,.3)}
-.dark .modal{background:#191c21;color:#fff}.modal.show{display:block;animation:pop .18s forwards}
-@keyframes pop{to{transform:translate(-50%,-50%) scale(1)}}
-.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.modal-head h2{margin:0;font-size:20px}.close{width:35px;height:35px;border-radius:50%;background:#eee}
-.dark .close{background:#292d33;color:#fff}
+.topbar{
+  width:100%;
+  background:#fff;
+  padding:8px 10px;
+  display:flex;
+  gap:8px;
+  border-bottom:1px solid #eee;
+}
 
-.form-group{margin-bottom:11px}.form-group label{display:block;margin-bottom:5px;font-size:12px;font-weight:800}
-.form-group input,.form-group textarea,.form-group select{width:100%;border:1px solid #ddd;border-radius:9px;padding:10px;outline:none;background:#fff}
-.dark .form-group input,.dark .form-group textarea,.dark .form-group select{background:#101216;color:#fff;border-color:#363a42}
-.form-group textarea{min-height:105px;resize:none}
-.word-count{text-align:right;font-size:10px;color:#777;margin-top:3px}
-.primary{width:100%;height:44px;border-radius:9px;background:#e31b23;color:#fff;font-weight:900}
-.secondary{width:100%;height:42px;border-radius:9px;background:#eee;font-weight:800}
+.top-option{
+  flex:1;
+  min-width:0;
+  height:34px;
+  border:1px solid #ddd;
+  border-radius:18px;
+  background:#fff;
+  font-size:12px;
+  font-weight:600;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
 
-.auth-tabs{display:flex;gap:5px;margin-bottom:15px}.auth-tab{flex:1;height:38px;border-radius:8px;background:#eee;font-weight:800}
-.auth-tab.active{background:#e31b23;color:#fff}
+/* FEED */
 
-.search-box{display:flex;gap:6px}.search-box input{flex:1;padding:11px;border:1px solid #ddd;border-radius:9px}
-.search-results{max-height:55dvh;overflow:auto;margin-top:12px}
-.search-result{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #ddd}
-.search-result img{width:70px;height:50px;border-radius:6px;object-fit:cover}.search-result b{font-size:13px}
+#feed{
+  width:100%;
+  max-width:100%;
+  padding:8px 8px 82px;
+}
 
-.comments-list{max-height:42dvh;overflow:auto}.comment{padding:9px 0;border-bottom:1px solid #ddd}
-.comment-name{font-size:12px;font-weight:900}.comment-text{font-size:13px;margin-top:3px}
-.comment-input-row{display:flex;gap:6px;margin-top:10px}.comment-input-row input{flex:1;min-width:0;border:1px solid #ddd;border-radius:8px;padding:10px}
+/* NEWS */
 
-.reels-modal{position:fixed;z-index:500;inset:0;display:none;background:#000}.reels-modal.show{display:block}
-.reels-feed{width:100%;height:100%;overflow-y:auto;scroll-snap-type:y mandatory}
-.reel{position:relative;width:100%;height:100%;min-height:100%;scroll-snap-align:start;background:#000}
-.reel img,.reel video{width:100%;height:100%;object-fit:cover}
-.reel-info{position:absolute;left:15px;right:15px;bottom:30px;color:#fff;text-shadow:0 1px 6px #000}
-.reel-info h3{margin:0 0 5px}.reels-close{position:absolute;z-index:510;right:12px;top:12px;width:40px;height:40px;border-radius:50%;color:#fff;background:rgba(0,0,0,.6);font-size:22px}
+.news-card{
+  width:100%;
+  max-width:100%;
+  background:#fff;
+  border-radius:12px;
+  margin-bottom:12px;
+  overflow:hidden;
+  box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
 
-.info-card{border:1px solid #e5e5e5;border-radius:12px;padding:12px;margin-bottom:10px}
-.dark .info-card{border-color:#363a42}
-.info-title{font-weight:900}.info-body{margin-top:10px;font-size:13px;line-height:1.6}
+.news-image{
+  display:block;
+  width:100%;
+  height:250px;
+  object-fit:cover;
+  background:#ddd;
+}
 
-.toast{position:fixed;z-index:1000;left:50%;bottom:70px;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;padding:10px 16px;border-radius:22px;font-size:12px;opacity:0;pointer-events:none;transition:.25s;white-space:nowrap}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.news-content{
+  width:100%;
+  padding:11px;
+  overflow:hidden;
+}
 
-@media(max-height:650px){
-.news-photo-wrap{height:22dvh;flex-basis:22dvh}.news-content{padding-top:5px}.news-title{font-size:17px;margin-bottom:3px}
-.news-actions{height:45px;min-height:45px;flex-basis:45px}.action{height:43px}
+.news-meta{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:6px;
+  color:#777;
+  font-size:10px;
+  overflow:hidden;
+}
+
+.news-category{
+  color:#e11;
+  font-weight:700;
+}
+
+.news-title{
+  font-size:18px;
+  line-height:1.3;
+  font-weight:800;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+.news-matter{
+  margin-top:7px;
+  color:#555;
+  font-size:13px;
+  line-height:1.45;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+/* ACTIONS */
+
+.actions{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:6px;
+  padding:8px 10px 10px;
+  overflow:hidden;
+}
+
+.action{
+  width:100%;
+  min-width:0;
+  height:36px;
+  border:0;
+  border-radius:18px;
+  background:#f3f4f6;
+  color:#333;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 3px;
+  font-size:11px;
+  font-weight:600;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.action.liked{
+  background:#fff0f0;
+  color:#e53935;
+}
+
+.action.saved{
+  background:#eef4ff;
+  color:#155eef;
+}
+
+/* REELS */
+
+.reels-container{
+  width:100%;
+  padding:0 0 80px;
+}
+
+.reel-card{
+  width:100%;
+  max-width:100%;
+  margin:0 0 12px;
+  background:#000;
+  overflow:hidden;
+}
+
+.reel-card video{
+  display:block;
+  width:100%;
+  height:calc(100vh - 115px);
+  min-height:520px;
+  max-height:780px;
+  object-fit:cover;
+  background:#000;
+}
+
+.reel-info{
+  width:100%;
+  padding:12px;
+  background:#fff;
+}
+
+.reel-title{
+  font-size:17px;
+  line-height:1.3;
+  font-weight:800;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+.reel-matter{
+  margin-top:6px;
+  color:#555;
+  font-size:13px;
+  line-height:1.45;
+}
+
+.reel-location{
+  margin-top:7px;
+  color:#777;
+  font-size:11px;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:1500;
+  width:100%;
+  height:64px;
+  background:#fff;
+  border-top:1px solid #ddd;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+}
+
+.nav-btn{
+  border:0;
+  background:#fff;
+  color:#777;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  font-size:10px;
+}
+
+.nav-btn .icon{
+  font-size:19px;
+}
+
+.nav-btn.active{
+  color:#111;
+  font-weight:700;
+}
+
+/* DRAWER */
+
+.drawer-bg{
+  position:fixed;
+  inset:0;
+  z-index:3000;
+  background:rgba(0,0,0,.45);
+  display:none;
+}
+
+.drawer{
+  width:285px;
+  max-width:85%;
+  height:100%;
+  background:#fff;
+  padding:20px 14px;
+}
+
+.drawer-title{
+  font-size:21px;
+  font-weight:900;
+  margin-bottom:25px;
+}
+
+.drawer-item{
+  width:100%;
+  height:45px;
+  border:0;
+  background:#fff;
+  border-radius:9px;
+  text-align:left;
+  padding:0 12px;
+  font-size:14px;
+}
+
+.drawer-item:hover{
+  background:#f3f3f3;
+}
+
+/* MODALS */
+
+.modal-bg{
+  position:fixed;
+  inset:0;
+  z-index:2500;
+  background:rgba(0,0,0,.5);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+}
+
+.modal{
+  width:100%;
+  max-width:520px;
+  max-height:92vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:18px 18px 0 0;
+  padding:18px;
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+
+.modal-head h2{
+  font-size:20px;
+}
+
+.close{
+  width:34px;
+  height:34px;
+  border:0;
+  border-radius:50%;
+  background:#f1f1f1;
+  font-size:18px;
+}
+
+.field{
+  margin-bottom:11px;
+}
+
+.field label{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:5px;
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  border:1px solid #ddd;
+  border-radius:9px;
+  padding:11px;
+  font-size:14px;
+  outline:none;
+}
+
+.field textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.primary{
+  width:100%;
+  height:44px;
+  border:0;
+  border-radius:10px;
+  background:#111;
+  color:#fff;
+  font-size:14px;
+  font-weight:700;
+}
+
+.secondary{
+  width:100%;
+  height:42px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  background:#fff;
+  font-weight:600;
+  margin-top:8px;
+}
+
+/* PROFILE */
+
+.profile-box{
+  text-align:center;
+  padding-bottom:15px;
+}
+
+.avatar{
+  width:75px;
+  height:75px;
+  border-radius:50%;
+  background:#111;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 10px;
+  font-size:28px;
+  font-weight:800;
+}
+
+.profile-name{
+  font-size:20px;
+  font-weight:800;
+}
+
+.profile-email{
+  color:#777;
+  font-size:12px;
+  margin-top:4px;
+}
+
+.profile-info{
+  background:#f6f6f6;
+  border-radius:10px;
+  padding:10px;
+  margin:12px 0;
+  font-size:13px;
+  line-height:1.7;
+  text-align:left;
+}
+
+.profile-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.profile-action{
+  height:45px;
+  border:0;
+  border-radius:9px;
+  background:#f1f2f4;
+  font-weight:700;
+}
+
+.profile-action.full{
+  grid-column:1/-1;
+}
+
+/* COMMENTS */
+
+.comment-item{
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+}
+
+.comment-user{
+  font-size:12px;
+  font-weight:800;
+}
+
+.comment-text{
+  margin-top:4px;
+  color:#444;
+  font-size:13px;
+}
+
+.comment-form{
+  display:flex;
+  gap:7px;
+  margin-top:12px;
+}
+
+.comment-form input{
+  flex:1;
+  min-width:0;
+  border:1px solid #ddd;
+  border-radius:20px;
+  padding:10px 13px;
+}
+
+.comment-form button{
+  width:70px;
+  border:0;
+  border-radius:20px;
+  background:#111;
+  color:#fff;
+}
+
+/* SEARCH */
+
+.search-box{
+  display:flex;
+  gap:8px;
+}
+
+.search-box input{
+  flex:1;
+  min-width:0;
+}
+
+.search-result{
+  padding:11px 0;
+  border-bottom:1px solid #eee;
+}
+
+/* COMMON */
+
+.empty{
+  text-align:center;
+  padding:50px 20px;
+  color:#777;
+  font-size:14px;
+}
+
+.loading{
+  text-align:center;
+  padding:40px;
+  color:#777;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:78px;
+  transform:translateX(-50%);
+  z-index:5000;
+  display:none;
+  max-width:90%;
+  padding:10px 15px;
+  border-radius:22px;
+  background:#111;
+  color:#fff;
+  font-size:12px;
+  text-align:center;
+}
+
+/* SMALL MOBILE */
+
+@media(max-width:380px){
+
+  .news-image{
+    height:225px;
+  }
+
+  .actions{
+    gap:4px;
+    padding-left:7px;
+    padding-right:7px;
+  }
+
+  .action{
+    height:34px;
+    font-size:10px;
+    padding:0 2px;
+  }
+
+  .reel-card video{
+    height:calc(100vh - 110px);
+    min-height:480px;
+  }
+}
+
+/* TABLET */
+
+@media(min-width:600px){
+
+  #feed{
+    max-width:700px;
+    margin:auto;
+  }
+
+  .news-card{
+    max-width:680px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .reel-card{
+    max-width:700px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .reel-card video{
+    height:760px;
+    max-height:760px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<!-- HEADER -->
 
 <header class="header">
-<button class="menu-btn" onclick="toggleMenu()">☰</button>
-<div class="logo">ONE <b>MINUTE</b> NEWS</div>
-<div class="header-right">
-<button class="icon-btn" onclick="openSearch()">⌕</button>
-<button class="icon-btn" onclick="openLogin()">◯</button>
-</div>
+
+  <button class="menu-btn" onclick="openDrawer()">☰</button>
+
+  <div class="logo">
+    ONE MINUTE NEWS
+    <span>FAST • SHORT • LOCAL</span>
+  </div>
+
+  <button class="profile-btn" onclick="openProfile()">👤</button>
+
 </header>
 
-<div class="location-bar">
-<button class="location-btn" onclick="openLocation()">📍 <span id="locationText">All India</span></button>
-<span id="dateText"></span>
+
+<!-- LOCATION / LANGUAGE -->
+
+<div class="topbar">
+
+  <button class="top-option" onclick="openLocation()">
+    📍 <span id="locationText">India</span>
+  </button>
+
+  <button class="top-option" onclick="openLanguage()">
+    🌐 <span id="languageText">English</span>
+  </button>
+
 </div>
 
-<main class="news-feed" id="newsFeed"></main>
+
+<!-- MAIN -->
+
+<main id="feed">
+  <div class="loading">Loading news...</div>
+</main>
+
+
+<!-- BOTTOM NAV -->
 
 <nav class="bottom-nav">
-<button class="nav-item active" onclick="goHome()"><span>⌂</span><small>Home</small></button>
-<button class="nav-item" onclick="openSearch()"><span>⌕</span><small>Search</small></button>
-<button class="nav-item" onclick="openReels()"><span>▶</span><small>Reels</small></button>
-<button class="nav-item" onclick="openSaved()"><span>🔖</span><small>Saved</small></button>
-<button class="nav-item" onclick="openLogin()"><span>◯</span><small>Profile</small></button>
+
+  <button
+    class="nav-btn active"
+    id="navHome"
+    onclick="showHome()">
+
+    <span class="icon">⌂</span>
+    Home
+
+  </button>
+
+  <button
+    class="nav-btn"
+    id="navSearch"
+    onclick="openSearch()">
+
+    <span class="icon">⌕</span>
+    Search
+
+  </button>
+
+  <button
+    class="nav-btn"
+    id="navReels"
+    onclick="showReels()">
+
+    <span class="icon">▶</span>
+    Reels
+
+  </button>
+
+  <button
+    class="nav-btn"
+    id="navSaved"
+    onclick="showSaved()">
+
+    <span class="icon">🔖</span>
+    Saved
+
+  </button>
+
+  <button
+    class="nav-btn"
+    id="navProfile"
+    onclick="openProfile()">
+
+    <span class="icon">👤</span>
+    Profile
+
+  </button>
+
 </nav>
+
+
+<!-- DRAWER -->
+
+<div
+  class="drawer-bg"
+  id="drawerBg"
+  onclick="closeDrawer()">
+
+  <div
+    class="drawer"
+    onclick="event.stopPropagation()">
+
+    <div class="drawer-title">
+      ONE MINUTE NEWS
+    </div>
+
+    <button
+      class="drawer-item"
+      onclick="showHome();closeDrawer()">
+      🏠 Home
+    </button>
+
+    <button
+      class="drawer-item"
+      onclick="showReels();closeDrawer()">
+      ▶ Reels
+    </button>
+
+    <button
+      class="drawer-item"
+      onclick="showSaved();closeDrawer()">
+      🔖 Saved
+    </button>
+
+    <button
+      class="drawer-item"
+      onclick="openProfile();closeDrawer()">
+      👤 Profile
+    </button>
+
+    <button
+      class="drawer-item"
+      onclick="openSearch();closeDrawer()">
+      🔍 Search
+    </button>
+
+    <button
+      class="drawer-item"
+      onclick="openAbout();closeDrawer()">
+      ℹ️ About
+    </button>
+
+  </div>
+
 </div>
 
-<div class="overlay" id="drawerOverlay" onclick="closeMenu()"></div>
 
-<aside class="drawer" id="drawer">
-<div class="drawer-title">ONE MINUTE NEWS</div>
-<div class="drawer-user" id="drawerUser">Create your account</div>
+<!-- LOGIN -->
 
-<button class="drawer-item" onclick="openLogin();closeMenu()">🔐 Login / Sign Up</button>
-<button class="drawer-item" onclick="openUpload();closeMenu()">⬆️ Upload News</button>
-<button class="drawer-item" onclick="openReelUpload();closeMenu()">🎬 Upload Reels</button>
-<button class="drawer-item" onclick="openReels();closeMenu()">▶️ Reels</button>
-<button class="drawer-item" onclick="openLiveInfo();closeMenu()">🏏 Live Scores & Weather</button>
-<button class="drawer-item" onclick="openSaved();closeMenu()">🔖 Saved News</button>
-<button class="drawer-item" onclick="openLocation();closeMenu()">📍 Change Location</button>
-<button class="drawer-item" onclick="openLanguage();closeMenu()">🌐 Language</button>
-<button class="drawer-item" onclick="toggleDarkMode()">🌙 Dark Mode</button>
-<button class="drawer-item" onclick="openNotifications();closeMenu()">🔔 Notifications</button>
-<button class="drawer-item" onclick="openAbout();closeMenu()">ℹ️ About</button>
-<button class="drawer-item" id="logoutBtn" style="display:none" onclick="logoutUser()">🚪 Logout</button>
-</aside>
+<div class="modal-bg" id="loginModal">
 
-<!-- ACCOUNT -->
-<div class="modal" id="authModal">
-<div class="modal-head"><h2>Account</h2><button class="close" onclick="closeModal('authModal')">✕</button></div>
-<div class="auth-tabs">
-<button class="auth-tab active" id="loginTab" onclick="switchAuth('login')">Login</button>
-<button class="auth-tab" id="signupTab" onclick="switchAuth('signup')">Create Account</button>
-</div>
-<div class="form-group" id="nameGroup" style="display:none"><label>Name</label><input id="authName" placeholder="Enter your name"></div>
-<div class="form-group"><label>Email</label><input id="authEmail" type="email" placeholder="Enter email"></div>
-<div class="form-group"><label>Password</label><input id="authPassword" type="password" placeholder="Enter password"></div>
-<button class="primary" id="authSubmit" onclick="submitAuth()">Login</button>
-<div style="text-align:center;color:#888;font-size:10px;margin-top:10px">Simple demo account</div>
-</div>
+  <div class="modal">
 
-<!-- NEWS UPLOAD -->
-<div class="modal" id="uploadModal">
-<div class="modal-head"><h2>Upload News</h2><button class="close" onclick="closeModal('uploadModal')">✕</button></div>
+    <div class="modal-head">
 
-<div class="form-group"><label>Headline</label><input id="uploadHeadline" maxlength="180" placeholder="News headline"></div>
-<div class="form-group"><label>News Matter — Maximum 60 Words</label>
-<textarea id="uploadMatter" placeholder="Write news in maximum 60 words" oninput="updateWordCount()"></textarea>
-<div class="word-count"><span id="wordCount">0</span>/60</div></div>
+      <h2>Login / Sign Up</h2>
 
-<div class="form-group"><label>Category</label>
-<select id="uploadCategory">
-<option>India</option><option>Telangana</option><option>Andhra Pradesh</option><option>Politics</option><option>Business</option><option>Technology</option><option>Sports</option><option>Education</option><option>Entertainment</option><option>Crime</option><option>World</option><option>Jobs</option>
-</select></div>
+      <button
+        class="close"
+        onclick="closeModal('loginModal')">
+        ×
+      </button>
 
-<div class="form-group"><label>Language</label>
-<select id="uploadLanguage">
-<option>English</option><option>Telugu</option><option>Hindi</option><option>Tamil</option><option>Kannada</option><option>Malayalam</option><option>Marathi</option><option>Bengali</option><option>Gujarati</option><option>Punjabi</option><option>Odia</option><option>Assamese</option><option>Urdu</option>
-</select></div>
+    </div>
 
-<div class="form-group"><label>Location</label><input id="uploadLocation" placeholder="City / District / State"></div>
+    <div class="field">
+      <label>Name</label>
+      <input
+        id="loginName"
+        placeholder="Enter your name">
+    </div>
 
-<div class="form-group"><label>Media Type</label>
-<select id="mediaType" onchange="changeMediaType()">
-<option value="single">Single Picture</option><option value="multiple">Multiple Pictures</option><option value="video">Video</option>
-</select></div>
+    <div class="field">
+      <label>Email</label>
+      <input
+        id="loginEmail"
+        type="email"
+        placeholder="Enter email">
+    </div>
 
-<div class="form-group"><input id="mediaFile" type="file" accept="image/*"></div>
-<div id="mediaPreview"></div>
-<button class="primary" onclick="publishNews()">Publish News</button>
+    <div class="field">
+      <label>Password</label>
+      <input
+        id="loginPassword"
+        type="password"
+        placeholder="Enter password">
+    </div>
+
+    <button
+      class="primary"
+      onclick="demoLogin()">
+      Continue
+    </button>
+
+    <p style="
+      font-size:11px;
+      color:#777;
+      text-align:center;
+      margin-top:10px">
+      Demo login — no email verification required.
+    </p>
+
+  </div>
+
 </div>
 
-<!-- REEL UPLOAD -->
-<div class="modal" id="reelUploadModal">
-<div class="modal-head"><h2>Upload Reels</h2><button class="close" onclick="closeModal('reelUploadModal')">✕</button></div>
-<div class="form-group"><label>Reel Title</label><input id="reelTitle" maxlength="120" placeholder="Reel title"></div>
-<div class="form-group"><label>Reel Matter</label><textarea id="reelMatter" maxlength="300" placeholder="Short reel description"></textarea></div>
-<div class="form-group"><label>Category</label>
-<select id="reelCategory"><option>India</option><option>Telangana</option><option>Andhra Pradesh</option><option>Politics</option><option>Business</option><option>Technology</option><option>Sports</option><option>Education</option><option>Entertainment</option><option>World</option></select>
-</div>
-<div class="form-group"><label>Location</label><input id="reelLocation" placeholder="City / District / State"></div>
-<div class="form-group"><label>Reel Video</label><input id="reelFile" type="file" accept="video/*"></div>
-<div id="reelPreview"></div>
-<button class="primary" onclick="publishReel()">Publish Reel</button>
+
+<!-- PROFILE -->
+
+<div class="modal-bg" id="profileModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <h2>Profile</h2>
+
+      <button
+        class="close"
+        onclick="closeModal('profileModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div id="profileContent"></div>
+
+  </div>
+
 </div>
 
-<!-- SEARCH -->
-<div class="modal" id="searchModal">
-<div class="modal-head"><h2>Search News</h2><button class="close" onclick="closeModal('searchModal')">✕</button></div>
-<div class="search-box"><input id="searchInput" placeholder="Search news..." oninput="searchNews()"></div>
-<div class="search-results" id="searchResults"></div>
+
+<!-- UPLOAD NEWS -->
+
+<div class="modal-bg" id="uploadNewsModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <h2>Upload News</h2>
+
+      <button
+        class="close"
+        onclick="closeModal('uploadNewsModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="field">
+      <label>Headline</label>
+
+      <input
+        id="newsHeadline"
+        placeholder="Enter headline">
+    </div>
+
+    <div class="field">
+
+      <label>News Matter</label>
+
+      <textarea
+        id="newsMatter"
+        placeholder="Enter news details"></textarea>
+
+    </div>
+
+    <div class="field">
+
+      <label>Category</label>
+
+      <select id="newsCategory">
+
+        <option>General</option>
+        <option>Andhra Pradesh</option>
+        <option>Telangana</option>
+        <option>India</option>
+        <option>World</option>
+        <option>Politics</option>
+        <option>Business</option>
+        <option>Sports</option>
+        <option>Technology</option>
+        <option>Entertainment</option>
+        <option>Education</option>
+
+      </select>
+
+    </div>
+
+    <div class="field">
+
+      <label>Location</label>
+
+      <select id="newsLocation"></select>
+
+    </div>
+
+    <div class="field">
+
+      <label>Language</label>
+
+      <select id="newsLanguage"></select>
+
+    </div>
+
+    <div class="field">
+
+      <label>Upload Image</label>
+
+      <input
+        id="newsImage"
+        type="file"
+        accept="image/*">
+
+    </div>
+
+    <button
+      class="primary"
+      onclick="uploadNews()">
+      Upload News
+    </button>
+
+  </div>
+
 </div>
 
-<!-- LOCATION -->
-<div class="modal" id="locationModal">
-<div class="modal-head"><h2>Select Location</h2><button class="close" onclick="closeModal('locationModal')">✕</button></div>
-<div class="form-group"><label>State</label><select id="stateSelect" onchange="loadDistricts()"></select></div>
-<div class="form-group"><label>District</label><select id="districtSelect"></select></div>
-<button class="primary" onclick="saveLocation()">Save Location</button>
+
+<!-- UPLOAD REEL -->
+
+<div class="modal-bg" id="uploadReelModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <h2>Upload Reel</h2>
+
+      <button
+        class="close"
+        onclick="closeModal('uploadReelModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="field">
+
+      <label>Reel Title</label>
+
+      <input
+        id="reelTitle"
+        placeholder="Enter reel title">
+
+    </div>
+
+    <div class="field">
+
+      <label>Reel Matter</label>
+
+      <textarea
+        id="reelMatter"
+        placeholder="Enter reel description"></textarea>
+
+    </div>
+
+    <div class="field">
+
+      <label>Location</label>
+
+      <select id="reelLocation"></select>
+
+    </div>
+
+    <!-- DIRECT VIDEO UPLOAD -->
+
+    <div class="field">
+
+      <label>Upload Video</label>
+
+      <input
+        id="reelVideoFile"
+        type="file"
+        accept="video/*">
+
+    </div>
+
+    <button
+      class="primary"
+      onclick="uploadReel()">
+      Upload Reel
+    </button>
+
+  </div>
+
 </div>
 
-<!-- LANGUAGE -->
-<div class="modal" id="languageModal">
-<div class="modal-head"><h2>Language</h2><button class="close" onclick="closeModal('languageModal')">✕</button></div>
-<div class="form-group"><select id="languageSelect"><option>English</option><option>Telugu</option><option>Hindi</option><option>Tamil</option><option>Kannada</option><option>Malayalam</option><option>Marathi</option><option>Bengali</option><option>Gujarati</option><option>Punjabi</option><option>Odia</option><option>Assamese</option><option>Urdu</option></select></div>
-<button class="primary" onclick="saveLanguage()">Save Language</button>
-</div>
 
 <!-- COMMENTS -->
-<div class="modal" id="commentModal">
-<div class="modal-head"><h2>Comments</h2><button class="close" onclick="closeModal('commentModal')">✕</button></div>
-<div class="comments-list" id="commentsList"></div>
-<div class="comment-input-row"><input id="commentInput" placeholder="Write a comment"><button class="primary" style="width:80px" onclick="sendComment()">Send</button></div>
+
+<div class="modal-bg" id="commentsModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <h2>Comments</h2>
+
+      <button
+        class="close"
+        onclick="closeModal('commentsModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div id="commentsList"></div>
+
+    <div class="comment-form">
+
+      <input
+        id="commentInput"
+        placeholder="Write a comment...">
+
+      <button onclick="postComment()">
+        Post
+      </button>
+
+    </div>
+
+  </div>
+
 </div>
 
-<!-- SAVED -->
-<div class="modal" id="savedModal">
-<div class="modal-head"><h2>Saved News</h2><button class="close" onclick="closeModal('savedModal')">✕</button></div>
-<div id="savedList"></div>
+
+<!-- LOCATION -->
+
+<div class="modal-bg" id="locationModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <h2>Select Location</h2>
+
+      <button
+        class="close"
+        onclick="closeModal('locationModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="field">
+      <select id="locationSelect"></select>
+    </div>
+
+    <button
+      class="primary"
+      onclick="saveLocation()">
+      Save
+    </button>
+
+  </div>
+
 </div>
 
-<!-- LIVE SCORE + WEATHER -->
-<div class="modal" id="liveInfoModal">
-<div class="modal-head"><h2>Live Updates</h2><button class="close" onclick="closeModal('liveInfoModal')">✕</button></div>
 
-<div class="info-card">
-<div class="info-title">🏏 Live Scores</div>
-<div class="info-body" id="liveScores">Loading live scores...</div>
+<!-- LANGUAGE -->
+
+<div class="modal-bg" id="languageModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <h2>Select Language</h2>
+
+      <button
+        class="close"
+        onclick="closeModal('languageModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="field">
+      <select id="languageSelect"></select>
+    </div>
+
+    <button
+      class="primary"
+      onclick="saveLanguage()">
+      Save
+    </button>
+
+  </div>
+
 </div>
 
-<div class="info-card">
-<div class="info-title">🌤 Weather</div>
-<div class="info-body" id="weatherBox">Loading weather...</div>
-</div>
+
+<!-- SEARCH -->
+
+<div class="modal-bg" id="searchModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <h2>Search News</h2>
+
+      <button
+        class="close"
+        onclick="closeModal('searchModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="search-box">
+
+      <input
+        id="searchInput"
+        placeholder="Search news...">
+
+      <button
+        class="primary"
+        style="width:75px;margin:0"
+        onclick="doSearch()">
+        Search
+      </button>
+
+    </div>
+
+    <div
+      id="searchResults"
+      style="margin-top:12px">
+    </div>
+
+  </div>
+
 </div>
 
-<!-- NOTIFICATIONS -->
-<div class="modal" id="notificationModal">
-<div class="modal-head"><h2>Notifications</h2><button class="close" onclick="closeModal('notificationModal')">✕</button></div>
-<p style="font-size:14px;line-height:1.5">🔔 Important news notifications will appear here.</p>
-</div>
 
 <!-- ABOUT -->
-<div class="modal" id="aboutModal">
-<div class="modal-head"><h2>ONE MINUTE NEWS</h2><button class="close" onclick="closeModal('aboutModal')">✕</button></div>
-<p style="font-size:14px;line-height:1.6">ONE MINUTE NEWS is a short-news platform designed for quick mobile reading. Every news story is shown in a simple one-screen format.</p>
+
+<div class="modal-bg" id="aboutModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <h2>About</h2>
+
+      <button
+        class="close"
+        onclick="closeModal('aboutModal')">
+        ×
+      </button>
+
+    </div>
+
+    <p style="
+      line-height:1.6;
+      font-size:14px">
+      ONE MINUTE NEWS gives short and fast news
+      updates from India.
+    </p>
+
+  </div>
+
 </div>
 
-<!-- REELS -->
-<div class="reels-modal" id="reelsModal">
-<button class="reels-close" onclick="closeReels()">✕</button>
-<div class="reels-feed" id="reelsFeed">
-<div class="reel">
-<img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1200&q=80">
-<div class="reel-info"><h3>ONE MINUTE NEWS</h3><div>Short news. Fast updates.</div></div>
-</div>
-<div class="reel">
-<img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80">
-<div class="reel-info"><h3>India Updates</h3><div>Stay updated with important developments.</div></div>
-</div>
-</div>
-</div>
 
 <div class="toast" id="toast"></div>
 
+
 <script>
-const SUPABASE_URL="https://eaowxilhfzyukzetgqxo.supabase.co";
-const SUPABASE_ANON_KEY="sb_publishable_Z3xsADypaOjX8GEQEOLUdg_vbxynHRx";
-let sb=null;
 
-try{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY)}catch(e){console.log(e)}
+/* ================================
+   SUPABASE
+================================ */
 
-const sampleNews=[
-{id:"sample1",headline:"India sees important developments across major cities",matter:"Important developments are being reported across India today. Government departments, businesses, education institutions and local administrations are releasing updates. Follow ONE MINUTE NEWS for short and easy-to-read news updates from your selected location.",category:"India",language:"English",location:"All India",image_url:"https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80",created_at:new Date().toISOString()},
-{id:"sample2",headline:"Technology sector continues to expand with new opportunities",matter:"Technology companies are continuing to announce new products, services and employment opportunities. The sector remains an important part of India's growing digital economy, with startups and established companies expanding their presence across different cities.",category:"Technology",language:"English",location:"Hyderabad",image_url:"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",created_at:new Date().toISOString()},
-{id:"sample3",headline:"Local administrations announce new public initiatives",matter:"Local administrations are announcing new initiatives focused on public services, infrastructure and citizen convenience. Residents are advised to follow official announcements for schedules, eligibility details and other information related to the latest programmes.",category:"Local",language:"English",location:"Telangana",image_url:"https://images.unsplash.com/photo-1577412647305-991150c7d163?auto=format&fit=crop&w=1200&q=80",created_at:new Date().toISOString()},
-{id:"sample4",headline:"Education institutions prepare students for new opportunities",matter:"Schools, colleges and training institutions are focusing on new learning opportunities and skill development programmes. Students are encouraged to check official announcements from their institutions for application dates, examination schedules and programme information.",category:"Education",language:"English",location:"All India",image_url:"https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80",created_at:new Date().toISOString()}
+const SUPABASE_URL =
+"https://eaowxilhfzyukzetgqxo.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_Z3xsADypaOjX8GEQEOLUdg_vbxynHRx";
+
+const sb =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* ================================
+   LOCATIONS
+================================ */
+
+const states = [
+"India",
+"Andhra Pradesh",
+"Arunachal Pradesh",
+"Assam",
+"Bihar",
+"Chhattisgarh",
+"Goa",
+"Gujarat",
+"Haryana",
+"Himachal Pradesh",
+"Jharkhand",
+"Karnataka",
+"Kerala",
+"Madhya Pradesh",
+"Maharashtra",
+"Manipur",
+"Meghalaya",
+"Mizoram",
+"Nagaland",
+"Odisha",
+"Punjab",
+"Rajasthan",
+"Sikkim",
+"Tamil Nadu",
+"Telangana",
+"Tripura",
+"Uttar Pradesh",
+"Uttarakhand",
+"West Bengal",
+"Andaman and Nicobar Islands",
+"Chandigarh",
+"Dadra and Nagar Haveli and Daman and Diu",
+"Delhi",
+"Jammu and Kashmir",
+"Ladakh",
+"Lakshadweep",
+"Puducherry"
 ];
 
-let news=[...sampleNews];
-let likes=JSON.parse(localStorage.getItem("omn_likes")||"{}");
-let saved=JSON.parse(localStorage.getItem("omn_saved")||"[]");
-let comments=JSON.parse(localStorage.getItem("omn_comments")||"{}");
-let locationName=localStorage.getItem("omn_location")||"All India";
-let languageName=localStorage.getItem("omn_language")||"English";
-let currentNewsId=null,authMode="login";
 
-const states={
-"All India":["All India"],
-"Telangana":["All Districts","Hyderabad","Rangareddy","Medchal-Malkajgiri","Warangal","Hanamkonda","Karimnagar","Khammam","Nalgonda","Nizamabad","Sangareddy","Siddipet","Adilabad","Mahabubnagar"],
-"Andhra Pradesh":["All Districts","Visakhapatnam","Vijayawada","Guntur","Tirupati","Nellore","Kurnool","Kadapa","Anantapur","Kakinada","Rajahmundry"],
-"Karnataka":["All Districts","Bengaluru Urban","Mysuru","Mangaluru","Hubballi","Belagavi"],
-"Tamil Nadu":["All Districts","Chennai","Coimbatore","Madurai","Salem"],
-"Kerala":["All Districts","Thiruvananthapuram","Kochi","Kozhikode","Thrissur"],
-"Maharashtra":["All Districts","Mumbai City","Pune","Nagpur","Nashik","Thane"],
-"Delhi":["All Districts","New Delhi","Central Delhi","East Delhi","South Delhi"],
-"Gujarat":["All Districts","Ahmedabad","Surat","Vadodara","Rajkot"],
-"West Bengal":["All Districts","Kolkata","Howrah","Darjeeling"],
-"Uttar Pradesh":["All Districts","Lucknow","Noida","Ghaziabad","Agra","Varanasi"],
-"Rajasthan":["All Districts","Jaipur","Jodhpur","Udaipur"],
-"Madhya Pradesh":["All Districts","Bhopal","Indore","Gwalior"],
-"Bihar":["All Districts","Patna","Gaya"],
-"Odisha":["All Districts","Bhubaneswar","Cuttack","Puri"],
-"Punjab":["All Districts","Amritsar","Ludhiana","Jalandhar"],
-"Haryana":["All Districts","Gurugram","Faridabad"],
-"Jharkhand":["All Districts","Ranchi","Jamshedpur"],
-"Assam":["All Districts","Guwahati","Dibrugarh"],
-"Goa":["All Districts","North Goa","South Goa"]
-};
+/* ================================
+   LANGUAGES
+================================ */
 
-document.addEventListener("DOMContentLoaded",async()=>{
-document.getElementById("dateText").textContent=new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short"});
-document.getElementById("locationText").textContent=locationName;
-loadStates();renderNews(news);updateUserUI();
+const languages = [
+"English",
+"Telugu",
+"Hindi",
+"Bengali",
+"Marathi",
+"Tamil",
+"Gujarati",
+"Kannada",
+"Malayalam",
+"Punjabi",
+"Odia",
+"Assamese",
+"Urdu",
+"Sanskrit",
+"Nepali",
+"Konkani",
+"Maithili",
+"Santali",
+"Bodo",
+"Dogri",
+"Kashmiri",
+"Meitei",
+"Sindhi"
+];
 
-if(sb){
-try{
-const {data:{session}}=await sb.auth.getSession();
-if(session)updateUserUI(session.user);
-}catch(e){}
-await loadNews();
-await loadReels();
+
+/* ================================
+   STATE
+================================ */
+
+let currentUser =
+JSON.parse(
+  localStorage.getItem("oneMinuteDemoUser") || "null"
+);
+
+let selectedLocation =
+localStorage.getItem("oneMinuteLocation") || "India";
+
+let selectedLanguage =
+localStorage.getItem("oneMinuteLanguage") || "English";
+
+let allNews = [];
+let allReels = [];
+
+let currentCommentNewsId = null;
+
+let liked =
+JSON.parse(
+  localStorage.getItem("oneMinuteLiked") || "[]"
+);
+
+let saved =
+JSON.parse(
+  localStorage.getItem("oneMinuteSaved") || "[]"
+);
+
+let localComments =
+JSON.parse(
+  localStorage.getItem("oneMinuteComments") || "{}"
+);
+
+
+/* ================================
+   INIT
+================================ */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+    fillLocations();
+    fillLanguages();
+
+    document.getElementById(
+      "locationText"
+    ).textContent = selectedLocation;
+
+    document.getElementById(
+      "languageText"
+    ).textContent = selectedLanguage;
+
+    await loadNews();
+
+  }
+);
+
+
+/* ================================
+   HELPERS
+================================ */
+
+function toast(message){
+
+  const el =
+    document.getElementById("toast");
+
+  el.textContent = message;
+  el.style.display = "block";
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer =
+    setTimeout(() => {
+
+      el.style.display = "none";
+
+    },2500);
 }
-setInterval(removeExpiredNews,60000);
-});
 
-function isExpired(item){
-return item.created_at&&(Date.now()-new Date(item.created_at).getTime()>=86400000);
+
+function openModal(id){
+
+  document.getElementById(id)
+    .style.display = "flex";
+
 }
 
-function removeExpiredNews(){
-news=news.filter(x=>!isExpired(x));
-renderNews(news);
+
+function closeModal(id){
+
+  document.getElementById(id)
+    .style.display = "none";
+
 }
+
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttr(value){
+
+  return escapeHtml(value);
+
+}
+
+
+/* ================================
+   LOCATIONS
+================================ */
+
+function fillLocations(){
+
+  const selects = [
+
+    document.getElementById("locationSelect"),
+
+    document.getElementById("newsLocation"),
+
+    document.getElementById("reelLocation")
+
+  ];
+
+  selects.forEach(select => {
+
+    if(!select) return;
+
+    select.innerHTML = "";
+
+    states.forEach(item => {
+
+      const option =
+        document.createElement("option");
+
+      option.value = item;
+      option.textContent = item;
+
+      if(item === selectedLocation){
+        option.selected = true;
+      }
+
+      select.appendChild(option);
+
+    });
+
+  });
+
+}
+
+
+function openLocation(){
+
+  fillLocations();
+
+  openModal("locationModal");
+
+}
+
+
+function saveLocation(){
+
+  selectedLocation =
+    document.getElementById(
+      "locationSelect"
+    ).value;
+
+  localStorage.setItem(
+    "oneMinuteLocation",
+    selectedLocation
+  );
+
+  document.getElementById(
+    "locationText"
+  ).textContent = selectedLocation;
+
+  closeModal("locationModal");
+
+  loadNews();
+
+}
+
+
+/* ================================
+   LANGUAGES
+================================ */
+
+function fillLanguages(){
+
+  const selects = [
+
+    document.getElementById("languageSelect"),
+
+    document.getElementById("newsLanguage")
+
+  ];
+
+  selects.forEach(select => {
+
+    if(!select) return;
+
+    select.innerHTML = "";
+
+    languages.forEach(item => {
+
+      const option =
+        document.createElement("option");
+
+      option.value = item;
+      option.textContent = item;
+
+      if(item === selectedLanguage){
+        option.selected = true;
+      }
+
+      select.appendChild(option);
+
+    });
+
+  });
+
+}
+
+
+function openLanguage(){
+
+  fillLanguages();
+
+  openModal("languageModal");
+
+}
+
+
+function saveLanguage(){
+
+  selectedLanguage =
+    document.getElementById(
+      "languageSelect"
+    ).value;
+
+  localStorage.setItem(
+    "oneMinuteLanguage",
+    selectedLanguage
+  );
+
+  document.getElementById(
+    "languageText"
+  ).textContent = selectedLanguage;
+
+  closeModal("languageModal");
+
+  loadNews();
+
+}
+
+
+/* ================================
+   LOAD NEWS
+================================ */
 
 async function loadNews(){
-if(!sb)return;
-try{
-const {data,error}=await sb.from("news").select("*").order("created_at",{ascending:false});
-if(error){console.log(error);return}
-news=(data||[]).filter(x=>!isExpired(x)).map(x=>({...x,image_url:x.image_url||sampleNews[0].image_url}));
-renderNews(news);
-}catch(e){console.log(e)}
+
+  const feed =
+    document.getElementById("feed");
+
+  feed.innerHTML =
+    '<div class="loading">Loading news...</div>';
+
+  const {data,error} =
+    await sb
+      .from("news")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
+
+  if(error){
+
+    console.error(error);
+
+    feed.innerHTML =
+      '<div class="empty">Unable to load news.</div>';
+
+    return;
+  }
+
+  const now = Date.now();
+
+  allNews =
+    (data || []).filter(item => {
+
+      if(!item.created_at)
+        return true;
+
+      return (
+        now -
+        new Date(item.created_at).getTime()
+        <=
+        24 * 60 * 60 * 1000
+      );
+
+    });
+
+  renderNews(allNews);
+
 }
 
-function limit60(t){return String(t||"").trim().split(/\s+/).filter(Boolean).slice(0,60).join(" ")}
-function countWords(t){return String(t||"").trim().split(/\s+/).filter(Boolean).length}
 
-function renderNews(rows){
-const feed=document.getElementById("newsFeed");
-if(!rows.length){
-feed.innerHTML='<div class="news-screen"><div style="flex:1;display:flex;align-items:center;justify-content:center;text-align:center"><div><div style="font-size:42px">📰</div><h2>No news available</h2><p>Select another location.</p></div></div></div>';
-return;
-}
-feed.innerHTML=rows.map(item=>{
-const id=String(item.id),liked=!!likes[id],isSaved=saved.includes(id);
-return `<article class="news-screen">
-<div class="news-photo-wrap"><img class="news-photo" src="${esc(item.image_url||sampleNews[0].image_url)}"></div>
-<div class="news-content">
-<div class="category">${esc(item.category||"News")}</div>
-<h1 class="news-title">${esc(item.headline||"Latest News")}</h1>
-<div class="news-matter">${esc(limit60(item.matter||item.content||item.description))}</div>
-<div class="news-meta"><span>📍 ${esc(item.location||"India")}</span><span>${formatDate(item.created_at)}</span></div>
-</div>
-<div class="news-actions">
-<button class="action ${liked?"active":""}" onclick="likeNews('${esc(id)}')"><span>♥</span><small>${likes[id]||0} Like</small></button>
-<button class="action" onclick="openComments('${esc(id)}')"><span>💬</span><small>Comment</small></button>
-<button class="action ${isSaved?"active":""}" onclick="saveNews('${esc(id)}')"><span>🔖</span><small>${isSaved?"Saved":"Save"}</small></button>
-<button class="action" onclick="shareNews('${esc(id)}')"><span>↗</span><small>Share</small></button>
-</div>
-</article>`;
-}).join("");
-setTimeout(fitAllNewsText,30);
+/* ================================
+   RENDER NEWS
+================================ */
+
+function renderNews(list){
+
+  const feed =
+    document.getElementById("feed");
+
+  feed.innerHTML = "";
+
+  if(!list.length){
+
+    feed.innerHTML =
+      '<div class="empty">No news available.</div>';
+
+    return;
+  }
+
+  list.forEach(item => {
+
+    const card =
+      document.createElement("article");
+
+    card.className = "news-card";
+
+    const id =
+      String(item.id);
+
+    const isLiked =
+      liked.includes(id);
+
+    const isSaved =
+      saved.includes(id);
+
+    card.innerHTML = `
+
+      ${
+        item.image_url
+        ?
+        `
+        <img
+          class="news-image"
+          src="${escapeAttr(item.image_url)}"
+          alt="News"
+          onerror="this.style.display='none'">
+        `
+        :
+        ""
+      }
+
+      <div class="news-content">
+
+        <div class="news-meta">
+
+          <span class="news-category">
+            ${escapeHtml(
+              item.category || "General"
+            )}
+          </span>
+
+          <span>•</span>
+
+          <span>
+            ${escapeHtml(
+              item.location || "India"
+            )}
+          </span>
+
+          <span>•</span>
+
+          <span>
+            ${escapeHtml(
+              item.language || "English"
+            )}
+          </span>
+
+        </div>
+
+        <div class="news-title">
+          ${escapeHtml(
+            item.title ||
+            item.headline ||
+            ""
+          )}
+        </div>
+
+        ${
+          item.matter
+          ?
+          `
+          <div class="news-matter">
+            ${escapeHtml(item.matter)}
+          </div>
+          `
+          :
+          ""
+        }
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="action ${isLiked ? "liked" : ""}"
+          onclick="toggleLike('${id}',this)">
+          ${isLiked ? "❤️ Liked" : "♡ Like"}
+        </button>
+
+        <button
+          class="action"
+          onclick="openComments('${id}')">
+          💬 Comment
+        </button>
+
+        <button
+          class="action"
+          onclick="shareNews('${id}')">
+          ↗ Share
+        </button>
+
+        <button
+          class="action ${isSaved ? "saved" : ""}"
+          onclick="toggleSave('${id}',this)">
+          ${isSaved ? "🔖 Saved" : "🔖 Save"}
+        </button>
+
+      </div>
+    `;
+
+    feed.appendChild(card);
+
+  });
+
 }
 
-function fitAllNewsText(){
-document.querySelectorAll(".news-screen").forEach(s=>{
-const t=s.querySelector(".news-matter");if(!t)return;
-let z=15;t.style.fontSize=z+"px";
-while(t.scrollHeight>t.clientHeight&&z>9.5){z-=.5;t.style.fontSize=z+"px"}
-});
+
+/* ================================
+   LIKE
+================================ */
+
+async function toggleLike(id,button){
+
+  id = String(id);
+
+  if(!currentUser){
+
+    openLogin();
+
+    return;
+  }
+
+  const index =
+    liked.indexOf(id);
+
+  if(index >= 0){
+
+    liked.splice(index,1);
+
+    button.classList.remove("liked");
+
+    button.textContent =
+      "♡ Like";
+
+  }else{
+
+    liked.push(id);
+
+    button.classList.add("liked");
+
+    button.textContent =
+      "❤️ Liked";
+
+    try{
+
+      await sb
+        .from("news_likes")
+        .insert({
+          news_id:id
+        });
+
+    }catch(error){
+
+      console.log(error);
+
+    }
+
+  }
+
+  localStorage.setItem(
+    "oneMinuteLiked",
+    JSON.stringify(liked)
+  );
+
 }
 
-async function likeNews(id){
-likes[id]=(likes[id]||0)+1;
-localStorage.setItem("omn_likes",JSON.stringify(likes));
-renderNews(news);
-if(sb)try{await sb.from("news_likes").insert({news_id:String(id)})}catch(e){}
-toast("Liked ❤️");
+
+/* ================================
+   SAVE
+================================ */
+
+function toggleSave(id,button){
+
+  id = String(id);
+
+  if(!currentUser){
+
+    openLogin();
+
+    return;
+  }
+
+  const index =
+    saved.indexOf(id);
+
+  if(index >= 0){
+
+    saved.splice(index,1);
+
+    button.classList.remove("saved");
+
+    button.textContent =
+      "🔖 Save";
+
+  }else{
+
+    saved.push(id);
+
+    button.classList.add("saved");
+
+    button.textContent =
+      "🔖 Saved";
+
+    toast("News saved");
+
+  }
+
+  localStorage.setItem(
+    "oneMinuteSaved",
+    JSON.stringify(saved)
+  );
+
 }
 
-function saveNews(id){
-id=String(id);
-if(saved.includes(id)){saved=saved.filter(x=>x!==id);toast("Removed from saved")}
-else{saved.push(id);toast("News saved 🔖")}
-localStorage.setItem("omn_saved",JSON.stringify(saved));renderNews(news);
-}
 
-async function openComments(id){
-currentNewsId=String(id);
-await renderComments();
-document.getElementById("commentModal").classList.add("show");
-}
-
-async function renderComments(){
-let list=comments[currentNewsId]||[];
-if(sb)try{
-const {data,error}=await sb.from("news_comments").select("*").eq("news_id",currentNewsId).order("created_at");
-if(!error&&data)list=data.map(x=>({name:x.name||"User",text:x.comment}));
-}catch(e){}
-const box=document.getElementById("commentsList");
-box.innerHTML=list.length?list.map(c=>`<div class="comment"><div class="comment-name">${esc(c.name)}</div><div class="comment-text">${esc(c.text)}</div></div>`).join(""):'<div style="padding:25px;text-align:center;color:#888">No comments yet.</div>';
-}
-
-async function sendComment(){
-const input=document.getElementById("commentInput"),text=input.value.trim();
-if(!text)return toast("Write a comment");
-const name=localStorage.getItem("omn_name")||"User";
-(comments[currentNewsId]||(comments[currentNewsId]=[])).push({name,text});
-localStorage.setItem("omn_comments",JSON.stringify(comments));
-if(sb)try{await sb.from("news_comments").insert({news_id:currentNewsId,comment:text,name})}catch(e){}
-input.value="";await renderComments();toast("Comment added");
-}
+/* ================================
+   SHARE
+================================ */
 
 async function shareNews(id){
-const x=news.find(n=>String(n.id)===String(id));if(!x)return;
-try{
-if(navigator.share)await navigator.share({title:x.headline,text:limit60(x.matter),url:location.href});
-else{await navigator.clipboard.writeText(x.headline+"\n"+limit60(x.matter)+"\n"+location.href);toast("News link copied")}
-}catch(e){}
+
+  const item =
+    allNews.find(
+      x => String(x.id) === String(id)
+    );
+
+  if(!item) return;
+
+  const title =
+    item.title ||
+    item.headline ||
+    "ONE MINUTE NEWS";
+
+  try{
+
+    if(navigator.share){
+
+      await navigator.share({
+
+        title:"ONE MINUTE NEWS",
+
+        text:title,
+
+        url:location.href
+
+      });
+
+    }else{
+
+      await navigator.clipboard.writeText(
+        title + "\n" + location.href
+      );
+
+      toast("News link copied");
+
+    }
+
+  }catch(error){
+
+    console.log(error);
+
+  }
+
 }
 
-/* ACCOUNT */
-function getAccounts(){return JSON.parse(localStorage.getItem("omn_accounts")||"[]")}
-function openLogin(){document.getElementById("authModal").classList.add("show");switchAuth("login")}
-function switchAuth(m){
-authMode=m;
-loginTab.classList.toggle("active",m==="login");signupTab.classList.toggle("active",m==="signup");
-nameGroup.style.display=m==="signup"?"block":"none";authSubmit.textContent=m==="login"?"Login":"Create Account";
-}
-function submitAuth(){
-const name=authName.value.trim(),email=authEmail.value.trim().toLowerCase(),password=authPassword.value;
-if(!email)return toast("Enter email");if(!password)return toast("Enter password");
-let a=getAccounts();
-if(authMode==="signup"){
-if(!name)return toast("Enter name");
-if(a.some(x=>x.email===email))return toast("Account already exists");
-const u={id:"user_"+Date.now(),name,email,password};a.push(u);localStorage.setItem("omn_accounts",JSON.stringify(a));localStorage.setItem("omn_current_user",JSON.stringify(u));localStorage.setItem("omn_name",name);closeModal("authModal");updateUserUI();toast("Account created successfully");return;
-}
-const u=a.find(x=>x.email===email&&x.password===password);
-if(!u)return toast("Invalid email or password");
-localStorage.setItem("omn_current_user",JSON.stringify(u));localStorage.setItem("omn_name",u.name);closeModal("authModal");updateUserUI();toast("Login successful");
-}
-function logoutUser(){localStorage.removeItem("omn_current_user");localStorage.removeItem("omn_name");updateUserUI();closeMenu();toast("Logged out")}
-function updateUserUI(){
-const u=JSON.parse(localStorage.getItem("omn_current_user")||"null");
-drawerUser.textContent=u?"👤 "+u.name:"Create your account";logoutBtn.style.display=u?"flex":"none";
+
+/* ================================
+   COMMENTS
+================================ */
+
+async function openComments(id){
+
+  if(!currentUser){
+
+    openLogin();
+
+    return;
+  }
+
+  currentCommentNewsId = id;
+
+  openModal("commentsModal");
+
+  const list =
+    document.getElementById(
+      "commentsList"
+    );
+
+  list.innerHTML =
+    '<div class="loading">Loading comments...</div>';
+
+  const {data,error} =
+    await sb
+      .from("news_comments")
+      .select("*")
+      .eq("news_id",id)
+      .order(
+        "created_at",
+        {ascending:true}
+      );
+
+  let comments =
+    data || [];
+
+  if(error){
+
+    comments =
+      localComments[id] || [];
+
+  }
+
+  if(!comments.length){
+
+    list.innerHTML =
+      '<div class="empty" style="padding:20px">No comments yet.</div>';
+
+    return;
+  }
+
+  list.innerHTML = "";
+
+  comments.forEach(comment => {
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "comment-item";
+
+    div.innerHTML = `
+
+      <div class="comment-user">
+        ${escapeHtml(
+          comment.name || "User"
+        )}
+      </div>
+
+      <div class="comment-text">
+        ${escapeHtml(
+          comment.comment || ""
+        )}
+      </div>
+
+    `;
+
+    list.appendChild(div);
+
+  });
+
 }
 
-/* NEWS UPLOAD */
-function openUpload(){document.getElementById("uploadModal").classList.add("show")}
-function updateWordCount(){
-let a=uploadMatter.value.trim().split(/\s+/).filter(Boolean);
-if(a.length>60){a=a.slice(0,60);uploadMatter.value=a.join(" ")}
-wordCount.textContent=a.length;
-}
-function changeMediaType(){
-const t=mediaType.value;
-mediaFile.accept=t==="video"?"video/*":"image/*";
-mediaFile.multiple=t==="multiple";
-mediaPreview.innerHTML="";
-}
-mediaFile.addEventListener("change",()=>{
-mediaPreview.innerHTML="";
-[...mediaFile.files].forEach(f=>{
-const u=URL.createObjectURL(f);
-const el=f.type.startsWith("video/")?document.createElement("video"):document.createElement("img");
-el.src=u;el.controls=f.type.startsWith("video/");el.style.width="100%";el.style.maxHeight="180px";el.style.objectFit="cover";el.style.borderRadius="8px";mediaPreview.appendChild(el);
-});
-});
 
-async function publishNews(){
-const headline=uploadHeadline.value.trim(),matter=uploadMatter.value.trim(),file=mediaFile.files[0];
-if(!headline)return toast("Enter headline");
-if(!matter)return toast("Enter news matter");
-if(countWords(matter)>60)return toast("Maximum 60 words");
-if(!file)return toast("Select media");
-let imageUrl=sampleNews[0].image_url;
-try{
-if(sb){
-toast("Uploading...");
-const path="news/"+Date.now()+"_"+file.name.replace(/\s+/g,"_");
-const {error}=await sb.storage.from("news-media").upload(path,file);
-if(error)throw error;
-imageUrl=sb.storage.from("news-media").getPublicUrl(path).data.publicUrl;
-const {error:e}=await sb.from("news").insert({
-headline,matter:limit60(matter),category:uploadCategory.value,
-language:uploadLanguage.value,location:uploadLocation.value.trim()||"India",
-image_url:imageUrl,created_at:new Date().toISOString()
-});
-if(e)throw e;
-closeModal("uploadModal");toast("News published successfully");await loadNews();return;
-}
-}catch(e){console.log(e);toast("Supabase upload failed")}
-news.unshift({id:"local_"+Date.now(),headline,matter:limit60(matter),category:uploadCategory.value,language:uploadLanguage.value,location:uploadLocation.value||"India",image_url:imageUrl,created_at:new Date().toISOString()});
-renderNews(news);closeModal("uploadModal");toast("News added");
-}
+async function postComment(){
 
-/* REEL UPLOAD */
-function openReelUpload(){document.getElementById("reelUploadModal").classList.add("show")}
-reelFile.addEventListener("change",()=>{
-reelPreview.innerHTML="";
-const f=reelFile.files[0];if(!f)return;
-const v=document.createElement("video");v.src=URL.createObjectURL(f);v.controls=true;v.style.width="100%";v.style.maxHeight="220px";v.style.borderRadius="10px";reelPreview.appendChild(v);
-});
+  if(!currentUser){
 
-async function publishReel(){
-const title=reelTitle.value.trim(),file=reelFile.files[0];
-if(!title)return toast("Enter reel title");
-if(!file)return toast("Select reel video");
-if(!sb)return toast("Connect Supabase first");
-try{
-toast("Uploading reel...");
-const path="reels/"+Date.now()+"_"+file.name.replace(/\s+/g,"_");
-const {error}=await sb.storage.from("news-media").upload(path,file);
-if(error)throw error;
-const url=sb.storage.from("news-media").getPublicUrl(path).data.publicUrl;
-const {error:e}=await sb.from("reels").insert({
-title,matter:reelMatter.value.trim(),category:reelCategory.value,
-location:reelLocation.value.trim()||"India",video_url:url,created_at:new Date().toISOString()
-});
-if(e)throw e;
-closeModal("reelUploadModal");toast("Reel published successfully");await loadReels();
-}catch(e){console.log(e);toast("Reel upload failed")}
+    openLogin();
+
+    return;
+  }
+
+  const input =
+    document.getElementById(
+      "commentInput"
+    );
+
+  const text =
+    input.value.trim();
+
+  if(!text){
+
+    toast("Write a comment");
+
+    return;
+  }
+
+  const {error} =
+    await sb
+      .from("news_comments")
+      .insert({
+
+        news_id:currentCommentNewsId,
+
+        name:currentUser.name,
+
+        comment:text
+
+      });
+
+  if(error){
+
+    console.log(error);
+
+    if(!localComments[currentCommentNewsId]){
+      localComments[currentCommentNewsId] = [];
+    }
+
+    localComments[
+      currentCommentNewsId
+    ].push({
+
+      name:currentUser.name,
+
+      comment:text
+
+    });
+
+    localStorage.setItem(
+      "oneMinuteComments",
+      JSON.stringify(localComments)
+    );
+
+  }
+
+  input.value = "";
+
+  toast("Comment posted");
+
+  openComments(currentCommentNewsId);
+
 }
 
-async function loadReels(){
-if(!sb)return;
-try{
-const {data,error}=await sb.from("reels").select("*").order("created_at",{ascending:false});
-if(error)return;
-if(data&&data.length){
-reelsFeed.innerHTML=data.map(r=>`<div class="reel"><video src="${esc(r.video_url)}" controls playsinline loop></video><div class="reel-info"><h3>${esc(r.title||"ONE MINUTE NEWS")}</h3><div>${esc(r.matter||"")}</div></div></div>`).join("");
-}
-}catch(e){console.log(e)}
-}
-function openReels(){reelsModal.classList.add("show");loadReels()}
-function closeReels(){reelsModal.classList.remove("show")}
 
-/* SEARCH */
-function openSearch(){searchModal.classList.add("show");searchInput.focus();searchNews()}
-function searchNews(){
-const q=searchInput.value.trim().toLowerCase();
-if(!q){searchResults.innerHTML="<p style='color:#777'>Search news...</p>";return}
-const r=news.filter(x=>(x.headline+" "+x.matter+" "+x.category+" "+x.location).toLowerCase().includes(q));
-searchResults.innerHTML=r.length?r.map(x=>`<div class="search-result" onclick="openSearchNews('${esc(x.id)}')"><img src="${esc(x.image_url)}"><div><b>${esc(x.headline)}</b><div style="font-size:10px;color:#777;margin-top:4px">${esc(x.category)}</div></div></div>`).join(""):"<p style='color:#777'>No news found.</p>";
-}
-function openSearchNews(id){closeModal("searchModal");const i=news.findIndex(x=>String(x.id)===String(id));if(i>=0)document.querySelectorAll(".news-screen")[i]?.scrollIntoView({behavior:"smooth"})}
+/* ================================
+   LOGIN
+================================ */
 
-/* SAVED */
-function openSaved(){
-savedModal.classList.add("show");
-const r=news.filter(x=>saved.includes(String(x.id)));
-savedList.innerHTML=r.length?r.map(x=>`<div class="search-result" onclick="openSavedNews('${esc(x.id)}')"><img src="${esc(x.image_url)}"><div><b>${esc(x.headline)}</b><div style="font-size:10px;color:#777">${esc(x.location)}</div></div></div>`).join(""):'<div style="padding:25px;text-align:center;color:#777">No saved news.</div>';
-}
-function openSavedNews(id){closeModal("savedModal");const i=news.findIndex(x=>String(x.id)===String(id));if(i>=0)document.querySelectorAll(".news-screen")[i]?.scrollIntoView({behavior:"smooth"})}
+function openLogin(){
 
-/* LOCATION */
-function loadStates(){stateSelect.innerHTML=Object.keys(states).map(x=>`<option>${esc(x)}</option>`).join("");if(states[locationName])stateSelect.value=locationName;loadDistricts()}
-function loadDistricts(){districtSelect.innerHTML=(states[stateSelect.value]||["All Districts"]).map(x=>`<option>${esc(x)}</option>`).join("")}
-function openLocation(){loadStates();locationModal.classList.add("show")}
-function saveLocation(){
-const s=stateSelect.value,d=districtSelect.value;
-locationName=s==="All India"?"All India":d!=="All Districts"?d+", "+s:s;
-localStorage.setItem("omn_location",locationName);locationText.textContent=locationName;closeModal("locationModal");filterLocation();toast("Location updated")
-}
-function filterLocation(){
-if(locationName==="All India")return renderNews(news);
-const s=locationName.split(",")[0].trim().toLowerCase();
-const r=news.filter(x=>String(x.location||"").toLowerCase().includes(s)||String(x.location||"").toLowerCase().includes("all india"));
-renderNews(r.length?r:news)
+  closeModal("profileModal");
+
+  openModal("loginModal");
+
 }
 
-/* LANGUAGE */
-function openLanguage(){languageModal.classList.add("show");languageSelect.value=languageName}
-function saveLanguage(){languageName=languageSelect.value;localStorage.setItem("omn_language",languageName);closeModal("languageModal");toast("Language updated")}
 
-/* LIVE SCORE + WEATHER */
-function openLiveInfo(){liveInfoModal.classList.add("show");loadWeather();loadLiveScores()}
-async function loadWeather(){
-weatherBox.textContent="Loading weather...";
-try{
-const r=await fetch("https://api.open-meteo.com/v1/forecast?latitude=17.3850&longitude=78.4867&current=temperature_2m,relative_humidity_2m,weather_code&timezone=Asia%2FKolkata");
-const d=await r.json(),c=d.current;
-weatherBox.innerHTML=`🌡️ Temperature: <b>${c.temperature_2m}°C</b><br>💧 Humidity: <b>${c.relative_humidity_2m}%</b><br>📍 Hyderabad`;
-}catch(e){weatherBox.textContent="Weather unavailable"}
+function demoLogin(){
+
+  const name =
+    document
+      .getElementById("loginName")
+      .value
+      .trim();
+
+  const email =
+    document
+      .getElementById("loginEmail")
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById("loginPassword")
+      .value;
+
+  if(!name){
+
+    toast("Enter your name");
+
+    return;
+  }
+
+  if(!email){
+
+    toast("Enter your email");
+
+    return;
+  }
+
+  if(!password){
+
+    toast("Enter your password");
+
+    return;
+  }
+
+  currentUser = {
+
+    name:name,
+
+    email:email
+
+  };
+
+  localStorage.setItem(
+    "oneMinuteDemoUser",
+    JSON.stringify(currentUser)
+  );
+
+  closeModal("loginModal");
+
+  toast("Profile created successfully");
+
+  setTimeout(
+    openProfile,
+    400
+  );
+
 }
-async function loadLiveScores(){
-liveScores.innerHTML="Loading live matches...";
-/*
-For real live scores connect a licensed/current cricket or sports
-API here. No fake scores are displayed.
-*/
-liveScores.innerHTML='<span style="color:#777">Live match data will appear here when a live-score API is connected.</span>';
+
+
+/* ================================
+   PROFILE
+================================ */
+
+function openProfile(){
+
+  if(!currentUser){
+
+    openLogin();
+
+    return;
+  }
+
+  const initial =
+    currentUser.name
+      .charAt(0)
+      .toUpperCase();
+
+  document.getElementById(
+    "profileContent"
+  ).innerHTML = `
+
+    <div class="profile-box">
+
+      <div class="avatar">
+        ${escapeHtml(initial)}
+      </div>
+
+      <div class="profile-name">
+        ${escapeHtml(
+          currentUser.name
+        )}
+      </div>
+
+      <div class="profile-email">
+        ${escapeHtml(
+          currentUser.email
+        )}
+      </div>
+
+    </div>
+
+    <div class="profile-info">
+
+      <div>
+        <b>Location:</b>
+        ${escapeHtml(
+          selectedLocation
+        )}
+      </div>
+
+      <div>
+        <b>Language:</b>
+        ${escapeHtml(
+          selectedLanguage
+        )}
+      </div>
+
+    </div>
+
+    <div class="profile-actions">
+
+      <button
+        class="profile-action"
+        onclick="openUploadNews()">
+        📰 Upload News
+      </button>
+
+      <button
+        class="profile-action"
+        onclick="openUploadReel()">
+        ▶ Upload Reel
+      </button>
+
+      <button
+        class="profile-action full"
+        onclick="logout()">
+        Logout
+      </button>
+
+    </div>
+  `;
+
+  openModal("profileModal");
+
 }
 
-/* MENU */
-function toggleMenu(){drawer.classList.toggle("open");drawerOverlay.classList.toggle("show")}
-function closeMenu(){drawer.classList.remove("open");drawerOverlay.classList.remove("show")}
 
-/* DARK */
-function toggleDarkMode(){document.body.classList.toggle("dark");localStorage.setItem("omn_dark",document.body.classList.contains("dark")?"1":"0")}
-if(localStorage.getItem("omn_dark")==="1")document.body.classList.add("dark");
+function logout(){
 
-/* OTHER */
-function openNotifications(){notificationModal.classList.add("show")}
-function openAbout(){aboutModal.classList.add("show")}
-function goHome(){newsFeed.scrollTo({top:0,behavior:"smooth"})}
-function closeModal(id){document.getElementById(id).classList.remove("show")}
-function toast(m){const x=document.getElementById("toast");x.textContent=m;x.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>x.classList.remove("show"),2200)}
-function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
-function formatDate(d){if(!d)return "";try{return new Date(d).toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"})}catch(e){return ""}}
+  currentUser = null;
 
-document.addEventListener("keydown",e=>{
-if(e.key==="Escape"){
-closeMenu();
-document.querySelectorAll(".modal.show").forEach(x=>x.classList.remove("show"));
-closeReels();
+  localStorage.removeItem(
+    "oneMinuteDemoUser"
+  );
+
+  closeModal("profileModal");
+
+  toast("Logged out");
+
 }
-});
 
-window.addEventListener("resize",fitAllNewsText);
-setTimeout(fitAllNewsText,500);
+
+/* ================================
+   UPLOAD NEWS
+================================ */
+
+function openUploadNews(){
+
+  if(!currentUser){
+
+    openLogin();
+
+    return;
+  }
+
+  closeModal("profileModal");
+
+  fillLocations();
+  fillLanguages();
+
+  openModal("uploadNewsModal");
+
+}
+
+
+async function uploadNews(){
+
+  if(!currentUser){
+
+    openLogin();
+
+    return;
+  }
+
+  const headline =
+    document
+      .getElementById("newsHeadline")
+      .value
+      .trim();
+
+  const matter =
+    document
+      .getElementById("newsMatter")
+      .value
+      .trim();
+
+  const category =
+    document
+      .getElementById("newsCategory")
+      .value;
+
+  const location =
+    document
+      .getElementById("newsLocation")
+      .value;
+
+  const language =
+    document
+      .getElementById("newsLanguage")
+      .value;
+
+  const imageFile =
+    document
+      .getElementById("newsImage")
+      .files[0];
+
+  if(!headline){
+
+    toast("Enter headline");
+
+    return;
+  }
+
+  try{
+
+    let image_url = null;
+
+    if(imageFile){
+
+      const safeName =
+        imageFile.name.replace(
+          /[^a-zA-Z0-9._-]/g,
+          "_"
+        );
+
+      const fileName =
+        "news/" +
+        Date.now() +
+        "_" +
+        safeName;
+
+      const upload =
+        await sb.storage
+          .from("news-media")
+          .upload(
+            fileName,
+            imageFile,
+            {
+              upsert:false,
+              contentType:imageFile.type
+            }
+          );
+
+      if(upload.error){
+
+        throw upload.error;
+      }
+
+      const publicUrl =
+        sb.storage
+          .from("news-media")
+          .getPublicUrl(fileName);
+
+      image_url =
+        publicUrl.data.publicUrl;
+
+    }
+
+    const row = {
+
+      title:headline,
+
+      headline:headline,
+
+      matter:matter || null,
+
+      category:category || "General",
+
+      language:language || "English",
+
+      location:location || "India",
+
+      image_url:image_url,
+
+      created_at:
+        new Date().toISOString()
+
+    };
+
+    const {error} =
+      await sb
+        .from("news")
+        .insert(row)
+        .select()
+        .single();
+
+    if(error){
+
+      throw error;
+    }
+
+    document.getElementById(
+      "newsHeadline"
+    ).value = "";
+
+    document.getElementById(
+      "newsMatter"
+    ).value = "";
+
+    document.getElementById(
+      "newsImage"
+    ).value = "";
+
+    closeModal("uploadNewsModal");
+
+    toast(
+      "News uploaded successfully"
+    );
+
+    await loadNews();
+
+  }catch(error){
+
+    console.error(
+      "NEWS UPLOAD ERROR:",
+      error
+    );
+
+    toast(
+      "News upload failed: " +
+      (error.message || "Unknown error")
+    );
+
+  }
+
+}
+
+
+/* ================================
+   UPLOAD REEL
+================================ */
+
+function openUploadReel(){
+
+  if(!currentUser){
+
+    openLogin();
+
+    return;
+  }
+
+  closeModal("profileModal");
+
+  fillLocations();
+
+  openModal("uploadReelModal");
+
+}
+
+
+async function uploadReel(){
+
+  if(!currentUser){
+
+    openLogin();
+
+    return;
+  }
+
+  const title =
+    document
+      .getElementById("reelTitle")
+      .value
+      .trim();
+
+  const matter =
+    document
+      .getElementById("reelMatter")
+      .value
+      .trim();
+
+  const location =
+    document
+      .getElementById("reelLocation")
+      .value;
+
+  const videoFile =
+    document
+      .getElementById("reelVideoFile")
+      .files[0];
+
+  if(!title){
+
+    toast("Enter reel title");
+
+    return;
+  }
+
+  if(!videoFile){
+
+    toast("Please select a video");
+
+    return;
+  }
+
+  try{
+
+    toast("Uploading video...");
+
+    const safeName =
+      videoFile.name.replace(
+        /[^a-zA-Z0-9._-]/g,
+        "_"
+      );
+
+    const fileName =
+      "reels/" +
+      Date.now() +
+      "_" +
+      safeName;
+
+    const upload =
+      await sb.storage
+        .from("news-media")
+        .upload(
+          fileName,
+          videoFile,
+          {
+            upsert:false,
+            contentType:videoFile.type
+          }
+        );
+
+    if(upload.error){
+
+      throw upload.error;
+    }
+
+    const publicUrl =
+      sb.storage
+        .from("news-media")
+        .getPublicUrl(fileName);
+
+    const video_url =
+      publicUrl.data.publicUrl;
+
+    const {error} =
+      await sb
+        .from("reels")
+        .insert({
+
+          title:title,
+
+          matter:matter || null,
+
+          category:"General",
+
+          location:location || "India",
+
+          video_url:video_url,
+
+          created_at:
+            new Date().toISOString()
+
+        })
+        .select()
+        .single();
+
+    if(error){
+
+      throw error;
+    }
+
+    document.getElementById(
+      "reelTitle"
+    ).value = "";
+
+    document.getElementById(
+      "reelMatter"
+    ).value = "";
+
+    document.getElementById(
+      "reelVideoFile"
+    ).value = "";
+
+    closeModal("uploadReelModal");
+
+    toast(
+      "Reel uploaded successfully"
+    );
+
+  }catch(error){
+
+    console.error(
+      "REEL UPLOAD ERROR:",
+      error
+    );
+
+    toast(
+      "Reels upload failed: " +
+      (error.message || "Unknown error")
+    );
+
+  }
+
+}
+
+
+/* ================================
+   REELS SCREEN
+================================ */
+
+async function showReels(){
+
+  setActiveNav("navReels");
+
+  const feed =
+    document.getElementById("feed");
+
+  feed.innerHTML =
+    '<div class="loading">Loading reels...</div>';
+
+  const {data,error} =
+    await sb
+      .from("reels")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
+
+  if(error){
+
+    console.error(error);
+
+    feed.innerHTML =
+      '<div class="empty">Unable to load reels.</div>';
+
+    return;
+  }
+
+  const now = Date.now();
+
+  allReels =
+    (data || []).filter(item => {
+
+      if(!item.created_at)
+        return true;
+
+      return (
+        now -
+        new Date(item.created_at).getTime()
+        <=
+        24*60*60*1000
+      );
+
+    });
+
+  renderReels(allReels);
+
+}
+
+
+function renderReels(list){
+
+  const feed =
+    document.getElementById("feed");
+
+  feed.innerHTML = "";
+
+  if(!list.length){
+
+    feed.innerHTML =
+      '<div class="empty">No reels available.</div>';
+
+    return;
+  }
+
+  const container =
+    document.createElement("div");
+
+  container.className =
+    "reels-container";
+
+  list.forEach(item => {
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "reel-card";
+
+    card.innerHTML = `
+
+      <video
+        src="${escapeAttr(item.video_url)}"
+        controls
+        playsinline
+        loop
+        preload="metadata">
+      </video>
+
+      <div class="reel-info">
+
+        <div class="reel-title">
+          ${escapeHtml(
+            item.title || ""
+          )}
+        </div>
+
+        ${
+          item.matter
+          ?
+          `
+          <div class="reel-matter">
+            ${escapeHtml(
+              item.matter
+            )}
+          </div>
+          `
+          :
+          ""
+        }
+
+        <div class="reel-location">
+          📍 ${escapeHtml(
+            item.location || "India"
+          )}
+        </div>
+
+      </div>
+    `;
+
+    container.appendChild(card);
+
+  });
+
+  feed.appendChild(container);
+
+}
+
+
+/* ================================
+   HOME
+================================ */
+
+function showHome(){
+
+  setActiveNav("navHome");
+
+  loadNews();
+
+}
+
+
+function showSaved(){
+
+  setActiveNav("navSaved");
+
+  const savedNews =
+    allNews.filter(item =>
+      saved.includes(
+        String(item.id)
+      )
+    );
+
+  renderNews(savedNews);
+
+  if(!savedNews.length){
+
+    document.getElementById(
+      "feed"
+    ).innerHTML =
+      '<div class="empty">No saved news.</div>';
+
+  }
+
+}
+
+
+function setActiveNav(id){
+
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(btn =>
+      btn.classList.remove("active")
+    );
+
+  const button =
+    document.getElementById(id);
+
+  if(button){
+    button.classList.add("active");
+  }
+
+}
+
+
+/* ================================
+   SEARCH
+================================ */
+
+function openSearch(){
+
+  openModal("searchModal");
+
+  setTimeout(() => {
+
+    document
+      .getElementById("searchInput")
+      .focus();
+
+  },100);
+
+}
+
+
+function doSearch(){
+
+  const query =
+    document
+      .getElementById("searchInput")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const result =
+    document.getElementById(
+      "searchResults"
+    );
+
+  if(!query){
+
+    result.innerHTML =
+      '<div class="empty" style="padding:20px">Enter search text.</div>';
+
+    return;
+  }
+
+  const matches =
+    allNews.filter(item => {
+
+      const text = [
+
+        item.title,
+        item.headline,
+        item.matter,
+        item.category,
+        item.location,
+        item.language
+
+      ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+      return text.includes(query);
+
+    });
+
+  if(!matches.length){
+
+    result.innerHTML =
+      '<div class="empty" style="padding:20px">No results found.</div>';
+
+    return;
+  }
+
+  result.innerHTML = "";
+
+  matches.forEach(item => {
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "search-result";
+
+    div.innerHTML = `
+
+      <b>
+        ${escapeHtml(
+          item.title ||
+          item.headline ||
+          ""
+        )}
+      </b>
+
+      <div style="
+        color:#777;
+        font-size:11px;
+        margin-top:4px">
+        ${escapeHtml(
+          item.location || "India"
+        )}
+      </div>
+
+    `;
+
+    div.onclick = () => {
+
+      closeModal("searchModal");
+
+      renderNews([item]);
+
+    };
+
+    result.appendChild(div);
+
+  });
+
+}
+
+
+/* ================================
+   DRAWER
+================================ */
+
+function openDrawer(){
+
+  document.getElementById(
+    "drawerBg"
+  ).style.display = "block";
+
+}
+
+
+function closeDrawer(){
+
+  document.getElementById(
+    "drawerBg"
+  ).style.display = "none";
+
+}
+
+
+/* ================================
+   ABOUT
+================================ */
+
+function openAbout(){
+
+  openModal("aboutModal");
+
+}
+
 </script>
 
 </body>
